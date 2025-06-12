@@ -46,7 +46,15 @@
           </label>
         </td>
       </tr>
-
+      
+      <tr>
+      　　<td>
+          <label>禁煙できたか
+          <input type="radio" name="smoking" value="success">○
+          </label>
+        </td>
+      </tr>
+      
       <tr>
         <td colspan="2" class="searchandreset">
           <input type="submit" id="register" name="submit" value="登録">
