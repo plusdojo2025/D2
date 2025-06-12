@@ -12,8 +12,8 @@
 
 	<hr>
 	<form method="POST" action="">
-		ID<input type="text" name="id"><br> 
-		PW<input type="password" name="パスワード"><br> 
+		ID<input type="text" name="id"><br> <br> 
+		PW<input type="password" name="パスワード"><br> <br> 
 		<input type="submit" name="login" value="ログイン">
 	</form>
 </body>
