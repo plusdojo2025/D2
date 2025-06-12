@@ -13,8 +13,8 @@
 	<hr>
 	<form method="POST" action="">
 		ID<input type="text" name="id"><br> 
-		PW<input type="password" name="パスワード"><br> <input type="submit"
-			name="login" value="ログイン">
+		PW<input type="password" name="パスワード"><br> 
+		<input type="submit" name="login" value="ログイン">
 	</form>
 </body>
 </html>
