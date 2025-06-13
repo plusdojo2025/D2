@@ -154,7 +154,7 @@ public class HealthRecordDAO {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
 			// データベースに接続する
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/D2?"
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
 					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
 					"root", "password");
 
@@ -215,4 +215,41 @@ public class HealthRecordDAO {
 		// 結果を返す
 		return RecordList;
 	}
+		
+	// updateメソッド：引数cardで指定されたレコードを更新し、成功したらtrueを返す
+	public boolean update(HealthRecord record) {
+		Connection conn = null;
+		boolean result = false;
+
+		try {
+			// JDBCドライバを読み込む
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// データベースに接続する
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+			+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+			"root", "password");
+
+			// SQL文を準備する
+			String sql = "UPDATE SET UPDATE health_whole SET nosmoke=? sleep_time=? calorie_intake=? WHERE user_id=?, date=? ";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			// データベースを切断
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		// 結果を返す
+		return result;
+	}
+	
 }
