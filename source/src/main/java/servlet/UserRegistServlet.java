@@ -37,8 +37,8 @@ public class UserRegistServlet extends HttpServlet {
 
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
-
-        // 入力チェック
+//パスワード入力プログラム!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // すべてのプログラムを入力しているか?
         if (id == null || id.isEmpty() ||
             idConfirm == null || idConfirm.isEmpty() ||
             pw == null || pw.isEmpty() ||
@@ -51,16 +51,9 @@ public class UserRegistServlet extends HttpServlet {
             return;
         }
 
-        // ID一致チェック
-        if (!id.equals(idConfirm)) {
-            out.println("<html><body>");
-            out.println("<h3 style='color:red;'>IDが一致していません。</h3>");
-            out.println("<a href=\"UserRegistServlet\">戻る</a>");
-            out.println("</body></html>");
-            return;
-        }
+        
 
-        // パスワード一致チェック
+        // 2つの項目のパスワード一致しているか?
         if (!pw.equals(pwConfirm)) {
             out.println("<html><body>");
             out.println("<h3 style='color:red;'>パスワードが一致していません。</h3>");
@@ -77,7 +70,7 @@ public class UserRegistServlet extends HttpServlet {
         // DB登録処理
         UserDAO dao = new UserDAO();
         boolean result = dao.insert(user);
-
+//上記をすべて満たしていてもう登録されていないか確認のプログラム
         out.println("<html><body>");
         if (result) {
             out.println("<h2>登録に成功しました！</h2>");
