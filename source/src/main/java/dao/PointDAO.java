@@ -29,7 +29,7 @@ public class PointDAO {
 
 			// SQL文を作成する
 			// 取得されたデータのリストを返す
-			String sql = "SELECT user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime  FROM POINT WEHER user_id=? and month=? ORDER BY year, month";
+			String sql = "SELECT user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime  FROM POINT WHERE user_id=? and month=? ORDER BY year, month";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			
 			//SQL文を完成させる
