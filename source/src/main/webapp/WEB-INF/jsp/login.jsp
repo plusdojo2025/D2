@@ -11,9 +11,9 @@
 	<h1>ログイン</h1>
 
 	<hr>
-	<form method="POST" action="">
+	<form method="POST" action="/D2/LoginServlet">
 		ID<input type="text" name="id"><br> <br> 
-		PW<input type="password" name="パスワード"><br> <br> 
+		PW<input type="password" name="pw"><br> <br> 
 		<input type="submit" name="login" value="ログイン">
 	</form>
 </body>
