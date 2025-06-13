@@ -11,7 +11,7 @@ import java.util.List;
 import dto.Point;
 
 public class PointDAO {
-	public List<Point> selectByUser_id(java.awt.Point point) {
+	public List<Point> select(Point pt) {
 		// 結果セットを格納するコレクション
 		List<Point> pointList = new ArrayList<Point>();
 
@@ -29,11 +29,12 @@ public class PointDAO {
 
 			// SQL文を作成する
 			// 取得されたデータのリストを返す
-			String sql = "SELECT user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime  FROM POINT ORDER BY year, month";
+			String sql = "SELECT user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime  FROM POINT WEHER user_id=? and month=? ORDER BY year, month";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			
 			//SQL文を完成させる
-
+			pStmt.setString(1, pt.getUser_id());
+	        pStmt.setInt(2, pt.getMonth());
 			// SQL文を実行して検索結果を取得する
 			ResultSet rs = pStmt.executeQuery();
 
@@ -65,7 +66,7 @@ public class PointDAO {
 		return pointList;
 	}
 	
-	public boolean update(Point point) {
+	public boolean update(Point pt) {
 	    Connection conn = null;
 	    boolean result = false;
 
@@ -87,14 +88,14 @@ public class PointDAO {
 	        PreparedStatement pStmt = conn.prepareStatement(sql);
 
 	        // プレースホルダに値を設定
-	        pStmt.setInt(1, point.getTotal_calorie_consumed());
-	        pStmt.setInt(2, point.getTotal_nosmoke());
-	        pStmt.setInt(3, point.getTotal_alcohol_consumed());
-	        pStmt.setInt(4, point.getTotal_calorie_intake());
-	        pStmt.setInt(5, point.getTotal_sleeptime());
-	        pStmt.setString(6, point.getUser_id());
-	        pStmt.setInt(7, point.getYear());
-	        pStmt.setInt(8, point.getMonth());
+	        pStmt.setInt(1, pt.getTotal_calorie_consumed());
+	        pStmt.setInt(2, pt.getTotal_nosmoke());
+	        pStmt.setInt(3, pt.getTotal_alcohol_consumed());
+	        pStmt.setInt(4, pt.getTotal_calorie_intake());
+	        pStmt.setInt(5, pt.getTotal_sleeptime());
+	        pStmt.setString(6, pt.getUser_id());
+	        pStmt.setInt(7, pt.getYear());
+	        pStmt.setInt(8, pt.getMonth());
 
 	        // 実行
 	        if (pStmt.executeUpdate() == 1) {
