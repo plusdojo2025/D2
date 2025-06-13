@@ -42,7 +42,24 @@
 <div>
 <p>カレンダー</p>
 </div>
+<%
+    java.util.List<dto.RewardDay> rewardList = (java.util.List<dto.RewardDay>) request.getAttribute("rewardList");
 
+    if (rewardList != null && !rewardList.isEmpty()) {
+        for (int i = 0; i < rewardList.size(); i++) {
+            dto.RewardDay reward = rewardList.get(i);
+%>
+<p>
+    <%= reward.getUserId() %> | <%= reward.getDate() %> | <%= reward.getRewardExplain() %>
+</p>
+<%
+        }
+    } else {
+%>
+<p>報酬記録はありません</p>
+<%
+    }
+%>
 <div>
 <p>アバター・街並み表示</p>
 </div>
