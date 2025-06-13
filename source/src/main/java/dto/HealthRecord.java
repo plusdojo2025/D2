@@ -3,103 +3,155 @@ package dto;
 import java.io.Serializable;
 
 public class HealthRecord implements Serializable {
-	private String exerciseKind; //運動の種類
+	private String userId; // ユーザーID
+	private String date; // 日付
+	private String exerciseType; // 運動の種類
 	private int exerciseTime; // 運動時間
-	private double nowWeight; //現在の体重
-	private boolean isQuitSmoking; //禁煙できたか
-	private double alcoholContent; //アルコール度数
-	private int drinkingAmount; //お酒の摂取量
-	private double sleepHours; //睡眠時間
-	private int calorieIntake; //摂取カロリー
-	private String remarks; // 自由欄
-	
-	
-	
-	public HealthRecord(String exerciseKind, int exerciseTime, double nowWeight, boolean isQuitSmoking,
-			double alcoholContent, int drinkingAmount, double sleepHours, int calorieIntake, String remarks) {
+	private double nowWeight; // 現在の体重
+	private double calorieConsu; // 消費カロリー
+	private int nosmoke; // 禁煙できたか(0か1)
+	private double alcoholContent; // アルコール度数
+	private int alcoholConsumed; // お酒の摂取量
+	private double pureAlcoholConsumed;// 純アルコール摂取量
+	private double sleepHours; // 睡眠時間
+	private int calorieIntake; // 摂取カロリー
+	private String free; // 自由欄
+
+	// コンストラクタ
+	public HealthRecord(String userId, String date, String exerciseType, int exerciseTime, double nowWeight,
+			double calorieConsu, int nosmoke, double alcoholContent, int alcoholConsumed,
+			double pureAlcoholConsumed, double sleepHours, int calorieIntake, String free) {
 		super();
-		this.exerciseKind = exerciseKind;
+		this.userId = userId;
+		this.date = date;
+		this.exerciseType = exerciseType;
 		this.exerciseTime = exerciseTime;
 		this.nowWeight = nowWeight;
-		this.isQuitSmoking = isQuitSmoking;
+		this.calorieConsu = calorieConsu;
+		this.nosmoke = nosmoke;
 		this.alcoholContent = alcoholContent;
-		this.drinkingAmount = drinkingAmount;
+		this.alcoholConsumed = alcoholConsumed;
+		this.pureAlcoholConsumed = pureAlcoholConsumed;
 		this.sleepHours = sleepHours;
 		this.calorieIntake = calorieIntake;
-		this.remarks = remarks;
+		this.free = free;
 	}
-	
-	
-	//運動の種類のゲッターセッター
-	public String getExerciseKind() {
-		return exerciseKind;
+
+	// ユーザーIDのゲッターセッター
+	public String getUserId() {
+		return userId;
 	}
-	public void setExerciseKind(String exerciseKind) {
-		this.exerciseKind = exerciseKind;
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	
-	//運動時間のゲッターセッター
+
+	// 日付のゲッターセッター
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	// 運動の種類のゲッターセッター
+	public String getExerciseType() {
+		return exerciseType;
+	}
+
+	public void setExerciseType(String exerciseType) {
+		this.exerciseType = exerciseType;
+	}
+
+	// 運動時間のゲッターセッター
 	public int getExerciseTime() {
 		return exerciseTime;
 	}
+
 	public void setExerciseTime(int exerciseTime) {
 		this.exerciseTime = exerciseTime;
 	}
-	
-	//現在体重のゲッターセッター「
+
+	// 現在体重のゲッターセッター「
 	public double getNowWeight() {
 		return nowWeight;
 	}
+
 	public void setNowWeight(double nowWeight) {
 		this.nowWeight = nowWeight;
 	}
-	
-	//禁煙できたかのゲッターセッター
-	public boolean isQuitSmoking() {
-		return isQuitSmoking;
+
+	// 消費カロリーのゲッターセッター
+	public double getCalorieConsu() {
+		return calorieConsu;
 	}
-	public void setQuitSmoking(boolean isQuitSmoking) {
-		this.isQuitSmoking = isQuitSmoking;
+
+	public void setCalorieConsu(double calorieConsu) {
+		this.calorieConsu = calorieConsu;
 	}
-	
-	//アルコール度数のゲッターセッター
+
+	// 禁煙できたかのゲッターセッター
+	public int getNosmoke() {
+		return nosmoke;
+	}
+
+	public void setNosmoke(int nosmoke) {
+		this.nosmoke = nosmoke;
+	}
+
+	// アルコール度数のゲッターセッター
 	public double getAlcoholContent() {
 		return alcoholContent;
 	}
+
 	public void setAlcoholContent(double alcoholContent) {
 		this.alcoholContent = alcoholContent;
 	}
-	
-	//飲酒量のゲッターセッター
-	public int getDrinkingAmount() {
-		return drinkingAmount;
+
+	// 飲酒量のゲッターセッター
+	public int getAlcoholConsumed() {
+		return alcoholConsumed;
 	}
-	public void setDrinkingAmount(int drinkingAmount) {
-		this.drinkingAmount = drinkingAmount;
+
+	public void setAlcoholConsumed(int alcoholConsumed) {
+		this.alcoholConsumed = alcoholConsumed;
 	}
-	
-	//睡眠時間のゲッターセッター
+
+	// 純アルコール摂取量のゲッターセッター
+	public double getPureAlcoholConsumed() {
+		return pureAlcoholConsumed;
+	}
+
+	public void setPureAlcoholConsumed(double pureAlcoholConsumed) {
+		this.pureAlcoholConsumed = pureAlcoholConsumed;
+	}
+
+	// 睡眠時間のゲッターセッター
 	public double getSleepHours() {
 		return sleepHours;
 	}
+
 	public void setSleepHours(double sleepHours) {
 		this.sleepHours = sleepHours;
 	}
-	
-	//摂取カロリーのゲッターセッター
+
+	// 摂取カロリーのゲッターセッター
 	public int getCalorieIntake() {
 		return calorieIntake;
 	}
+
 	public void setCalorieIntake(int calorieIntake) {
 		this.calorieIntake = calorieIntake;
 	}
-	
-	//自由欄のゲッターセッター
-	public String getRemarks() {
-		return remarks;
+
+	// 自由欄のゲッターセッター
+	public String getFree() {
+		return free;
 	}
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
+
+	public void setFree(String free) {
+		this.free = free;
 	}
-	
+
 }
