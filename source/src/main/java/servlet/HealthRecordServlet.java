@@ -8,7 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import dao.HealthRecordDAO;
 import dto.HealthRecord;
@@ -17,7 +16,7 @@ import dto.Result;
 /**
  * Servlet implementation class HealthRecord
  */
-@WebServlet("/HealthRecord")
+@WebServlet("/HealthRecordServlet")
 public class HealthRecordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -34,11 +33,11 @@ public class HealthRecordServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-		HttpSession session = request.getSession();
+		/*HttpSession session = request.getSession();
 		if (session.getAttribute("id") == null) {
 			response.sendRedirect("/D2/LoginServlet");
 			return;
-		}
+		}*/
 		// String date = (String) request.getAttribute("date");
 		String date = "2025-06-12";
 		request.setAttribute("date", date);
