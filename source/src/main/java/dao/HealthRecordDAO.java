@@ -181,7 +181,7 @@ public class HealthRecordDAO {
 			while (rs.next()) {
 				HealthRecord record = new HealthRecord(rs.getString("hw.user_id"),
 						                               rs.getString("hw.date"),
-						                               rs.getString("excercise_type"),
+						                               rs.getString("exercise_type"),
 						                               rs.getInt("exercise_time"),
 						                               0,//現在の体重はカレンダーに載せないため値はなんでもよい
 						                               rs.getDouble("calorie_consu"),

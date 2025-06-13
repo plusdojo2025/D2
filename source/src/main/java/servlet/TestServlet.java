@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.HealthRecordDAO;
+import dto.HealthRecord;
 import dto.TownAvatarElements;
 
 /**
@@ -45,6 +47,12 @@ public class TestServlet extends HttpServlet {
 		request.setAttribute("elmsImage", elementsTownAvatar);
 		// ここまでコピー-------------------------------------------
 		
+		// 健康記録のカレンダー表示のテスト-------------------
+		HealthRecordDAO HRDao = new HealthRecordDAO();
+		List<HealthRecord> hrList = HRDao.select("kazutoshi_t", 6);
+		request.setAttribute("hrList", hrList);
+
+		// -------------------------------------------
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/test.jsp");
 		dispatcher.forward(request, response);
