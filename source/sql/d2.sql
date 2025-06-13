@@ -120,14 +120,14 @@ SELECT * FROM point;
 -- -------------------------------------------
 -- 報酬日
 CREATE TABLE reward_day(
+    id INT PRIMARY KEY AUTO_INCREMENT, 
     user_id VARCHAR(20), 
     date DATE, 
     reward_explain VARCHAR(30),
-    PRIMARY KEY(user_id, date),
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
-INSERT INTO reward_day VALUES  
+INSERT INTO reward_day(user_id, date, reward_explain) VALUES  
     ("kazutoshi_t", "2025-05-10", "人であふれた！"),
     ("kazutoshi_t", "2025-05-15", "建物が建った！"),
     ("kazutoshi_t", "2025-05-31", "民族衣装がもらえた！");
@@ -156,7 +156,7 @@ CREATE TABLE health_alcohol(
     pure_alcohol_consumed FLOAT,
     alcohol_consumed INT,
     alcohol_content FLOAT,
-    FOREIGN KEY(user_id) REFERENCES user(id)
+    FOREIGN KEY(user_id, date) REFERENCES health_whole(user_id, date)
 );
 
 CREATE TABLE health_exercise(
@@ -166,7 +166,7 @@ CREATE TABLE health_exercise(
     calorie_consu FLOAT,
     exercise_type VARCHAR(30),
     exercise_time  INT, 
-    FOREIGN KEY(user_id) REFERENCES user(id)
+    FOREIGN KEY(user_id, date) REFERENCES health_whole(user_id, date)
 );
 
 INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-01", 0, 8, 2000, "飲み会した");
