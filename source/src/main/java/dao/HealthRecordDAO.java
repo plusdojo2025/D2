@@ -173,28 +173,20 @@ public class HealthRecordDAO {
 			} else {
 				pStmt.setString(2, "%-" + month + "-%");
 			}
-			
+
 			// SQL文を実行し、結果表を取得する
 			ResultSet rs = pStmt.executeQuery();
-			
+
 			// ResultSetはDAOでしか使えないため結果表をコレクションにコピーする
 			while (rs.next()) {
-				HealthRecord record = new HealthRecord(rs.getString("hw.user_id"),
-						                               rs.getString("hw.date"),
-						                               rs.getString("exercise_type"),
-						                               rs.getInt("exercise_time"),
-						                               0,//現在の体重はカレンダーに載せないため値はなんでもよい
-						                               rs.getDouble("calorie_consu"),
-						                               rs.getInt("nosmoke"),
-						                               rs.getDouble("alcohol_content"),
-						                               rs.getInt("alcohol_consumed"),
-						                               rs.getDouble("pure_alcohol_consumed"),
-						                               rs.getDouble("sleep_time"),
-						                               rs.getInt("calorie_intake"),
-						                               rs.getString("free"));
+				HealthRecord record = new HealthRecord(rs.getString("hw.user_id"), rs.getString("hw.date"),
+						rs.getString("exercise_type"), rs.getInt("exercise_time"), 0, // 現在の体重はカレンダーに載せないため値はなんでもよい
+						rs.getDouble("calorie_consu"), rs.getInt("nosmoke"), rs.getDouble("alcohol_content"),
+						rs.getInt("alcohol_consumed"), rs.getDouble("pure_alcohol_consumed"),
+						rs.getDouble("sleep_time"), rs.getInt("calorie_intake"), rs.getString("free"));
 				RecordList.add(record);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			RecordList = null;
@@ -215,7 +207,7 @@ public class HealthRecordDAO {
 		// 結果を返す
 		return RecordList;
 	}
-		
+
 	// updateメソッド：引数cardで指定されたレコードを更新し、成功したらtrueを返す
 	public boolean update(HealthRecord record) {
 		Connection conn = null;
@@ -227,13 +219,30 @@ public class HealthRecordDAO {
 
 			// データベースに接続する
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
-			+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
-			"root", "password");
+					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+					"root", "password");
 
 			// SQL文を準備する
-			String sql = "UPDATE SET UPDATE health_whole SET nosmoke=? sleep_time=? calorie_intake=? WHERE user_id=?, date=? ";
-			PreparedStatement pStmt = conn.prepareStatement(sql);
-		}catch (SQLException e) {
+			String sql1 = "UPDATE SET UPDATE health_whole SET nosmoke=? sleep_time=? calorie_intake=? WHERE user_id=?, date=? ";
+			PreparedStatement pStmt1 = conn.prepareStatement(sql1);
+
+			// SQL文を完成させる
+			// 禁煙できたかを上書きする
+			pStmt1.setInt(1, record.getNosmoke());
+
+			// 睡眠時間を上書きする
+			pStmt1.setDouble(2, record.getSleepHours());
+			
+			//摂取カロリーを上書きする
+			pStmt1.setInt(3, record.getCalorieIntake());
+			
+			//ユーザーIDを指定する
+			pStmt1.setString(4, record.getUserId());
+			
+			//日付を指定する
+			pStmt1.setString(5, record.getDate());
+//_________06/13(金）ここまで進めた。			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -251,5 +260,5 @@ public class HealthRecordDAO {
 		// 結果を返す
 		return result;
 	}
-	
+
 }
