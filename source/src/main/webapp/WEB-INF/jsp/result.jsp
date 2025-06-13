@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="css/bc.css">
+
 <title>名刺管理</title>
 </head>
 <body>
