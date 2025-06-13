@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,29 +8,23 @@
 </head>
 <body>
 
-<hr>
+	<hr>
 
 
-<h2>ユーザー登録フォーム</h2>
+	<h2>ユーザー登録フォーム</h2>
 
-<form action="UserRegistServlet" method="post">
-    <label for="id">ID：</label>
-    <input type="text" id="id" name="id"><br><br>
+	<form action="UserRegistServlet" method="post">
+		<label for="id">ID：</label> 
+		<input type="text" id="id" name="id"><br>
+		<br> <label for="pw">パスワード：</label> 
+		<input type="password"id="pw" name="pw"><br>
+		<br> <label for="pwConfirm">パスワード（確認）：</label> 
+		<input type="password" id="pwConfirm" name="pwConfirm"><br>
+		<br> <input type="submit" value="登録">
+	</form>
 
-    <label for="idConfirm">ID（確認）：</label>
-    <input type="text" id="idConfirm" name="idConfirm"><br><br>
-
-    <label for="pw">パスワード：</label>
-    <input type="password" id="pw" name="pw"><br><br>
-
-    <label for="pwConfirm">パスワード（確認）：</label>
-    <input type="password" id="pwConfirm" name="pwConfirm"><br><br>
-
-    <input type="submit" value="登録">
-</form>
-
-<br>
-<a href="LoginServlet">ログインページに戻る</a>
+	<br>
+	<a href="LoginServlet">ログインページに戻る</a>
 
 </body>
 </html>
