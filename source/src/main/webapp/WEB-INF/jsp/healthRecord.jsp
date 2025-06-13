@@ -27,8 +27,8 @@
 				</tr>
 				<tr>
 					<td><label>種類 <select name="exercise_type" id="">
-								<option value="walking">ウォーキング 3.5メッツ</option>
-								<option value="cycling">サイクリング4.0メッツ</option>
+								<option value="ウォーキング">ウォーキング 3.5メッツ</option>
+								<option value="サイクリング">サイクリング4.0メッツ</option>
 						</select> <input type="hidden" name="mets" id="mets" value="3.5"> 
 						<script>
 							function updateMets() {
