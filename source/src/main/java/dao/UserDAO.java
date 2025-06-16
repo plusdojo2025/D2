@@ -101,7 +101,41 @@ public class UserDAO {
 	 *  	健康記録登録のたびに現在の体重を更新
 	 */
 	public boolean updateWeight(String userID, double weight) {
-		return false;
+		Connection conn = null;
+		boolean result = false;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/D2?"
+					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+					"root", "password");
+
+			// UPDATE文を準備する
+			String sql = "UPDATE user SET weight=? WHERE id=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setDouble(1, weight);
+			pStmt.setString(2, userID);
+
+			// UPDATE文を実行
+			int rowsUpdated = pStmt.executeUpdate();
+			if (rowsUpdated > 0) {
+				result = true;
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+			result = false;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+		
 	}
 	
 	/* updateProfile()
@@ -111,10 +145,56 @@ public class UserDAO {
 			String userID, 
 			double weight,
 			double height,
+			Character sex,
 			int age,
 			int activeLevelID
 			) {
-		return false;
+		Connection conn = null;
+		boolean result = false;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/D2?"
+					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+					"root", "password");
+
+			// UPDATE文を準備する
+			String sql = "UPDATE user SET"
+					+ " weight=?, height=?, sex=?, age=?, act_level_id=?"
+					+ " WHERE id=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setDouble(1, weight);
+			pStmt.setDouble(2, height);
+			pStmt.setString(3, sex.toString());
+			pStmt.setInt(4, age);
+			pStmt.setInt(5, activeLevelID);
+			pStmt.setString(6, userID);
+
+			// UPDATE文を実行
+			int rowsUpdated = pStmt.executeUpdate();
+			if (rowsUpdated > 0) {
+				result = true;
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+			result = false;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static void main(String[] args) {
+		UserDAO userDAO = new UserDAO();
+//		userDAO.updateProfile("kazutoshi_t", 70.0, 170.0, '男', 53, 1);
+		userDAO.updateWeight("kazutoshi_t", 69.0);
 	}
 }
 
