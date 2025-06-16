@@ -10,8 +10,9 @@
 	<header>
 		<h1>ケンコークラフト ホーム</h1>
 		<nav>
-			<a href="record.jsp">健康記録登録</a> <a href="calendar.jsp">カレンダー</a> <a
-				href="logout">ログアウト</a>
+			<a href="HealthRecordServlet?date=">健康記録登録</a> <!-- TODO: todayに今日の日付-->
+			<a href="CalendarServlet?month=6&year=2025">カレンダー</a> <!-- TODO: month, year-->
+			<a href="logout">ログアウト</a>
 		</nav>
 	</header>
 

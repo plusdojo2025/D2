@@ -34,11 +34,15 @@ public class TargetValueDAO {
 	}
 	
 	public boolean insertVoid(String UserID) {
-		// ユーザ登録したときに呼ばれる空の目標値レコードを追加する処理
+		/* 空の目標値レコードを追加する処理
+		 * ユーザ登録したときに呼ばれる
+		 */
+		
 		return false;
 	}
 	
 	public boolean update(TargetValue targetValue) {
+		/* 毎月の目標値更新 */
 		return false;
 	}
 }

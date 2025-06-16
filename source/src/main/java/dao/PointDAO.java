@@ -116,5 +116,10 @@ public class PointDAO {
 	    return result;
 	}
 	
-	// ポイント更新処理のための項目ごとのupdateを作ってほしい
+	// TODO:ポイント更新処理のための項目ごとのupdateを作ってほしい
+	
+	// TODO: 毎月の目標値設定の後に、その月のポイントレコードをinsertするメソッド
+	public boolean insert(String userID, int month, int year) {
+		return false;
+	}
 }

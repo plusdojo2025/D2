@@ -53,4 +53,8 @@ public class TownAvatarElements {
 		this.peopleNum = peopleNum;		
 	}
 	
+	public TownAvatarElements() {
+		
+	}
+	
 }

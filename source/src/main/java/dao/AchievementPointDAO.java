@@ -4,20 +4,27 @@ import dto.AchievementPoint;
 
 public class AchievementPointDAO {
 	public AchievementPoint selectEat() {
-		// 結果セットを格納するコレクション
 		
+		AchievementPoint achievementPoint = new AchievementPoint();
+		return achievementPoint;
 	}
+
 	public AchievementPoint selectAlcohol() {
-		// 結果セットを格納するコレクション
-		
+		AchievementPoint achievementPoint = new AchievementPoint();
+		return achievementPoint;
+
 	}
-	public AchievementPoint selectEat() {
-		// 結果セットを格納するコレクション
-		
+
+	public AchievementPoint selectSmoke() {
+		AchievementPoint achievementPoint = new AchievementPoint();
+		return achievementPoint;
+
 	}
-	public AchievementPoint selectEat() {
-		// 結果セットを格納するコレクション
-		
+
+	public AchievementPoint selectSleep() {
+		AchievementPoint achievementPoint = new AchievementPoint();
+		return achievementPoint;
+
 	}
-	
+
 }

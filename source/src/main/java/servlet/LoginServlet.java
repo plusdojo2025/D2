@@ -44,6 +44,7 @@ public class LoginServlet extends HttpServlet {
 		String pw = request.getParameter("pw");
 
 		// === ID・パスワードの入力チェックを追加 ===
+		// TODO: ここの処理をjsファイルに移行
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
