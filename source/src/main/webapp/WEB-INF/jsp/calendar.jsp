@@ -15,16 +15,34 @@
 <!-- 月セレクトボタン -->
 <!-- 前の月に移動 -->
   <div>
-    <form method="get" action="simpleCalendar.jsp" style="display: inline;">
-      <input type="hidden" name="month" value=""/>
-      <input type="submit" value="◀ 前月"/>
-    </form>
-   <h2>月</h2>
+
+ <%@ page import="java.time.LocalDate" %>
+<%
+    LocalDate now = LocalDate.now();
+    String max = now.getYear() + "-" + String.format("%02d", now.getMonthValue());
+    LocalDate lastYear = now.minusYears(1);
+    String min = lastYear.getYear() + "-" + String.format("%02d", lastYear.getMonthValue());
+%>
+ 
+<input type="month" id="monthInput" min="<%= min %>" max="<%= max %>"  />
+<script>
+  document.getElementById('monthInput').addEventListener('change', function() {
+    const ym = this.value;
+    if (!ym) return;
+
+    const parts = ym.split('-');
+    const year = parts[0];
+    const month = parseInt(parts[1]);
+
+    const url = '/D2/CalendarServlet?month=' + month + '&year=' + year;
+    window.location.href = url;
+  });
+</script>
+
+
+
 <!-- 次の月に移動 -->
-    <form method="get" action="simpleCalendar.jsp" style="display: inline;">
-      <input type="hidden" name="month" value=""/>
-      <input type="submit" value="翌月 ▶"/>
-    </form>
+
   </div>
   
   <!-- TODO: 〇月と書かれているところをクリックすると年と月を選べるプルダウンを作成する。 -->
