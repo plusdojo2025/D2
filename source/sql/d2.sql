@@ -71,6 +71,7 @@ INSERT INTO user(id, pw) VALUES
 SELECT * FROM user;
 
 -- TODO:update
+-- UPDATE user SET weight=70.0, height=170.0, sex="男", age=53, act_level_id=2 WHERE id="kazutoshi_t";
 
 -- -------------------------------------------
 -- 目標値
