@@ -50,6 +50,9 @@ public class CalendarServlet extends HttpServlet {
 			// 仮にかずとしにしとくね
 			userId = "kazutoshi_t";
 		}
+		
+		int month = (int) request.getAttribute("month"); // TODO:DBから持ってくるレコードはこの月をもとにする)
+		
 
 		// 達成した報酬をDBから持ってくる
 		RewardDayDAO rewarddao = new RewardDayDAO();
@@ -139,11 +142,6 @@ public class CalendarServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		/* カレンダーの日付をクリックしたときに、その日の健康記録登録・更新ページに遷移
-		 * 	日付からその日付の健康記録をDBから持ってくる
-		 * 		返り値がnullなら健康記録登録
-		 */
-		
 	}
 	
 }

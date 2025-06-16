@@ -26,6 +26,18 @@
       <input type="submit" value="翌月 ▶"/>
     </form>
   </div>
+  
+  <!-- TODO: 〇月と書かれているところをクリックすると年と月を選べるプルダウンを作成する。 -->
+  <a href="CalendarServlet?month=6&year=2025">カレンダー</a> 
+  <a href="CalendarServlet?month=7&year=2025">カレンダー</a> 
+  <a href="CalendarServlet?month=8&year=2025">カレンダー</a> 
+  <a href="CalendarServlet?month=9&year=2025">カレンダー</a> 
+  <a href="CalendarServlet?month=10&year=2025">カレンダー</a> 
+  <a href="CalendarServlet?month=11&year=2025">カレンダー</a> 
+  <a href="CalendarServlet?month=12&year=2025">カレンダー</a> 
+  <a href="CalendarServlet?month=1&year=2026">カレンダー</a> 
+  
+  
 
 
 <div>
@@ -145,6 +157,12 @@
 <% } %>
 </div>
 
+<!-- 
+/* TODO:カレンダーの日付をクリックしたときに、その日の健康記録登録・更新フォームをポップアップ
+		 * 	healthRecoed.jspのコピペ
+		 *  その日に既に健康記録がある場合は、健康記録内容をデフォルトでフォーム入力欄に表示
+ -->
+		 
 
 
 

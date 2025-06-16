@@ -38,7 +38,7 @@ public class HealthRecordServlet extends HttpServlet {
 			response.sendRedirect("/D2/LoginServlet");
 			return;
 		}*/
-		// String date = (String) request.getAttribute("date");
+//		String date = (String) request.getAttribute("date");
 		String date = "2025-06-12";
 		request.setAttribute("date", date);
 		// 登録ページにフォワードする

@@ -11,7 +11,7 @@
 	<div class="wrapper">
 		<!-- ヘッダー（ここから） -->
 		<h1>
-			<a href="MenuServlet">ケンコークラフト</a>
+			<a href="HomeServlet">ケンコークラフト</a>
 		</h1>
 
 

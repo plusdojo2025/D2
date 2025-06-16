@@ -96,15 +96,23 @@ public class UserDAO {
 		return result;
 	}
 	
-	// updataWeight()
+	/*
+	 *  updataWeight()
+	 *  	健康記録登録のたびに現在の体重を更新
+	 */
 	public boolean updateWeight(String userID, double weight) {
 		return false;
 	}
 	
-	// updateProfile()
-	public boolean updateProfile(String userID, 
-			double weight
-			//身長、年齢、活動レベル
+	/* updateProfile()
+	 * 		毎月の目標値設定のたびにユーザプロフィールを更新
+	 */
+	public boolean updateProfile(
+			String userID, 
+			double weight,
+			double height,
+			int age,
+			int activeLevelID
 			) {
 		return false;
 	}

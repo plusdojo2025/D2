@@ -33,11 +33,15 @@ public class HomeServlet extends HttpServlet {
             TargetValue targetValue = dao.getTargetValueByUserId(userId);
             request.setAttribute("targetValue", targetValue);
             
-            // 累計消費カロリーから次の国までの歩数を計算して、リクエストスコープに格納
+            /* DBから取得した累計消費カロリーから次の国までの歩数を計算
+             * → リクエストスコープに格納
+             */
             
         }
         
-        // 街並み・アバターを表示ための画像パスのリストを取得してリクエストスコープに格納
+        /* 街並み・アバターを表示ための画像パスのリストを取得(ImageAllDAOのselect()を使用)
+         * → リクエストスコープに格納
+         */
         
 
         // JSPへフォワード
@@ -58,6 +62,8 @@ public class HomeServlet extends HttpServlet {
 		 */
 		
 		// Pointテーブルのにその月のレコードを追加
+		
+		// ホームにフォワード
 		
 	}
 

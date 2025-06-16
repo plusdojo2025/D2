@@ -39,6 +39,7 @@ public class UserRegistServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 //パスワード入力プログラム!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // すべてのプログラムを入力しているか?
+        // TODO: ここの処理をjsファイルに移行
         if (id == null || id.isEmpty() ||
             idConfirm == null || idConfirm.isEmpty() ||
             pw == null || pw.isEmpty() ||
@@ -54,6 +55,7 @@ public class UserRegistServlet extends HttpServlet {
         
 
         // 2つの項目のパスワード一致しているか?
+        // TODO: ここの処理をjsファイルに移行
         if (!pw.equals(pwConfirm)) {
             out.println("<html><body>");
             out.println("<h3 style='color:red;'>パスワードが一致していません。</h3>");
