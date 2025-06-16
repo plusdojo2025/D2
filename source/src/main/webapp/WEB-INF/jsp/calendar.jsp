@@ -62,7 +62,90 @@
 %>
 <div>
 <p>アバター・街並み表示</p>
+<%
+    String clothImagePath = (String) request.getAttribute("clothImagePath");
+    String shoeImagePath = (String) request.getAttribute("shoeImagePath");
+    String hatImagePath = (String) request.getAttribute("hatImagePath");
+    String costumeImagePath = (String) request.getAttribute("costumeImagePath");
+%>
+
+<p>服の画像:</p>
+<% if (clothImagePath != null && !clothImagePath.isEmpty()) { %>
+    <img src="<%= clothImagePath %>" alt="服の画像" />
+<% } else { %>
+    <p>服の画像はありません</p>
+<% } %>
+
+<p>靴の画像:</p>
+<% if (shoeImagePath != null && !shoeImagePath.isEmpty()) { %>
+    <img src="<%= shoeImagePath %>" alt="靴の画像" />
+<% } else { %>
+    <p>靴の画像はありません</p>
+<% } %>
+
+<p>帽子の画像:</p>
+<% if (hatImagePath != null && !hatImagePath.isEmpty()) { %>
+    <img src="<%= hatImagePath %>" alt="帽子の画像" />
+<% } else { %>
+    <p>帽子の画像はありません</p>
+<% } %>
+
+<p>民族衣装の画像:</p>
+<% if (costumeImagePath != null && !costumeImagePath.isEmpty()) { %>
+    <img src="<%= costumeImagePath %>" alt="民族衣装の画像" />
+<% } else { %>
+    <p>民族衣装の画像はありません</p>
+<% } %>
+
+<%
+    java.util.List<dto.Image> buildingImages = (java.util.List<dto.Image>) request.getAttribute("buildingImages");
+%>
+
+<p>建物の画像:</p>
+<%
+    if (buildingImages != null && !buildingImages.isEmpty()) {
+        for (int i = 0; i < buildingImages.size(); i++) {
+            dto.Image img = buildingImages.get(i);
+%>
+            <p><%= (i + 1) %>つ目の建物画像:</p>
+            <img src="<%= img.getImagePath() %>" alt="建物の画像 <%= (i + 1) %>" />
+<%
+        }
+    } else {
+%>
+    <p>建物の画像はありません</p>
+<%
+    }
+%>
+
+<% 
+    String faceImagePath = (String) request.getAttribute("faceImagePath");
+%>
+<p>顔色の画像:</p>
+<% if (faceImagePath != null && !faceImagePath.isEmpty()) { %>
+    <img src="<%= faceImagePath %>" alt="顔色の画像" />
+<% } else { %>
+    <p>顔色の画像はありません</p>
+<% } %>
+
+<%
+    String peopleImagePath = (String) request.getAttribute("peopleImagePath");
+    Integer peopleCount = (Integer) request.getAttribute("peopleCount");
+    if (peopleCount == null) peopleCount = 0;
+%>
+
+<p>禁煙達成者の人数: <%= peopleCount %></p>
+
+<% if (peopleImagePath != null && !peopleImagePath.isEmpty() && peopleCount > 0) { %>
+    <% for (int i = 0; i < peopleCount; i++) { %>
+        <img src="<%= peopleImagePath %>" alt="禁煙者の人の画像" />
+    <% } %>
+<% } else { %>
+    <p>禁煙達成者の画像はありません</p>
+<% } %>
 </div>
+
+
 
 
 

@@ -105,8 +105,11 @@
 				<tr>
 					<td colspan="2" class="searchandreset">
 						<!-- 今リクエストスコープで保持している日付データは登録ボタンを押すとなくなってしまうため、hiddenでデータを保持しておく -->
+						<!-- 登録か更新ボタンの切換え -->
 						<input type="hidden" name="date" value="${date}"> <input
 						type="submit" id="register" name="submit" value="登録">
+						<input type="hidden" name="date" value="${date}"> <input
+						type="submit" id="update" name="submit" value="更新">
 						<p id="error_message"></p>
 					</td>
 				</tr>

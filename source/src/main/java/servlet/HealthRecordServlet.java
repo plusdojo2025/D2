@@ -130,6 +130,25 @@ public class HealthRecordServlet extends HttpServlet {
 		} else { // 登録失敗
 			request.setAttribute("result", new Result("登録失敗！", "レコードを登録できませんでした。", "/D2/HomeServlet"));// メニューページでなく検索ページに戻す
 		}
+		
+		/* 現在の体重に入力された数字をもとにユーザテーブルの現在の体重を更新
+		 * UserDAOのupdataWeight()
+		 */
+		
+		/* ポイント獲得処理
+		 * 	目標値達成しているかの処理(たぶんif文めっちゃ使う)
+		 * 	目標値達成した項目のポイントだけ更新
+		 * 	PointDaoのアップデートを使う
+		 * */
+		
+		/* 報酬受け取り処理
+		 * 	更新されたポイントの更新前と更新後のポイントと
+		 * 	各種達成ポイントテーブル(DAO作って)を比較して
+		 * 	ポイントが達成していたら報酬受け取り処理を行う
+		 * 		（RewardDayDAOのinsertを使う）
+		 */
+		
+		
 		// 結果ページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
 		dispatcher.forward(request, response);

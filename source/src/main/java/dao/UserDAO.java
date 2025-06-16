@@ -95,6 +95,18 @@ public class UserDAO {
 		}
 		return result;
 	}
-
+	
+	// updataWeight()
+	public boolean updateWeight(String userID, double weight) {
+		return false;
+	}
+	
+	// updateProfile()
+	public boolean updateProfile(String userID, 
+			double weight
+			//身長、年齢、活動レベル
+			) {
+		return false;
+	}
 }
 

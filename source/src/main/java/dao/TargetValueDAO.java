@@ -32,4 +32,13 @@ public class TargetValueDAO {
 		}
 		return targetValue;
 	}
+	
+	public boolean insertVoid(String UserID) {
+		// ユーザ登録したときに呼ばれる空の目標値レコードを追加する処理
+		return false;
+	}
+	
+	public boolean update(TargetValue targetValue) {
+		return false;
+	}
 }

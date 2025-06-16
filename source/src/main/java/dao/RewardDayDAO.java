@@ -22,11 +22,13 @@ public class RewardDayDAO {
 					"jdbc:mysql://localhost:3306/d2?" + "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
 					"root", "password");
 
+			//			ユーザーID、日付、報酬説明をテーブルから表示
 			String sql = "SELECT user_id, date, reward_explain FROM reward_day ORDER BY user_id, date";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			ResultSet rs = pStmt.executeQuery();
 
+			//			全行を表示するまで繰り返し
 			while (rs.next()) {
 				RewardDay rd = new RewardDay(rs.getString("user_id"), rs.getDate("date"),
 						rs.getString("reward_explain"));
@@ -51,5 +53,9 @@ public class RewardDayDAO {
 		}
 
 		return rewardList;
+	}
+	
+	public boolean insert(RewardDay rewardday){
+		return false;
 	}
 }

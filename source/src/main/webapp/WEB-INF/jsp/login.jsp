@@ -17,5 +17,7 @@
 			name="pw"><br> <br> <input type="submit"
 			name="login" value="ログイン">
 	</form>
+	
+	<!-- ID・パスワードの入力チェック処理をservletから移行 -->
 </body>
 </html>

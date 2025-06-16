@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.UserDAO;
-import dto.LoginUser;
 import dto.User;
 
 /**
@@ -83,7 +82,7 @@ public class LoginServlet extends HttpServlet {
 		if (iDao.isLoginOK(new User(id, pw))) { // ログイン成功
 			// セッションスコープにIDを格納する
 			HttpSession session = request.getSession();
-			session.setAttribute("id", new LoginUser(id));
+			session.setAttribute("user_id",id);
 
 			// メニューサーブレットにリダイレクトする
 			response.sendRedirect("/D2/HomeServlet");
