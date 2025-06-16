@@ -115,4 +115,6 @@ public class PointDAO {
 
 	    return result;
 	}
+	
+	// ポイント更新処理のための項目ごとのupdateを作ってほしい
 }

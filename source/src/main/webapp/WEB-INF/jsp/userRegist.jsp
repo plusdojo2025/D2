@@ -25,6 +25,8 @@
 
 	<br>
 	<a href="LoginServlet">ログインページに戻る</a>
+	
+	<!-- パスワードの2重チェック処理をservletから移行 -->
 
 </body>
 </html>

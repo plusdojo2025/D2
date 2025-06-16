@@ -260,5 +260,6 @@ public class HealthRecordDAO {
 		// 結果を返す
 		return result;
 	}
+	
 
 }

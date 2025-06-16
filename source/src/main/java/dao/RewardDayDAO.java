@@ -54,4 +54,8 @@ public class RewardDayDAO {
 
 		return rewardList;
 	}
+	
+	public boolean insert(RewardDay rewardday){
+		return false;
+	}
 }

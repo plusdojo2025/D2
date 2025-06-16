@@ -70,6 +70,12 @@ public class UserRegistServlet extends HttpServlet {
         // DB登録処理
         UserDAO dao = new UserDAO();
         boolean result = dao.insert(user);
+        
+        // ユーザの空の目標値レコードを追加
+        if(result) {
+        	//TargetValueDAOのinsertVoid()
+        }
+        
 //上記をすべて満たしていてもう登録されていないか確認のプログラム
         out.println("<html><body>");
         if (result) {

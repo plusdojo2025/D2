@@ -19,6 +19,8 @@ public class ImageDAO {
 
     // 服の画像
     public Image getClothImage(int stage) {
+    	// TODO:達成ポイントテーブルと引数の累計ポイントからステージを得る
+    	
         String sql = "SELECT image_path FROM reward_cloth WHERE stage = ? AND country_order = 0 ORDER BY id LIMIT 1";
         try (
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -41,6 +43,7 @@ public class ImageDAO {
 
     // 靴の画像
     public Image getShoeImage(int stage) {
+    	// TODO:達成ポイントテーブルと引数の累計ポイントからステージを得る
         String sql = "SELECT image_path FROM reward_cloth WHERE id = 2";
         try (
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -62,6 +65,7 @@ public class ImageDAO {
 
     // 帽子の画像
     public Image getHatImage(int stage) {
+    	// TODO:達成ポイントテーブルと引数の累計ポイントからステージを得る
         String sql = "SELECT image_path FROM reward_cloth WHERE id = 3";
         try (
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -81,6 +85,7 @@ public class ImageDAO {
 
     // 民族衣装の画像
     public Image getCountryCostumeImage(int countryOrder) {
+    	// TODO:達成ポイントテーブルと引数の累計ポイントからステージを得る
         String sql = "SELECT image_path FROM reward_cloth WHERE stage = 4 AND country_order = ?";
         try (
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -101,6 +106,7 @@ public class ImageDAO {
     
 //    建物
     public List<Image> getBuildingImages(int stage, int countryOrder) {
+    	// TODO:達成ポイントテーブルと引数の累計ポイントからステージを得る
         List<Image> images = new ArrayList<>();
         String sql = "SELECT image_path FROM reward_build WHERE stage <= ? AND country_order = ? ORDER BY stage";
         try (
@@ -123,6 +129,7 @@ public class ImageDAO {
     
 //    顔色
     public Image getFaceImage(int stage) {
+    	// TODO:達成ポイントテーブルと引数の累計ポイントからステージを得る
         String sql = "SELECT image_path FROM reward_face WHERE stage = ?";
         try (
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -145,6 +152,7 @@ public class ImageDAO {
     
 //    人の写真
     public Image getPeopleImage(int countryOrder) {
+    	// TODO:達成ポイントテーブルと引数の累計ポイントから人数を得る
         String sql = "SELECT image_path FROM reward_people WHERE country_order = ?";
         try (
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);

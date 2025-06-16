@@ -37,6 +37,13 @@ public class CalendarServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		/*HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("/D2/LoginServlet");
+			return;
+		}*/
+		
 		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("userId");
 		if (userId == null) {
@@ -44,10 +51,26 @@ public class CalendarServlet extends HttpServlet {
 			userId = "kazutoshi_t";
 		}
 
+		// 達成した報酬をDBから持ってくる
 		RewardDayDAO rewarddao = new RewardDayDAO();
-		List<RewardDay> rewardList = rewarddao.select(new RewardDay());
-
+		List<RewardDay> rewardList = rewarddao.select(new RewardDay()); // TODO: UserID, 月を引数にする
 		request.setAttribute("rewardList", rewardList);
+		
+		/* 健康記録をDBから持ってくる
+		 *  HealthRecordDAOのselectを使用
+		 *  リクエストスコープに格納
+		 */
+		
+		/* カレンダーに表示する統計値の計算処理
+		 * 	持ってきた健康記録のリストをもとに統計値を計算しリクエストスコープに格納
+		 */	
+		
+		/*
+		 *  街並み・アバター表示のための処理
+		 *   ImageAllDAOのselectを使用
+		 *   返り値のTownAvatarElementsをリクエストスコープに格納
+		 */
+		
 
 //		いったん仮のステージ
 		int countryOrder = 1;
@@ -113,4 +136,14 @@ public class CalendarServlet extends HttpServlet {
 
 		request.getRequestDispatcher("/WEB-INF/jsp/calendar.jsp").forward(request, response);
 	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		/* カレンダーの日付をクリックしたときに、その日の健康記録登録・更新ページに遷移
+		 * 	日付からその日付の健康記録をDBから持ってくる
+		 * 		返り値がnullなら健康記録登録
+		 */
+		
+	}
+	
 }
