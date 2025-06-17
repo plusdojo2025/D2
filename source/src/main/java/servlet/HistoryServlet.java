@@ -28,12 +28,20 @@ public class HistoryServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		/* 今日の西暦と月から、12か月以上前の健康記録と報酬達成日のレコードをそれぞれのテーブルから削除する
+		 * 	HealthRecordDAOのdelete(), RewardDayDAOのdelete()を使用
+		 */
 		
+		/* 今日の西暦と月から、12か月以上前のポイントのレコードをテキストファイルとして書き出し、テーブルから削除する
+		 *  書き出すパスは "history/ユーザーID/西暦-月.txt" (ユーザーIDと西暦と月は適切な名前にする)
+		 *  削除はPointDAOのdelete()を使用
+		 */
 		
-		
-		
-		
-		
+		// 過去ファイルのリストを取得
+		HistoryDAO dao = new HistoryDAO();
+        List<History> hrList = dao.select("kazutoshi_t");
+        request.setAttribute("fileList", hrList);
+        request.getRequestDispatcher("/History.jsp").forward(request, response);
 		
 		// ログインページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
@@ -42,12 +50,7 @@ public class HistoryServlet extends HttpServlet {
 		
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       //検索キーワードをjspにわたす!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		String keyword = req.getParameter("searchDate");
-        HistoryDAO dao = new HistoryDAO();
-        List<History> files = dao.getFilesByDate(keyword);
-req.setAttribute("fileList", files);
-        req.getRequestDispatcher("/History.jsp").forward(req, resp);
+
 		//ヘルプはjavascriptで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 		
