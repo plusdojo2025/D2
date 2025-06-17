@@ -33,7 +33,7 @@ public class HealthRecordDAO {
 			// 1つ目の健康記録（全体）に記録するSQL文を準備する
 			String sqlWhole = "INSERT INTO health_whole(user_id, date, nosmoke, sleep_time, calorie_intake, free)"
 					+ "VALUES(?, ?, ?, ?, ?, ?)";
-			try (PreparedStatement pStmtWhole = conn.prepareStatement(sqlWhole);) {
+			try (PreparedStatement pStmtWhole = conn.prepareStatement(sqlWhole)) {
 				// SQL文を完成させる
 				// ユーザーIDを？に挿入
 				if (hw.getUserId() != null) {
