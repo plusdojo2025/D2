@@ -35,7 +35,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 
 	<!-- ④ 街を見るボタン -->
 	<form action="HistoryServlet" method="post" style="display: inline;">
-		<input type="text" name="searchDate" placeholder="日付を入力">
+		
 		<button class="btn" type="submit">街を見る</button>
 	</form>
 
@@ -79,6 +79,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 			%>
 
 			<!-- ⑦ ダウンロードボタン -->
+			<input type="text" name="searchDate" placeholder="日付を入力"><br>
 			<button class="btn" type="submit">ダウンロード</button>
 		</form>
 	</div>
