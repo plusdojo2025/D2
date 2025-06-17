@@ -36,7 +36,7 @@ public class HomeServlet extends HttpServlet {
 			// === 現在の年月を取得 ===
 			java.time.LocalDate now = java.time.LocalDate.now();
 			int currentYear = now.getYear();
-			int currentMonth = now.getMonthValue();
+			int currentMonth = now.getMonthValue(); 
 
 			PointDAO pointDAO = new PointDAO();
 
@@ -126,7 +126,7 @@ public class HomeServlet extends HttpServlet {
 
 		// フォームから取得
 		java.time.LocalDate now = java.time.LocalDate.now();
-		int currentMonth = now.getMonthValue();
+		int currentMonth = now.getMonthValue(); 
 		String pureAlcoholStr = request.getParameter("pure_alcohol_consumed");
 		String sleepTimeStr = request.getParameter("sleep_time");
 		String calorieIntakeStr = request.getParameter("calorie_intake");
