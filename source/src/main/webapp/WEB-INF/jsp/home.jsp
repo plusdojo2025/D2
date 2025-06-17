@@ -31,9 +31,15 @@ window.onload = function () {
 <body>
 <header>
     <h1>ケンコークラフト ホーム</h1>
+    <%
+    	java.time.LocalDate now = java.time.LocalDate.now();
+    	String currentDateStr = now.toString();
+    	int currentYear = now.getYear();
+    	int currentMonth = now.getMonthValue();
+	%>
     <nav>
-        <a href="HealthRecordServlet?date=">健康記録登録</a>
-        <a href="CalendarServlet?month=6&year=2025">カレンダー</a>
+        <a href="HealthRecordServlet?date=<%= currentDateStr %>">健康記録登録</a>
+        <a href="CalendarServlet?year=<%= currentYear %>&month=<%= currentMonth %>">カレンダー</a>
         <a href="logout">ログアウト</a>
     </nav>
 </header>
@@ -45,11 +51,11 @@ window.onload = function () {
 <h2>今月の目標値</h2>
 <% if (targetValue != null) { %>
 <p>
-    ユーザーID: <%= targetValue.getUser_id() %><br>
-    月: <%= targetValue.getMonth() %><br>
+    ユーザーID: <%= targetValue.getUser_id() %>
+    現在の月: <%= java.time.LocalDate.now().getMonthValue() %>月
     目標体重: <%= targetValue.getTarget_weight() %> kg<br>
-    純アルコール摂取量: <%= targetValue.getPure_alcohol_consumed() %> g/日<br>
-    睡眠時間: <%= targetValue.getSleep_time() %> 時間<br>
+    純アルコール摂取量: <%= targetValue.getPure_alcohol_consumed() %> g/日
+    睡眠時間: <%= targetValue.getSleep_time() %> 時間
     カロリー摂取量: <%= targetValue.getCalorie_intake() %> kcal/日
 </p>
 <% } else { %>
