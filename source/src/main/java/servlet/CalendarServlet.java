@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.HealthRecordDAO;
 import dao.ImageDAO;
 import dao.RewardDayDAO;
+import dto.HealthRecord;
 import dto.Image;
 import dto.RewardDay;
 
@@ -38,32 +40,45 @@ public class CalendarServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-		/*HttpSession session = request.getSession();
-		if (session.getAttribute("id") == null) {
-			response.sendRedirect("/D2/LoginServlet");
-			return;
-		}*/
+//		HttpSession session = request.getSession();
+//		if (session.getAttribute("id") == null) {
+//			response.sendRedirect("/D2/LoginServlet");
+//			return;
+//		}
 		
 		HttpSession session = request.getSession();
-		String userId = (String) session.getAttribute("userId");
-		if (userId == null) {
-			// 仮にかずとしにしとくね
-			userId = "kazutoshi_t";
+        String userId = (String) session.getAttribute("user_id");
+		
+		
+		String yearParam = request.getParameter("year");
+		int year = 0;
+		try {
+		    year = Integer.parseInt(yearParam);
+		} catch (NumberFormatException | NullPointerException e) {
+		    year = java.time.LocalDate.now().getYear();
 		}
 		
-		int month = (int) request.getAttribute("month"); // TODO:DBから持ってくるレコードはこの月をもとにする)
+		String monthParam = request.getParameter("month");
+		int month = 0;
+		try {
+		    month = Integer.parseInt(monthParam);
+		} catch (NumberFormatException | NullPointerException e) {
+		    month = java.time.LocalDate.now().getMonthValue(); // デフォルトは今月
+		}
 		
-
+		System.out.println("userId in session: " + userId);
 		// 達成した報酬をDBから持ってくる
-		RewardDayDAO rewarddao = new RewardDayDAO();
-		List<RewardDay> rewardList = rewarddao.select(new RewardDay()); // TODO: UserID, 月を引数にする
+		RewardDayDAO rewardDao = new RewardDayDAO();
+		List<RewardDay> rewardList = rewardDao.select(userId, year, month); // TODO: UserID, 月を引数にする(達成？）
 		request.setAttribute("rewardList", rewardList);
 		
 		/* 健康記録をDBから持ってくる
 		 *  HealthRecordDAOのselectを使用
 		 *  リクエストスコープに格納
 		 */
-		
+		HealthRecordDAO healthDao = new HealthRecordDAO();
+		List<HealthRecord> healthList = healthDao.select(userId, month);
+		request.setAttribute("healthList", healthList);
 		/* カレンダーに表示する統計値の計算処理
 		 * 	持ってきた健康記録のリストをもとに統計値を計算しリクエストスコープに格納
 		 */	
