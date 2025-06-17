@@ -27,11 +27,7 @@ public class HomeServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// もしもログインしていなかったらログインサーブレットにリダイレクトする
 		HttpSession session = request.getSession();
-		if (session.getAttribute("id") == null) {
-			response.sendRedirect("/D2/LoginServlet");
-			return;
-		}
-
+		
 		// セッションからuser_idを取得
 		String userId = (String) session.getAttribute("user_id");
 
