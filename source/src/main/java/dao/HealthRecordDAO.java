@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,15 +27,13 @@ public class HealthRecordDAO {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
 					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
 					"root", "password");
-			
-			// トランザクション開始
-	        conn.setAutoCommit(false);
-	        try {
-	        	// 1つ目の健康記録（全体）に記録するSQL文を準備する
-				String sqlWhole = "INSERT INTO health_whole(user_id, date, nosmoke, sleep_time, calorie_intake, free)"
-						+ "VALUES(?, ?, ?, ?, ?, ?)";
-				PreparedStatement pStmtWhole = conn.prepareStatement(sqlWhole);
 
+			// トランザクション開始
+			conn.setAutoCommit(false);
+			// 1つ目の健康記録（全体）に記録するSQL文を準備する
+			String sqlWhole = "INSERT INTO health_whole(user_id, date, nosmoke, sleep_time, calorie_intake, free)"
+					+ "VALUES(?, ?, ?, ?, ?, ?)";
+			try (PreparedStatement pStmtWhole = conn.prepareStatement(sqlWhole);) {
 				// SQL文を完成させる
 				// ユーザーIDを？に挿入
 				if (hw.getUserId() != null) {
@@ -65,16 +62,15 @@ public class HealthRecordDAO {
 				} else {
 					pStmtWhole.setString(6, "");
 				}
-				//SQL文を実行
+				// SQL文を実行
 				pStmtWhole.executeUpdate();
-				
+			}
 
-				// 2つ目の健康記録（アルコール）に記録するSQL文を準備する(idはinsertに含めない)
-				for (HealthAlcohol ha : haList) {
-					String sqlAlc = "INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content)"
-							+ "VALUES(?, ?, ?, ?, ?)";
-					PreparedStatement pStmtAlc = conn.prepareStatement(sqlAlc);
-
+			// 2つ目の健康記録（アルコール）に記録するSQL文を準備する(idはinsertに含めない)
+			for (HealthAlcohol ha : haList) {
+				String sqlAlc = "INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content)"
+						+ "VALUES(?, ?, ?, ?, ?)";
+				try (PreparedStatement pStmtAlc = conn.prepareStatement(sqlAlc)) {
 					// SQL文を完成させる
 					// ユーザーIDを？に挿入
 					if (ha.getUserId() != null) {
@@ -96,64 +92,67 @@ public class HealthRecordDAO {
 
 					// アルコール度数を？に挿入
 					pStmtAlc.setDouble(5, ha.getAlcoholContent());
-				
-				//SQL文を実行
-				pStmtAlc.executeUpdate();
 
-				// 3つ目の健康記録（運動）に記録するSQL文を準備する（idはinsertに含めない））
-				for (HealthExercise he : heList)
+					// SQL文を実行
+					pStmtAlc.executeUpdate();
+				}
+			}
+
+			// 3つ目の健康記録（運動）に記録するSQL文を準備する（idはinsertに含めない））
+			for (HealthExercise he : heList) {
 				String sqlExer = "INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time)"
 						+ "VALUES(?, ?, ?, ?, ?)";
-				PreparedStatement pStmtExer = conn.prepareStatement(sqlExer);
+				try (PreparedStatement pStmtExer = conn.prepareStatement(sqlExer)) {
+					// SQL文を完成させる
+					// ユーザーIDを？に挿入
+					if (he.getUserId() != null) {
+						pStmtExer.setString(1, he.getUserId());
+					} else {
+						pStmtExer.setString(1, "");
+					}
+					// 日付を？に挿入
+					if (he.getDate() != null) {
+						pStmtExer.setString(2, he.getDate());
+					} else {
+						pStmtExer.setString(2, "");
+					}
 
-				// SQL文を完成させる
-				// ユーザーIDを？に挿入
-				if (record.getUserId() != null) {
-					pStmtExer.setString(1, record.getUserId());
-				} else {
-					pStmtExer.setString(1, "");
+					// 消費カロリーを？に挿入
+					pStmtExer.setDouble(3, he.getCalorieConsu());
+
+					// 運動の種類を？に挿入
+					if (he.getExerciseType() != null) {
+						pStmtExer.setString(4, he.getExerciseType());
+					} else {
+						pStmtExer.setString(4, "");
+					}
+
+					// 運動時間を？に挿入
+					pStmtExer.setInt(5, he.getExerciseTime());
+
+					// SQL文を実行する
+					pStmtExer.executeUpdate();
 				}
-				// 日付を？に挿入
-				if (record.getDate() != null) {
-					pStmtExer.setString(2, record.getDate());
-				} else {
-					pStmtExer.setString(2, "");
-				}
+			}
 
-				// 消費カロリーを？に挿入
-				pStmtExer.setDouble(3, record.getCalorieConsu());
+			// 全て成功したらコミット
+			conn.commit();
+			result = true;
 
-				// 運動の種類を？に挿入
-				if (record.getExerciseType() != null) {
-					pStmtExer.setString(4, record.getExerciseType());
-				} else {
-					pStmtExer.setString(4, "");
-				}
-
-				// 運動時間を？に挿入
-				pStmtExer.setInt(5, record.getExerciseTime());
-
-				// SQL文を実行する
-				pStmtExer.executeUpdate()
-	        }
-	        
-	        //全て成功したらコミット
-	        conn.commit();
-	        result = true;
-			
-	    } catch (SQLException e ) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
-			conn.rollback();
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			conn.rollback();
-		}
-
-		finally {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		} finally {
 			// データベースを切断
 			if (conn != null) {
 				try {
+					conn.setAutoCommit(true); // 元に戻す
 					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -166,7 +165,7 @@ public class HealthRecordDAO {
 	}
 
 	// selectメソッド 指定された項目で検索して、取得されたデータのリストを返す
-	public List<HealthRecord> select(String userId, int year, int month) {
+	public List<HealthRecord> select(String userId, int month) {
 		Connection conn = null;
 		List<HealthRecord> RecordList = new ArrayList<HealthRecord>();
 
@@ -190,9 +189,9 @@ public class HealthRecordDAO {
 
 			// 月で指定
 			if (month >= 1 && month <= 9) {
-				pStmt.setString(2, year+"-0" + month + "-%");
+				pStmt.setString(2, "-0" + month + "-%");
 			} else {
-				pStmt.setString(2, year+"-" + month + "-%");
+				pStmt.setString(2, "-" + month + "-%");
 			}
 
 			// SQL文を実行し、結果表を取得する
@@ -229,7 +228,7 @@ public class HealthRecordDAO {
 		return RecordList;
 	}
 
-	// updateメソッド：引数cardで指定されたレコードを更新し、成功したらtrueを返す
+	/*// updateメソッド：引数cardで指定されたレコードを更新し、成功したらtrueを返す
 	public boolean update(HealthRecord record) {
 		Connection conn = null;
 		boolean result = false;
@@ -443,6 +442,5 @@ public class HealthRecordDAO {
 
 	// 結果を返す
 	return result;
-}
-
+  */
 }
