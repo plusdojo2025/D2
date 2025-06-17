@@ -84,6 +84,9 @@ public class Point {
 		this.total_sleeptime = total_sleeptime;
 	}
 	
+	public Point() {
+		
+	}
 	
 	
 	

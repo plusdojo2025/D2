@@ -89,6 +89,8 @@ INSERT INTO target_value(user_id) VALUES
     ("kazutoshi_t"), 
     ("test1");
 
+UPDATE target_value SET month=5, pure_alcohol_consumed=40, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="kazutoshi_t";
+
 SELECT * FROM target_value;
 
 -- TODO:update
@@ -258,26 +260,26 @@ CREATE TABLE reward_cloth(
 );
 
 INSERT INTO reward_cloth(stage, country_order, image_path) VALUES
-    (1, 0, "webapp/img/test_cloth.png"),
-    (2, 0, "webapp/img/test_cloth.png"),
-    (3, 0, "webapp/img/test_cloth.png"),
-    (4, 1, "webapp/img/test_cloth.png"),
-    (4, 2, "webapp/img/test_cloth.png"),
-    (4, 3, "webapp/img/test_cloth.png"),
-    (4, 4, "webapp/img/test_cloth.png"),
-    (4, 5, "webapp/img/test_cloth.png"),
-    (4, 6, "webapp/img/test_cloth.png"),
-    (4, 7, "webapp/img/test_cloth.png"),
-    (4, 8, "webapp/img/test_cloth.png"),
-    (4, 9, "webapp/img/test_cloth.png"),
-    (4, 10, "webapp/img/test_cloth.png"),
-    (4, 11, "webapp/img/test_cloth.png"),
-    (4, 12, "webapp/img/test_cloth.png"),
-    (4, 13, "webapp/img/test_cloth.png"),
-    (4, 14, "webapp/img/test_cloth.png"),
-    (4, 15, "webapp/img/test_cloth.png"),
-    (4, 16, "webapp/img/test_cloth.png"),
-    (4, 17, "webapp/img/test_cloth.png");
+    (1, 0, "img/cloth1.png"),
+    (2, 0, "img/cloth2.png"),
+    (3, 0, "img/cloth3.png"),
+    (4, 1, "img/jp_cloth4.png"),
+    (4, 2, "img/au_cloth4.png"),
+    (4, 3, "img/test_cloth4.png"),
+    (4, 4, "img/test_cloth4.png"),
+    (4, 5, "img/test_cloth4.png"),
+    (4, 6, "img/test_cloth4.png"),
+    (4, 7, "img/test_cloth4.png"),
+    (4, 8, "img/test_cloth4.png"),
+    (4, 9, "img/test_cloth4.png"),
+    (4, 10, "img/test_cloth4.png"),
+    (4, 11, "img/test_cloth4.png"),
+    (4, 12, "img/test_cloth4.png"),
+    (4, 13, "img/test_cloth4.png"),
+    (4, 14, "img/test_cloth4.png"),
+    (4, 15, "img/test_cloth4.png"),
+    (4, 16, "img/test_cloth4.png"),
+    (4, 17, "img/test_cloth4.png");
 
 SELECT * FROM reward_cloth;
 
@@ -293,57 +295,57 @@ CREATE TABLE reward_build(
 );
 
 INSERT INTO reward_build(stage, country_order, image_path) VALUES
-    (1, 1, "webapp/img/test_building.png"),
-    (2, 1, "webapp/img/test_building.png"),
-    (3, 1, "webapp/img/test_building.png"),
-    (1, 2, "webapp/img/test_building.png"),
-    (2, 2, "webapp/img/test_building.png"),
-    (3, 2, "webapp/img/test_building.png"),
-    (1, 3, "webapp/img/test_building.png"),
-    (2, 3, "webapp/img/test_building.png"),
-    (3, 3, "webapp/img/test_building.png"),
-    (1, 4, "webapp/img/test_building.png"),
-    (2, 4, "webapp/img/test_building.png"),
-    (3, 4, "webapp/img/test_building.png"),
-    (1, 5, "webapp/img/test_building.png"),
-    (2, 5, "webapp/img/test_building.png"),
-    (3, 5, "webapp/img/test_building.png"),
-    (1, 6, "webapp/img/test_building.png"),
-    (2, 6, "webapp/img/test_building.png"),
-    (3, 6, "webapp/img/test_building.png"),
-    (1, 7, "webapp/img/test_building.png"),
-    (2, 7, "webapp/img/test_building.png"),
-    (3, 7, "webapp/img/test_building.png"),
-    (1, 8, "webapp/img/test_building.png"),
-    (2, 8, "webapp/img/test_building.png"),
-    (3, 8, "webapp/img/test_building.png"),
-    (1, 9, "webapp/img/test_building.png"),
-    (2, 9, "webapp/img/test_building.png"),
-    (3, 9, "webapp/img/test_building.png"),
-    (1, 10, "webapp/img/test_building.png"),
-    (2, 10, "webapp/img/test_building.png"),
-    (3, 10, "webapp/img/test_building.png"),
-    (1, 11, "webapp/img/test_building.png"),
-    (2, 11, "webapp/img/test_building.png"),
-    (3, 11, "webapp/img/test_building.png"),
-    (1, 12, "webapp/img/test_building.png"),
-    (2, 12, "webapp/img/test_building.png"),
-    (3, 12, "webapp/img/test_building.png"),
-    (1, 13, "webapp/img/test_building.png"),
-    (2, 13, "webapp/img/test_building.png"),
-    (3, 13, "webapp/img/test_building.png"),
-    (1, 14, "webapp/img/test_building.png"),
-    (2, 14, "webapp/img/test_building.png"),
-    (3, 14, "webapp/img/test_building.png"),
-    (1, 15, "webapp/img/test_building.png"),
-    (2, 15, "webapp/img/test_building.png"),
-    (3, 15, "webapp/img/test_building.png"),
-    (1, 16, "webapp/img/test_building.png"),
-    (2, 16, "webapp/img/test_building.png"),
-    (3, 16, "webapp/img/test_building.png"),
-    (1, 17, "webapp/img/test_building.png"),
-    (2, 17, "webapp/img/test_building.png"),
-    (3, 17, "webapp/img/test_building.png");
+    (1, 1, "img/jp_build1.png"),
+    (2, 1, "img/jp_build2.png"),
+    (3, 1, "img/jp_build3.png"),
+    (1, 2, "img/au_build1.png"),
+    (2, 2, "img/au_build2.png"),
+    (3, 2, "img/au_build3.png"),
+    (1, 3, "img/test_build1.png"),
+    (2, 3, "img/test_build2.png"),
+    (3, 3, "img/test_build3.png"),
+    (1, 4, "img/test_build1.png"),
+    (2, 4, "img/test_build2.png"),
+    (3, 4, "img/test_build3.png"),
+    (1, 5, "img/test_build1.png"),
+    (2, 5, "img/test_build2.png"),
+    (3, 5, "img/test_build3.png"),
+    (1, 6, "img/test_build1.png"),
+    (2, 6, "img/test_build2.png"),
+    (3, 6, "img/test_build3.png"),
+    (1, 7, "img/test_build1.png"),
+    (2, 7, "img/test_build2.png"),
+    (3, 7, "img/test_build3.png"),
+    (1, 8, "img/test_build1.png"),
+    (2, 8, "img/test_build2.png"),
+    (3, 8, "img/test_build3.png"),
+    (1, 9, "img/test_build1.png"),
+    (2, 9, "img/test_build2.png"),
+    (3, 9, "img/test_build3.png"),
+    (1, 10, "img/test_build1.png"),
+    (2, 10, "img/test_build2.png"),
+    (3, 10, "img/test_build3.png"),
+    (1, 11, "img/test_build1.png"),
+    (2, 11, "img/test_build2.png"),
+    (3, 11, "img/test_build3.png"),
+    (1, 12, "img/test_build1.png"),
+    (2, 12, "img/test_build2.png"),
+    (3, 12, "img/test_build3.png"),
+    (1, 13, "img/test_build1.png"),
+    (2, 13, "img/test_build2.png"),
+    (3, 13, "img/test_build3.png"),
+    (1, 14, "img/test_build1.png"),
+    (2, 14, "img/test_build2.png"),
+    (3, 14, "img/test_build3.png"),
+    (1, 15, "img/test_build1.png"),
+    (2, 15, "img/test_build2.png"),
+    (3, 15, "img/test_build3.png"),
+    (1, 16, "img/test_build1.png"),
+    (2, 16, "img/test_build2.png"),
+    (3, 16, "img/test_build3.png"),
+    (1, 17, "img/test_build1.png"),
+    (2, 17, "img/test_build2.png"),
+    (3, 17, "img/test_build3.png");
 
 SELECT * FROM reward_build;
 
@@ -357,23 +359,23 @@ CREATE TABLE reward_people(
 );
 
 INSERT INTO reward_people(country_order, image_path) VALUES
-    (1, "webapp/img/test_people.png"),
-    (2, "webapp/img/test_people.png"),
-    (3, "webapp/img/test_people.png"),
-    (4, "webapp/img/test_people.png"),
-    (5, "webapp/img/test_people.png"),
-    (6, "webapp/img/test_people.png"),
-    (7, "webapp/img/test_people.png"),
-    (8, "webapp/img/test_people.png"),
-    (9, "webapp/img/test_people.png"),
-    (10, "webapp/img/test_people.png"),
-    (11, "webapp/img/test_people.png"),
-    (12, "webapp/img/test_people.png"),
-    (13, "webapp/img/test_people.png"),
-    (14, "webapp/img/test_people.png"),
-    (15, "webapp/img/test_people.png"),
-    (16, "webapp/img/test_people.png"),
-    (17, "webapp/img/test_people.png");
+    (1, "img/jp_people.png"),
+    (2, "img/au_people.png"),
+    (3, "img/test_people.png"),
+    (4, "img/test_people.png"),
+    (5, "img/test_people.png"),
+    (6, "img/test_people.png"),
+    (7, "img/test_people.png"),
+    (8, "img/test_people.png"),
+    (9, "img/test_people.png"),
+    (10, "img/test_people.png"),
+    (11, "img/test_people.png"),
+    (12, "img/test_people.png"),
+    (13, "img/test_people.png"),
+    (14, "img/test_people.png"),
+    (15, "img/test_people.png"),
+    (16, "img/test_people.png"),
+    (17, "img/test_people.png");
 
 SELECT * FROM reward_people;
 
@@ -387,11 +389,11 @@ CREATE TABLE reward_face(
 );
 
 INSERT INTO reward_face(stage, image_path) VALUES
-    (1, "webapp/img/face1.png"),
-    (2, "webapp/img/face2.png"),
-    (3, "webapp/img/face3.png"),
-    (4, "webapp/img/face4.png"),
-    (5, "webapp/img/face5.png");
+    (1, "img/face1.png"),
+    (2, "img/face2.png"),
+    (3, "img/face3.png"),
+    (4, "img/face4.png"),
+    (5, "img/face5.png");
 
 SELECT * FROM reward_face;
 
