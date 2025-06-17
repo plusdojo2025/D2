@@ -25,15 +25,14 @@ import dto.TargetValue;
 public class HomeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-//    	// もしもログインしていなかったらログインサーブレットにリダイレクトする
-//		HttpSession session = request.getSession();
-//		if (session.getAttribute("id") == null) {
-//			response.sendRedirect("/D2/LoginServlet");
-//			return;
-//		}
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("/D2/LoginServlet");
+			return;
+		}
 
 		// セッションからuser_idを取得
-		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("user_id");
 
 		// user_idがnullでない場合に目標値を取得
@@ -73,20 +72,19 @@ public class HomeServlet extends HttpServlet {
 			TargetValueDAO tdao = new TargetValueDAO();
 			TargetValue targetValue = tdao.getTargetValueByUserId(userId);
 			request.setAttribute("targetValue", targetValue);
-			
+
 			boolean needsInput = false;
 
 			if (targetValue == null) {
-			    needsInput = true;  // 初回ユーザーは入力必須
+				needsInput = true; // 初回ユーザーは入力必須
 			} else if (targetValue.getMonth() != currentMonth) {
-			    needsInput = true;  // 月が変わったら入力必須
-			} else if (targetValue.getPure_alcohol_consumed() == 0.0f || targetValue.getSleep_time() == 0.0f ||
-			           targetValue.getCalorie_intake() == 0 || targetValue.getTarget_weight() == 0.0f) {
-			    needsInput = true;  // 値が未設定のときも入力必須
+				needsInput = true; // 月が変わったら入力必須
+			} else if (targetValue.getPure_alcohol_consumed() == 0.0f || targetValue.getSleep_time() == 0.0f
+					|| targetValue.getCalorie_intake() == 0 || targetValue.getTarget_weight() == 0.0f) {
+				needsInput = true; // 値が未設定のときも入力必須
 			}
 			request.setAttribute("needsInput", needsInput);
 			request.setAttribute("targetValue", targetValue);
-
 
 			List<Point> allPoints = pointDAO.selectByUserId(userId);
 
@@ -124,13 +122,12 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		 System.out.println("doPost called");
+		System.out.println("doPost called");
 		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("user_id"); // ユーザーIDはセッションから取得
-		System.out.println("userId from session: " + userId);  // 追加
+		System.out.println("userId from session: " + userId); // 追加
 		request.setCharacterEncoding("UTF-8");
 
-		
 		// フォームから取得
 		java.time.LocalDate now = java.time.LocalDate.now();
 		int currentMonth = now.getMonthValue();
@@ -143,45 +140,43 @@ public class HomeServlet extends HttpServlet {
 		TargetValue targetValue = tdao.getTargetValueByUserId(userId);
 
 		if (targetValue == null) {
-		    // まだ目標値レコードがない -> INSERT
-		    String insertSql = "INSERT INTO target_value (user_id, month, pure_alcohol_consumed, sleep_time, calorie_intake, target_weight) VALUES (?, ?, ?, ?, ?, ?)";
-		    try( Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
-					"root", "password");
-			PreparedStatement pStmt = conn.prepareStatement(insertSql)){
-				
-		        pStmt.setString(1, userId);
-		        pStmt.setInt(2, currentMonth);
-		        pStmt.setFloat(3, Float.parseFloat(pureAlcoholStr));
-		        pStmt.setFloat(4, Float.parseFloat(sleepTimeStr));
-		        pStmt.setInt(5, Integer.parseInt(calorieIntakeStr));
-		        pStmt.setFloat(6, Float.parseFloat(targetWeightStr));
-		        
-		        pStmt.executeUpdate();
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		        request.setAttribute("errorMsg", "目標値の新規登録に失敗しました");
-		    }
+			// まだ目標値レコードがない -> INSERT
+			String insertSql = "INSERT INTO target_value (user_id, month, pure_alcohol_consumed, sleep_time, calorie_intake, target_weight) VALUES (?, ?, ?, ?, ?, ?)";
+			try (Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9", "root",
+					"password"); PreparedStatement pStmt = conn.prepareStatement(insertSql)) {
+
+				pStmt.setString(1, userId);
+				pStmt.setInt(2, currentMonth);
+				pStmt.setFloat(3, Float.parseFloat(pureAlcoholStr));
+				pStmt.setFloat(4, Float.parseFloat(sleepTimeStr));
+				pStmt.setInt(5, Integer.parseInt(calorieIntakeStr));
+				pStmt.setFloat(6, Float.parseFloat(targetWeightStr));
+
+				pStmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				request.setAttribute("errorMsg", "目標値の新規登録に失敗しました");
+			}
 		} else {
-		    // 既存のレコードがあれば UPDATE
-		    String updateSql = "UPDATE target_value SET pure_alcohol_consumed = ?, sleep_time = ?, calorie_intake = ?, target_weight = ?, month = ? WHERE user_id = ?";
-		    try( Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
-					"root", "password");
-			PreparedStatement pStmt = conn.prepareStatement(updateSql)){
-		    	
-		        pStmt.setFloat(1, Float.parseFloat(pureAlcoholStr));
-		        pStmt.setFloat(2, Float.parseFloat(sleepTimeStr));
-		        pStmt.setInt(3, Integer.parseInt(calorieIntakeStr));
-		        pStmt.setFloat(4, Float.parseFloat(targetWeightStr));
-		        pStmt.setInt(5, currentMonth);
-		        pStmt.setString(6, userId);
-		        
-		        pStmt.executeUpdate();
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		        request.setAttribute("errorMsg", "目標値の更新に失敗しました");
-		    }
+			// 既存のレコードがあれば UPDATE
+			String updateSql = "UPDATE target_value SET pure_alcohol_consumed = ?, sleep_time = ?, calorie_intake = ?, target_weight = ?, month = ? WHERE user_id = ?";
+			try (Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9", "root",
+					"password"); PreparedStatement pStmt = conn.prepareStatement(updateSql)) {
+
+				pStmt.setFloat(1, Float.parseFloat(pureAlcoholStr));
+				pStmt.setFloat(2, Float.parseFloat(sleepTimeStr));
+				pStmt.setInt(3, Integer.parseInt(calorieIntakeStr));
+				pStmt.setFloat(4, Float.parseFloat(targetWeightStr));
+				pStmt.setInt(5, currentMonth);
+				pStmt.setString(6, userId);
+
+				pStmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				request.setAttribute("errorMsg", "目標値の更新に失敗しました");
+			}
 		}
 		// 目標値入力フォームのプロフィール項目に記載された内容をもとに更新 UserDAOのupdateProfile()
 		String weightStr = request.getParameter("weight");
