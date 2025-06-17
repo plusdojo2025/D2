@@ -4,14 +4,7 @@
 
 <%
 TargetValue targetValue = (TargetValue) request.getAttribute("targetValue");
-boolean needsInput = false;
-if (targetValue == null ||
-    targetValue.getPure_alcohol_consumed() == 0.0f ||
-    targetValue.getSleep_time() == 0.0f ||
-    targetValue.getCalorie_intake() == 0 ||
-    targetValue.getTarget_weight() == 0.0f) {
-    needsInput = true;
-}
+
 %>
 
 <!DOCTYPE html>
@@ -21,7 +14,7 @@ if (targetValue == null ||
 <title>ホーム画面</title>
 <script>
 window.onload = function () {
-    const needsInput = <%= needsInput %>;
+    const needsInput = "${needsInput}" === "true";
     if (needsInput) {
         document.getElementById("popup").style.display = "block";
     }
