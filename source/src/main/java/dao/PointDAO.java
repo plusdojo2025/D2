@@ -134,13 +134,13 @@ public class PointDAO {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			
 			pStmt.setString(1, userId);
-			pStmt.setInt(1, month);
+			pStmt.setInt(2, month);
 			
 			ResultSet rs = pStmt.executeQuery();
 			
 			rs.next();
 				
-			point = new Point(rs.getString("user_id"), rs.getInt("year"), rs.getInt("month"),					
+			point = new Point(rs.getString("user_id"), rs.getInt("month"), rs.getInt("year"), 					
 					rs.getInt("total_calorie_consumed"), rs.getInt("total_nosmoke"),					
 					rs.getInt("total_alcohol_consumed"), rs.getInt("total_calorie_intake"),					
 					rs.getInt("total_sleeptime"));
