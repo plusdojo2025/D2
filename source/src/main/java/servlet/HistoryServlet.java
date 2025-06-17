@@ -42,11 +42,11 @@ public class HistoryServlet extends HttpServlet {
 		
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String keyword = req.getParameter("searchDate");
+       //検索キーワードをjspにわたす!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		String keyword = req.getParameter("searchDate");
         HistoryDAO dao = new HistoryDAO();
         List<History> files = dao.getFilesByDate(keyword);
-
-        req.setAttribute("fileList", files);
+req.setAttribute("fileList", files);
         req.getRequestDispatcher("/History.jsp").forward(req, resp);
 		//ヘルプはjavascriptで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
