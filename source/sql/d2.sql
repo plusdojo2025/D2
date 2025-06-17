@@ -89,6 +89,8 @@ INSERT INTO target_value(user_id) VALUES
     ("kazutoshi_t"), 
     ("test1");
 
+UPDATE target_value SET month=5, pure_alcohol_consumed=40, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="kazutoshi_t";
+
 SELECT * FROM target_value;
 
 -- TODO:update
