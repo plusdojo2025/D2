@@ -33,16 +33,98 @@ public class TargetValueDAO {
 		return targetValue;
 	}
 	
-	public boolean insertVoid(String UserID) {
+	public boolean insertVoid(String UserID, int month, float pure_alcohol_consumed, float sleep_time, int calorie_intake, float target_weight) {
 		/* 空の目標値レコードを追加する処理
 		 * ユーザ登録したときに呼ばれる
 		 */
-		
-		return false;
-	}
+		 Connection conn = null;
+		 
+		    PreparedStatement pstmt = null;
+		    boolean result = false;
+		    try {
+		    String sql = "INSERT INTO target_value (user_id, month, pure_alcohol_consumed, sleep_time, calorie_intake, target_weight) "
+		               + "VALUES (?, ?, ?, ?, ?, ?)";
+		    
+		    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/D2?"
+					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+					"root", "password");
+
+		        pstmt = conn.prepareStatement(sql);
+		  
+		   
+		    	pstmt.setString(1, UserID);
+		        pstmt.setInt(2, month);
+		        
+		     // 以下の値を NULL として登録する
+		        pstmt.setNull(3, java.sql.Types.FLOAT); // pure_alcohol_consumed
+		        pstmt.setNull(4, java.sql.Types.FLOAT); // sleep_time
+		        pstmt.setNull(5, java.sql.Types.INTEGER); // calorie_intake
+		        pstmt.setNull(6, java.sql.Types.FLOAT); // target_weight
+		    
+		        int rowsAffected = pstmt.executeUpdate();
+		        if (rowsAffected > 0) {
+		            result = true;
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            if (pstmt != null) pstmt.close();
+		            if (conn != null) conn.close();
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+		 // 結果を返す
+		    return result;
+		}
+		    
+		   
 	
 	public boolean update(TargetValue targetValue) {
 		/* 毎月の目標値更新 */
-		return false;
+		Connection conn = null;
+	    boolean result = false;
+
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+
+	        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+	                + "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+	                "root", "password");
+	        
+	        String sql = "UPDATE target_value SET "
+	                   + "pure_alcohol_consumed = ?, "
+	                   + "sleep_time = ?, "
+	                   + "calorie_intake = ?, "
+	                   + "target_weight = ? "
+	                   + "WHERE user_id = ? AND month = ?";
+	        
+	        PreparedStatement pStmt = conn.prepareStatement(sql);
+	        
+	        pStmt.setFloat(1, targetValue.getPure_alcohol_consumed());
+	        pStmt.setFloat(2, targetValue.getSleep_time());
+	        pStmt.setInt(3, targetValue.getCalorie_intake());
+	        pStmt.setFloat(4, targetValue.getTarget_weight());
+	        pStmt.setString(5, targetValue.getUser_id());
+	        pStmt.setInt(6, targetValue.getMonth());
+	       
+	        if (pStmt.executeUpdate() == 1) {
+				result = true;
+			}
+	    } catch (SQLException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (conn != null) {
+	            try {
+	                conn.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+
+	    return result;
 	}
 }
