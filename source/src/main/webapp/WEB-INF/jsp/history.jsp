@@ -10,7 +10,12 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 <meta charset="UTF-8">
 <title>ケンコークラフト</title>
 
-
+ <script>
+        function showHelp() {
+            alert("このページでは、過去ファイルのダウンロード・街並みの表示ができます。\n" +
+                  "検索ボックスで日付をフィルタし、「街を見る」で表示、「ダウンロード」で保存できます。");
+        }
+    </script>
 </head>
 <body>
 
