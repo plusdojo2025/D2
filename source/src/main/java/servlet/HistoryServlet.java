@@ -41,7 +41,7 @@ public class HistoryServlet extends HttpServlet {
 		HistoryDAO dao = new HistoryDAO();
         List<History> hrList = dao.select("kazutoshi_t");
         request.setAttribute("fileList", hrList);
-        request.getRequestDispatcher("/History.jsp").forward(request, response);
+        
 		
 		// ログインページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
