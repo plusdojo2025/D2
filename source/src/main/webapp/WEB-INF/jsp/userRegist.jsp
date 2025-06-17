@@ -20,7 +20,8 @@
 		<input type="password"id="pw" name="pw"><br>
 		<br> <label for="pwConfirm">パスワード（確認）：</label> 
 		<input type="password" id="pwConfirm" name="pwConfirm"><br>
-		<br> <input type="submit" value="登録">
+		<br> 
+		<input type="submit" value="登録" onclick="return confirm('お間違えないでしょうか？');">
 	</form>
 
 	<br>
