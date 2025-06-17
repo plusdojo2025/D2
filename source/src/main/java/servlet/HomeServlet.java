@@ -38,12 +38,57 @@ public class HomeServlet extends HttpServlet {
 
 		// user_idがnullでない場合に目標値を取得
 		if (userId != null) {
+			// === 現在の年月を取得 ===
+			java.time.LocalDate now = java.time.LocalDate.now();
+			int currentYear = now.getYear();
+			int currentMonth = now.getMonthValue();
+
+			PointDAO pointDAO = new PointDAO();
+
+			// === 今月のレコードがあるか確認 ===
+			Point searchPoint = new Point();
+			searchPoint.setUser_id(userId);
+			searchPoint.setMonth(currentMonth);
+
+			List<Point> existingPoints = pointDAO.select(searchPoint);
+
+			if (existingPoints == null || existingPoints.isEmpty()) {
+				// === ない場合、前月までの累計カロリーを引き継いでINSERT ===
+				List<Point> allPoints = pointDAO.selectByUserId(userId);
+				int latestCalorie = 0;
+
+				if (allPoints != null && !allPoints.isEmpty()) {
+					Point latestPoint = allPoints.get(allPoints.size() - 1);
+					latestCalorie = latestPoint.getTotal_calorie_consumed();
+				}
+
+				boolean inserted = pointDAO.insert(userId, currentMonth, currentYear, latestCalorie);
+
+				if (!inserted) {
+					request.setAttribute("errorMsg", "今月のポイントレコードの作成に失敗しました。");
+				}
+			}
+
+			// === 通常の目標値とポイントデータの取得処理 ===
 			TargetValueDAO tdao = new TargetValueDAO();
 			TargetValue targetValue = tdao.getTargetValueByUserId(userId);
 			request.setAttribute("targetValue", targetValue);
+			
+			boolean needsInput = false;
 
-			PointDAO dao = new PointDAO();
-			List<Point> allPoints = dao.selectByUserId(userId);
+			if (targetValue == null) {
+			    needsInput = true;  // 初回ユーザーは入力必須
+			} else if (targetValue.getMonth() != currentMonth) {
+			    needsInput = true;  // 月が変わったら入力必須
+			} else if (targetValue.getPure_alcohol_consumed() == 0.0f || targetValue.getSleep_time() == 0.0f ||
+			           targetValue.getCalorie_intake() == 0 || targetValue.getTarget_weight() == 0.0f) {
+			    needsInput = true;  // 値が未設定のときも入力必須
+			}
+			request.setAttribute("needsInput", needsInput);
+			request.setAttribute("targetValue", targetValue);
+
+
+			List<Point> allPoints = pointDAO.selectByUserId(userId);
 
 			// 累計カロリー取得
 			int totalCaloriesSum = 0;
@@ -56,28 +101,21 @@ public class HomeServlet extends HttpServlet {
 			request.setAttribute("totalCaloriesSum", totalCaloriesSum);
 
 			double Step = 0.03;
-			int CountryCalorie = 3600; // 1国 = 3600 kcal
-			int nextcountry = 120000; // 画面上で1国を進むのに必要な表示歩数
+			int CountryCalorie = 3600;
+			int nextcountry = 120000;
 
-			// 今どこの国か？（0から始まる）
 			int currentCountryIndex = totalCaloriesSum / CountryCalorie;
-
-			// 次の目的地（国）までに必要なカロリー
 			int nextTargetCalories = CountryCalorie * (currentCountryIndex + 1);
 			int remainingCalories = Math.max(0, nextTargetCalories - totalCaloriesSum);
-
-			// 実際に必要な歩数（運動として）
 			int requiredSteps = (int) Math.ceil(remainingCalories / Step);
-
-			// 表示用の「進捗歩数」：1国＝12000歩として正規化
 			double displayStepsToNext = nextcountry * ((double) remainingCalories / CountryCalorie);
 
-			// JSPに渡す
 			request.setAttribute("requiredSteps", requiredSteps);
 			request.setAttribute("remainingCalories", remainingCalories);
 			request.setAttribute("displayStepsToNext", (int) Math.ceil(displayStepsToNext));
 			request.setAttribute("currentCountry", currentCountryIndex + 1);
 		}
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -86,54 +124,65 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		 System.out.println("doPost called");
 		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("user_id"); // ユーザーIDはセッションから取得
-
+		System.out.println("userId from session: " + userId);  // 追加
 		request.setCharacterEncoding("UTF-8");
 
+		
 		// フォームから取得
-		String monthStr = request.getParameter("month");
+		java.time.LocalDate now = java.time.LocalDate.now();
+		int currentMonth = now.getMonthValue();
 		String pureAlcoholStr = request.getParameter("pure_alcohol_consumed");
 		String sleepTimeStr = request.getParameter("sleep_time");
 		String calorieIntakeStr = request.getParameter("calorie_intake");
 		String targetWeightStr = request.getParameter("target_weight");
 
-		if (userId != null) {
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection conn = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
-						"root", "password");
+		TargetValueDAO tdao = new TargetValueDAO();
+		TargetValue targetValue = tdao.getTargetValueByUserId(userId);
 
-				// 目標値テーブルの更新 TargetValueDAOのupdate
-				String sql = "UPDATE target_value SET pure_alcohol_consumed = ?,"
-						+ " sleep_time = ?, calorie_intake = ?, target_weight = ?"
-						+ " WHERE user_id = ? AND month = ? ";
-
-				PreparedStatement pStmt = conn.prepareStatement(sql);
-				pStmt.setInt(1, Integer.parseInt(monthStr)); // user_idはそのままWHERE句で利用
-				pStmt.setFloat(2, Float.parseFloat(pureAlcoholStr));
-				pStmt.setFloat(3, Float.parseFloat(sleepTimeStr));
-				pStmt.setInt(4, Integer.parseInt(calorieIntakeStr));
-				pStmt.setFloat(5, Float.parseFloat(targetWeightStr));
-				pStmt.setString(6, userId); // user_idはそのままWHERE句で利用
-
-				pStmt.executeUpdate();
-
-				pStmt.close();
-				conn.close();
-			} catch (SQLException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-
-			// 更新が終わったら home.jsp に反映するため doGet を呼び出す
-			doGet(request, response);
+		if (targetValue == null) {
+		    // まだ目標値レコードがない -> INSERT
+		    String insertSql = "INSERT INTO target_value (user_id, month, pure_alcohol_consumed, sleep_time, calorie_intake, target_weight) VALUES (?, ?, ?, ?, ?, ?)";
+		    try( Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
+					"root", "password");
+			PreparedStatement pStmt = conn.prepareStatement(insertSql)){
+				
+		        pStmt.setString(1, userId);
+		        pStmt.setInt(2, currentMonth);
+		        pStmt.setFloat(3, Float.parseFloat(pureAlcoholStr));
+		        pStmt.setFloat(4, Float.parseFloat(sleepTimeStr));
+		        pStmt.setInt(5, Integer.parseInt(calorieIntakeStr));
+		        pStmt.setFloat(6, Float.parseFloat(targetWeightStr));
+		        
+		        pStmt.executeUpdate();
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        request.setAttribute("errorMsg", "目標値の新規登録に失敗しました");
+		    }
 		} else {
-			// セッションに user_id がない場合はログインページへリダイレクト
-			response.sendRedirect("/D2/LoginServlet");
+		    // 既存のレコードがあれば UPDATE
+		    String updateSql = "UPDATE target_value SET pure_alcohol_consumed = ?, sleep_time = ?, calorie_intake = ?, target_weight = ?, month = ? WHERE user_id = ?";
+		    try( Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
+					"root", "password");
+			PreparedStatement pStmt = conn.prepareStatement(updateSql)){
+		    	
+		        pStmt.setFloat(1, Float.parseFloat(pureAlcoholStr));
+		        pStmt.setFloat(2, Float.parseFloat(sleepTimeStr));
+		        pStmt.setInt(3, Integer.parseInt(calorieIntakeStr));
+		        pStmt.setFloat(4, Float.parseFloat(targetWeightStr));
+		        pStmt.setInt(5, currentMonth);
+		        pStmt.setString(6, userId);
+		        
+		        pStmt.executeUpdate();
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        request.setAttribute("errorMsg", "目標値の更新に失敗しました");
+		    }
 		}
-
 		// 目標値入力フォームのプロフィール項目に記載された内容をもとに更新 UserDAOのupdateProfile()
 		String weightStr = request.getParameter("weight");
 		String heightStr = request.getParameter("height");
@@ -142,8 +191,6 @@ public class HomeServlet extends HttpServlet {
 		String activeLevelIdStr = request.getParameter("active_level_id");
 
 		if (userId != null) {
-			// ...（目標値更新の処理）...
-
 			// プロフィールの更新処理
 			UserDAO userDAO = new UserDAO();
 			userDAO.updateProfile(userId, Double.parseDouble(weightStr), Double.parseDouble(heightStr),
@@ -154,11 +201,9 @@ public class HomeServlet extends HttpServlet {
 		}
 
 // Pointテーブルのにその月のレコードを追加
-		String yearStr = request.getParameter("year");
-		
-		if (userId != null && monthStr != null && yearStr != null) {
-			int month = Integer.parseInt(monthStr);
-			int year = Integer.parseInt(yearStr);
+		if (userId != null) {
+			int year = now.getYear();
+			int month = now.getMonthValue();
 
 			PointDAO pointDAO = new PointDAO();
 
@@ -187,9 +232,7 @@ public class HomeServlet extends HttpServlet {
 					// 挿入に失敗した場合のエラーハンドリング
 					request.setAttribute("errorMsg", "ポイントレコードの追加に失敗しました。");
 				}
-			}			
-			doGet(request, response);
-
+			}
 		} else {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
 			dispatcher.forward(request, response);
