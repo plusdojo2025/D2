@@ -12,19 +12,22 @@
 <h1>ケンコークラフト</h1>
 
 
-<!-- 月セレクトボタン -->
-<!-- 前の月に移動 -->
   <div>
-
+  <!-- TODO: 〇月と書かれているところをクリックすると年と月を選べるプルダウンを作成する。 -->
  <%@ page import="java.time.LocalDate" %>
 <%
     LocalDate now = LocalDate.now();
+    LocalDate lastYearNextMonth = now.minusYears(1).plusMonths(1);
+
+    // 例えば今が2025年6月なら
+    // lastYearNextMonth は 2024年7月 になる
+
+    String min = lastYearNextMonth.getYear() + "-" + String.format("%02d", lastYearNextMonth.getMonthValue());
     String max = now.getYear() + "-" + String.format("%02d", now.getMonthValue());
-    LocalDate lastYear = now.minusYears(1);
-    String min = lastYear.getYear() + "-" + String.format("%02d", lastYear.getMonthValue());
 %>
- 
-<input type="month" id="monthInput" min="<%= min %>" max="<%= max %>"  />
+
+<input type="month" id="monthInput" min="<%= min %>" max="<%= max %>" />
+
 <script>
   document.getElementById('monthInput').addEventListener('change', function() {
     const ym = this.value;
@@ -45,15 +48,8 @@
 
   </div>
   
-  <!-- TODO: 〇月と書かれているところをクリックすると年と月を選べるプルダウンを作成する。 -->
-  <a href="CalendarServlet?month=6&year=2025">カレンダー</a> 
-  <a href="CalendarServlet?month=7&year=2025">カレンダー</a> 
-  <a href="CalendarServlet?month=8&year=2025">カレンダー</a> 
-  <a href="CalendarServlet?month=9&year=2025">カレンダー</a> 
-  <a href="CalendarServlet?month=10&year=2025">カレンダー</a> 
-  <a href="CalendarServlet?month=11&year=2025">カレンダー</a> 
-  <a href="CalendarServlet?month=12&year=2025">カレンダー</a> 
-  <a href="CalendarServlet?month=1&year=2026">カレンダー</a> 
+
+
   
   
 
@@ -72,6 +68,8 @@
 <div>
 <p>カレンダー</p>
 </div>
+
+<!-- 報酬記録 -->
 <%
     java.util.List<dto.RewardDay> rewardList = (java.util.List<dto.RewardDay>) request.getAttribute("rewardList");
 
@@ -91,7 +89,6 @@
     }
 %>
 <div>
-<p>アバター・街並み表示</p>
 <%
     String clothImagePath = (String) request.getAttribute("clothImagePath");
     String shoeImagePath = (String) request.getAttribute("shoeImagePath");
@@ -173,6 +170,8 @@
 <% } else { %>
     <p>禁煙達成者の画像はありません</p>
 <% } %>
+
+
 </div>
 
 <!-- 
