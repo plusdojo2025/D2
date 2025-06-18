@@ -37,7 +37,7 @@ public class AchievementPointDAO {
 					"root", "password");
 
 			// SQL文を準備する
-			String sql = "SELECT * FROM point_smoke";
+			String sql = "SELECT * FROM point_smoke ORDER BY achievement_point";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を実行し、結果表を取得する
@@ -84,7 +84,7 @@ public class AchievementPointDAO {
 					"root", "password");
 
 			// SQL文を準備する
-			String sql = "SELECT * FROM point_" + mode;
+			String sql = "SELECT * FROM point_" + mode + "ORDER BY achievement_point";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を実行し、結果表を取得する
