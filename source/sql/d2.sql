@@ -28,7 +28,7 @@ CREATE TABLE world_tour(
 );
 
 INSERT INTO world_tour VALUES 
-    (0, null, 0),
+    --(0, null, 0),
     (1, "日本", 0), 
     (2, "オーストラリア", 3600),
     (3, "シンガポール", 7200),
