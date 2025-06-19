@@ -401,10 +401,19 @@ SELECT * FROM reward_face;
 -- 過去ファイル
 CREATE TABLE history(
     user_id VARCHAR(20),
-    date DATE,
+    year INT,
+    month INT,
     file_path VARCHAR(50),
-    PRIMARY KEY(user_id, date),
+    PRIMARY KEY(user_id, year, month),
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
--- -------------------------------------------
+INSERT INTO history VALUES
+    ("kazutoshi_t", 2024, 2, "history/kazutoshi_t/2024-2.txt"),
+    ("kazutoshi_t", 2024, 3, "history/kazutoshi_t/2024-3.txt"),
+    ("kazutoshi_t", 2024, 4, "history/kazutoshi_t/2024-4.txt"),
+    ("kazutoshi_t", 2024, 5, "history/kazutoshi_t/2024-5.txt"),
+    ("kazutoshi_t", 2024, 6, "history/kazutoshi_t/2024-6.txt");
+
+SELECT * FROM history;
+-----------------------------
