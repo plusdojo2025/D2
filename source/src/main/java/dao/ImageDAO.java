@@ -13,78 +13,76 @@ import dto.Image;
 public class ImageDAO {
 
 	// 接続情報はここにまとめておく
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9";
-	private static final String DB_USER = "root";
-	private static final String DB_PASS = "password";
+	 private static final String DB_URL = "jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9";
+	    private static final String DB_USER = "root";
+	    private static final String DB_PASS = "password";
+	   // トータルカロリーからカントリーオーダーを判別する
+	    static public int getCountryOrder(int totalCalorieConsumed) {
+	        int countryOrder = 0;
 
-	// トータルカロリーからカントリーオーダーを判別する
-	public int getCountryOrder(int totalCalorieConsu) {
-		int countryOrder = 0;
-		
-		countryOrder = totalCalorieConsu / 3600;
-//		countryOrder = countryOrder/3600;
+	        countryOrder  = totalCalorieConsumed / 3600;
+	        
+	        return countryOrder;
+	    }
+	   //ポイントからステージを判定する 
+	    public int getEatStage(int caloriePoint) {
+	        int stage = 0;
+	        String sql = "SELECT stage FROM point_eat WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
 
-		return countryOrder;
-	}
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-	// ポイントからステージを判定する
-	public int getEatStage(int caloriePoint) {
-		int stage = 0;
-		String sql = "SELECT stage FROM point_eat WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, caloriePoint);
 
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    stage = rs.getInt("stage");
+	                }
+	            }
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, caloriePoint);
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					stage = rs.getInt("stage");
-				}
-			}
-
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		return stage;
-	}
-
+	        return stage;
+	    }
 //服の画像
-	public Image getClothImage(int stage) {
-		return getImageById(1);
-	}
+	    public Image getClothImage(int stage) {
+	        return getImageByStage(stage);
+	    }
 
-	// 靴の画像
-	public Image getShoeImage(int stage) {
-		return getImageById(2);
-	}
+	    // 靴の画像
+	    public Image getShoeImage(int stage) {
+	        return getImageByStage(stage);
+	    }
 
-	// 帽子の画像
-	public Image getHatImage(int stage) {
-		return getImageById(3);
-	}
+	    // 帽子の画像
+	    public Image getHatImage(int stage) {
+	        return getImageByStage(stage);
+	    }
 
-	private Image getImageById(int id) {
-		String sql = "SELECT image_path FROM reward_cloth WHERE id = ?";
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+	    private Image getImageByStage(int stage) {
+	        String sql = "SELECT image_path FROM reward_cloth WHERE stage = ? AND country_order = 0 LIMIT 1";
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
+	            
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, stage);
+	            
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    return new Image(rs.getString("image_path"));
+	                }
+	            }
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	        return new Image(null);
+	    }
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, id);
-
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return new Image(rs.getString("image_path"));
-				}
-			}
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return new Image(null);
-	}
-	 public Image getCountryCostumeImage(int countryOrder) {
+	    // 民族衣装の画像（stage=4 & countryOrder指定）
+	    public Image getCountryCostumeImage(int countryOrder) {
 	        String sql = "SELECT image_path FROM reward_cloth WHERE stage = 4 AND country_order = ?";
 	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 	             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -102,161 +100,138 @@ public class ImageDAO {
 	        }
 	        return new Image(null);
 	    }
+	    //アルコールポイントに応じて建物のステージ判定
+	    public int getAlcoholStage(int alcoholPoint) {
+	        int stage = 0;
+	        String sql = "SELECT stage FROM point_alcohol WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
 
-//	    private Image getImageByStage(int stage) {
-//	        String sql = "SELECT image_path FROM reward_cloth WHERE stage = ? AND country_order = 0 LIMIT 1";
-//	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-//	             PreparedStatement ps = conn.prepareStatement(sql)) {
-//	            
-//	            Class.forName("com.mysql.cj.jdbc.Driver");
-//	            ps.setInt(1, stage);
-//	            
-//	            try (ResultSet rs = ps.executeQuery()) {
-//	                if (rs.next()) {
-//	                    return new Image(rs.getString("image_path"));
-//	                }
-//	            }
-//	        } catch (SQLException | ClassNotFoundException e) {
-//	            e.printStackTrace();
-//	        }
-//	        return new Image(null);
-//	    }
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-	// アルコールポイントに応じて建物のステージ判定
-	public int getAlcoholStage(int alcoholPoint) {
-		int stage = 0;
-		String sql = "SELECT stage FROM point_alcohol WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, alcoholPoint);
 
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    stage = rs.getInt("stage");
+	                }
+	            }
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, alcoholPoint);
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					stage = rs.getInt("stage");
-				}
-			}
+	        return stage;
+	    }
+	 // 建物画像複数取得
+	    public List<Image> getBuildingImages(int buildingStage, int countryOrder) {
+	        List<Image> list = new ArrayList<>();
+	        String sql = "SELECT image_path FROM reward_build WHERE stage <= ? AND country_order = ? ORDER BY id";
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, buildingStage);
+	            ps.setInt(2, countryOrder);
 
-		return stage;
-	}
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                    list.add(new Image(rs.getString("image_path")));
+	                }
+	            }
 
-	// 建物画像複数取得
-	public List<Image> getBuildingImages(int buildingStage, int countryOrder) {
-		List<Image> list = new ArrayList<>();
-		String sql = "SELECT image_path FROM reward_build WHERE stage <= ? AND country_order = ? ORDER BY id";
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	        return list;
+	    }
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, buildingStage);
-			ps.setInt(2, countryOrder);
+	 //睡眠ポイントからステージ判断
+	    public int getSleepStage(int sleepPoint) {
+	        int stage = 0;
+	        String sql = "SELECT stage FROM point_sleep WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
 
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(new Image(rs.getString("image_path")));
-				}
-			}
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, sleepPoint);
 
-	// 睡眠ポイントからステージ判断
-	public int getSleepStage(int sleepPoint) {
-		int stage = 0;
-		String sql = "SELECT stage FROM point_sleep WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    stage = rs.getInt("stage");
+	                }
+	            }
 
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, sleepPoint);
+	        return stage;
+	    }
+	    // 顔色画像取得
+	    public Image getFaceImage(int faceStage) {
+	        String sql = "SELECT image_path FROM reward_face WHERE stage = ?";
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					stage = rs.getInt("stage");
-				}
-			}
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, faceStage);
 
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    return new Image(rs.getString("image_path"));
+	                }
+	            }
 
-		return stage;
-	}
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	        return new Image(null);
+	    }
 
-	// 顔色画像取得
-	public Image getFaceImage(int faceStage) {
-		String sql = "SELECT image_path FROM reward_face WHERE stage = ?";
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+	    //人数カウント（achievementポイントから）
+	    public int getNoSmokingCount(int achievementPoint) {
+	        int peopleCount = 0;
+	        String sql = "SELECT people FROM point_smoke WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, faceStage);
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return new Image(rs.getString("image_path"));
-				}
-			}
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, achievementPoint);
 
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return new Image(null);
-	}
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    peopleCount = rs.getInt("people");
+	                }
+	            }
 
-	// 人数カウント（achievementポイントから）
-	public int getNoSmokingCount(int achievementPoint) {
-		int peopleCount = 0;
-		String sql = "SELECT people FROM point_smoke WHERE achievement_point <= ? ORDER BY achievement_point DESC LIMIT 1";
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
 
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+	        return peopleCount;
+	    }
+	 // 禁煙達成者の画像取得（1枚だけ、複製はJSP側で）
+	    public Image getPeopleImage(int countryOrder) {
+	        String sql = "SELECT image_path FROM reward_people WHERE country_order = ?";
+	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, achievementPoint);
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            ps.setInt(1, countryOrder);
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					peopleCount = rs.getInt("people");
-				}
-			}
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    return new Image(rs.getString("image_path"));
+	                }
+	            }
 
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		return peopleCount;
-	}
-
-	// 禁煙達成者の画像取得（1枚だけ、複製はJSP側で）
-	public Image getPeopleImage(int countryOrder) {
-		String sql = "SELECT image_path FROM reward_people WHERE country_order = ?";
-		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
-
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			ps.setInt(1, countryOrder);
-
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return new Image(rs.getString("image_path"));
-				}
-			}
-
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return new Image(null);
-	}
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	        return new Image(null);
+	    }
 
 }

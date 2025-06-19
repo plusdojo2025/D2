@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.HealthRecordDAO;
 import dao.ImageAllDAO;
+import dao.ImageDAO;
 import dao.PointDAO;
 import dao.RewardDayDAO;
 import dto.HealthRecord;
@@ -104,7 +105,9 @@ public class CalendarServlet extends HttpServlet {
 		// ImageAllDAOを使って画像情報を取得
 		ImageAllDAO imageAllDAO = new ImageAllDAO();
 		
-		TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, totalCalorieConsu);
+		int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
+		
+		TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
 
 		// JSPにセットしてフォワード
 		request.setAttribute("avatar", avatar);
