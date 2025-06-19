@@ -84,7 +84,7 @@ public class AchievementPointDAO {
 					"root", "password");
 
 			// SQL文を準備する
-			String sql = "SELECT * FROM point_" + mode + "ORDER BY achievement_point";
+			String sql = "SELECT * FROM point_" + mode + " ORDER BY achievement_point";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を実行し、結果表を取得する
@@ -118,8 +118,8 @@ public class AchievementPointDAO {
 		AchievementPointDAO achievementPointDAO = new AchievementPointDAO();
 //		List<AchievementPoint> apList = achievementPointDAO.selectEat();
 //		List<AchievementPoint> apList = achievementPointDAO.selectSleep();
-//		List<AchievementPoint> apList = achievementPointDAO.selectAlcohol();
-		List<AchievementPoint> apList = achievementPointDAO.selectSmoke();
+		List<AchievementPoint> apList = achievementPointDAO.selectAlcohol();
+		//List<AchievementPoint> apList = achievementPointDAO.selectSmoke();
 		
 		for (AchievementPoint ap: apList) {
 			System.out.println(ap.getAchievementPoint() + ", " + ap.getStage());

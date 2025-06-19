@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +12,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.AchievementPointDAO;
 import dao.HealthRecordDAO;
 import dao.PointDAO;
+import dao.RewardDayDAO;
 import dao.TargetValueDAO;
 import dao.UserDAO;
+import dao.WorldTourDAO;
+import dto.AchievementPoint;
 import dto.HealthAlcohol;
 import dto.HealthExercise;
 import dto.HealthWhole;
 import dto.Point;
 import dto.Result;
+import dto.RewardDay;
 import dto.TargetValue;
 
 /**
@@ -137,12 +143,12 @@ public class HealthRecordServlet extends HttpServlet {
 		uDao.updateWeight(userId, nowWeight);
 
 		// ポイント獲得処理 目標値達成しているかの処理(たぶんif文めっちゃ使う) 目標値達成した項目のポイントだけ更新 PointDaoのアップデートを使う
-		// 年と月を取得
+		// 年と月と日を取得
 		String tempYear = date.split("-")[0];
 		int year = Integer.parseInt(tempYear);
 		String tempMonth = date.split("-")[1];
 		int month = Integer.parseInt(tempMonth);
-
+		
 		TargetValueDAO tvDao = new TargetValueDAO();
 		TargetValue tv = new TargetValue();
 		// 目標値を取得
@@ -159,18 +165,23 @@ public class HealthRecordServlet extends HttpServlet {
 			totalPureAlcConsu += ha.getPureAlcoholConsumed();
 		}
 		// 目標値を達成していたら累計報酬ポイント（飲酒）に10足す
+		boolean alcoholPointChanged = false;
 		if (totalPureAlcConsu < tv.getPure_alcohol_consumed()) {
+			alcoholPointChanged = true;
 			pDao.updateTotalAlcoholConsumed(userId, year, month, point.getTotal_alcohol_consumed() + 10);
 		}
 
 		// 睡眠時間ポイントの処理
 		// 目標値を達成していたら累計報酬ポイント（顔色）に1足す
+		int sleepPointChanged = 0;
 		if (sleepHours >= tv.getSleep_time() - 1 && sleepHours <= tv.getSleep_time() + 1) {
 			if (point.getTotal_sleeptime() < 5) {
+				sleepPointChanged = 1;
 				pDao.updateTotalSleeptime(userId, year, month, point.getTotal_sleeptime() + 1);
 			}
 		} else {
 			if (point.getTotal_sleeptime() > 1) {
+				sleepPointChanged = -1;
 				pDao.updateTotalSleeptime(userId, year, month, point.getTotal_sleeptime() - 1);
 			}
 		}
@@ -178,34 +189,40 @@ public class HealthRecordServlet extends HttpServlet {
 		// 摂取カロリーのポイントの処理
 		// 目標値を達成していたら累計報酬ポイント（食事）に10を足す
 		// 現在体重が目標体重＋1kgより多い場合、目標摂取カロリー-500～目標摂取カロリーにおさまっていればポイントゲット
+		boolean caloriePointChanged = false;
 		if (nowWeight >= tv.getTarget_weight() + 1) {
 			if (calorieIntake >= tv.getCalorie_intake() - 500 && calorieIntake <= tv.getCalorie_intake()) {
 				pDao.updateTotalCalorieIntake(userId, year, month, point.getTotal_calorie_intake() + 10);
+				caloriePointChanged = true;
 			}
 		}
 		// 現在体重が目標体重-1kgより少ない場合、目標摂取カロリー～目標摂取カロリー+500におさまっていればポイントゲット
 		else if (nowWeight <= tv.getTarget_weight() - 1) {
 			if (calorieIntake >= tv.getCalorie_intake() && calorieIntake <= tv.getCalorie_intake() + 500) {
 				pDao.updateTotalCalorieIntake(userId, year, month, point.getTotal_calorie_intake() + 10);
+				caloriePointChanged = true;
 			}
 		}
 		// 現在体重が目標体重+-1以内の場合、目標摂取カロリー-300～目標摂取カロリー+300におさまっていればポイントゲット
 		else {
 			if (calorieIntake >= tv.getCalorie_intake() - 300 && calorieIntake <= tv.getCalorie_intake() + 300) {
 				pDao.updateTotalCalorieIntake(userId, year, month, point.getTotal_calorie_intake() + 10);
+				caloriePointChanged = true;
 			}
 		}
 
 		// 禁煙ポイントの処理
-		// 禁煙ポイントが７より小さい場合、禁煙できたら1を足す
+		// 禁煙ポイントが７より小さい場合、禁煙できたら1を足す。喫煙したら0にする。
+		int nosmokePointChanged = 0;
 		if (noSmoke == 1) {
 			if (point.getTotal_nosmoke() != 7) {
 				pDao.updateTotalNosmoke(userId, year, month, point.getTotal_nosmoke() + 1);
+				nosmokePointChanged = 1;
 			}
 		} else {
-			if (point.getTotal_nosmoke() != 0) {
-				pDao.updateTotalNosmoke(userId, year, month, point.getTotal_nosmoke() - 1);
-			}
+			pDao.updateTotalNosmoke(userId, year, month, 0);
+			nosmokePointChanged = -1;
+
 		}
 
 		// 累計消費カロリーを更新
@@ -220,6 +237,81 @@ public class HealthRecordServlet extends HttpServlet {
 		 * 報酬受け取り処理 更新されたポイントの更新前と更新後のポイントと 各種達成ポイントテーブル(DAO作って)を比較して
 		 * ポイントが達成していたら報酬受け取り処理を行う （RewardDayDAOのinsertを使う）
 		 */
+		Date date1 = Date.valueOf(date);
+		RewardDayDAO RDDao = new RewardDayDAO();
+		// 飲酒ポイントの報酬（建物）の受け取り処理
+		if (alcoholPointChanged) {
+			AchievementPointDAO apDao = new AchievementPointDAO();
+			List<AchievementPoint> apList = apDao.selectAlcohol();
+			if ((point.getTotal_alcohol_consumed() + 10) == apList.get(0).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "1つ目の建物が建った！");
+				RDDao.insert(rewardDay);
+			} else if ((point.getTotal_alcohol_consumed() + 10) == apList.get(1).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "2つ目の建物が建った！");
+				RDDao.insert(rewardDay);
+			} else if ((point.getTotal_alcohol_consumed() + 10) == apList.get(2).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "3つ目の建物が建った！");
+				RDDao.insert(rewardDay);
+			}
+		}
+
+		// 睡眠時間ポイントの報酬（顔色）の受け取り処理
+		if (sleepPointChanged == 1) {
+			RewardDay rewardDay = new RewardDay(userId, date1, "顔色が良くなった！");
+			RDDao.insert(rewardDay);
+		} else if (sleepPointChanged == -1) {
+			RewardDay rewardDay = new RewardDay(userId, date1, "顔色が悪くなった！");
+			RDDao.insert(rewardDay);
+		} else if (sleepPointChanged == 0) {
+			// 何もしない
+		}
+
+		// 摂取カロリーポイントの報酬（衣服）の受け取り処理
+		if (caloriePointChanged) {
+			AchievementPointDAO apDao = new AchievementPointDAO();
+			List<AchievementPoint> apList = apDao.selectEat();
+			if ((point.getTotal_calorie_intake() + 10) == apList.get(0).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "服を受け取った！");
+				RDDao.insert(rewardDay);
+			} else if ((point.getTotal_calorie_intake() + 10) == apList.get(1).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "靴を受け取った！");
+				RDDao.insert(rewardDay);
+			} else if ((point.getTotal_calorie_intake() + 10) == apList.get(2).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "帽子を受け取った！");
+				RDDao.insert(rewardDay);
+			} else if ((point.getTotal_calorie_intake() + 10) == apList.get(3).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "民族衣装を受け取った！");
+				RDDao.insert(rewardDay);
+			}
+		}
+
+		// 禁煙ポイントの報酬（人）の受け取り処理
+		if (nosmokePointChanged == 1) {
+			AchievementPointDAO apDao = new AchievementPointDAO();
+			List<AchievementPoint> apList = apDao.selectSmoke();
+			if ((point.getTotal_nosmoke() + 1) == apList.get(apList.size() - 1).getAchievementPoint()) {
+				RewardDay rewardDay = new RewardDay(userId, date1, "人であふれた！");
+				RDDao.insert(rewardDay);
+			} else {
+				RewardDay rewardDay = new RewardDay(userId, date1, "人が増えた！");
+				RDDao.insert(rewardDay);
+			}
+		} else if (nosmokePointChanged == -1) {
+			RewardDay rewardDay = new RewardDay(userId, date1, "人がいなくなった！");
+			RDDao.insert(rewardDay);
+		} else if (nosmokePointChanged == 0) {
+			// 何もしない
+		}
+
+		// 消費カロリーポイントの報酬の受け取り処理
+		int shoPrevious = point.getTotal_calorie_consumed() / 3600;
+		int shoToday = (point.getTotal_calorie_consumed()+ totalCalorieConsu) / 3600;
+		if (shoPrevious != shoToday) {
+			WorldTourDAO WTDao = new WorldTourDAO();
+			String country = WTDao.select(point.getTotal_calorie_consumed() + totalCalorieConsu);
+			RewardDay rewardDay = new RewardDay(userId, date1, country + "に到達した！");
+			RDDao.insert(rewardDay);
+		}
 
 		// 結果ページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");

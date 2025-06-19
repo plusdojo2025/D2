@@ -28,7 +28,7 @@ CREATE TABLE world_tour(
 );
 
 INSERT INTO world_tour VALUES 
-    --(0, null, 0),
+    (0, null, 0),
     (1, "日本", 0), 
     (2, "オーストラリア", 3600),
     (3, "シンガポール", 7200),
@@ -85,9 +85,7 @@ CREATE TABLE target_value(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
--- INSERT INTO target_value(user_id) VALUES 
---     ("kazutoshi_t"), 
---     ("test1");
+INSERT INTO target_value(user_id) VALUES ("kazutoshi_t"),("test1");
 
 UPDATE target_value SET month=5, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="kazutoshi_t";
 
@@ -110,7 +108,7 @@ CREATE TABLE point(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
-INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 7200, 7, 300, 210, 5);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 7100, 6, 190, 200, 4);
 INSERT INTO point(user_id, year, month) VALUES  
     ("kazutoshi_t", 2025, 6), 
     ("test1", 2025, 6);
