@@ -18,8 +18,11 @@ public class ImageAllDAO {
      * @param countryOrder 国番号
      * @return TownAvatarElements まとめた画像群
      */
+    
     public TownAvatarElements select(int caloriePoint, int alcoholPoint, int sleepPoint, int noSmokeAchievementPoint, int countryOrder) {
         TownAvatarElements avatar = new TownAvatarElements();
+        
+        System.out.println("countryOrder = " + countryOrder);
 
         // 食事ポイントから服のステージ判定
         int clothStage = imageDAO.getEatStage(caloriePoint);
@@ -38,7 +41,7 @@ public class ImageAllDAO {
         Image shoe = null;
         Image hat = null;
         Image costume = null;
-
+        
         switch (clothStage) {
         case 1:
             cloth = imageDAO.getClothImage(clothStage);

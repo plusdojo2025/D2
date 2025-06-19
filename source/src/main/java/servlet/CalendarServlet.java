@@ -52,13 +52,7 @@ public class CalendarServlet extends HttpServlet {
 		String userId = "kazutoshi_t";
 		
 		
-		String yearParam = request.getParameter("year");
-		int year = 0;
-		try {
-			year = Integer.parseInt(yearParam);
-		} catch (NumberFormatException | NullPointerException e) {
-			year = java.time.LocalDate.now().getYear();
-		}
+	
 
 		String monthParam = request.getParameter("month");
 		int month = 0;
@@ -97,19 +91,20 @@ public class CalendarServlet extends HttpServlet {
 		int alcoholPoint = 0;
 		int sleepPoint = 0;
 		int noSmokePoint = 0;
-		int totalCalorieConsumed = 0;
+		int totalCalorieConsu = 0;
 
 		if (point != null) {
 		    caloriePoint = point.getTotal_calorie_intake();
 		    alcoholPoint = point.getTotal_alcohol_consumed();
 		    sleepPoint = point.getTotal_sleeptime();
 		    noSmokePoint = point.getTotal_nosmoke();
-		    totalCalorieConsumed = point.getTotal_calorie_consumed();
+		    totalCalorieConsu = point.getTotal_calorie_consumed();
 		}
 
 		// ImageAllDAOを使って画像情報を取得
 		ImageAllDAO imageAllDAO = new ImageAllDAO();
-		TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, totalCalorieConsumed);
+		
+		TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, totalCalorieConsu);
 
 		// JSPにセットしてフォワード
 		request.setAttribute("avatar", avatar);
