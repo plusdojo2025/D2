@@ -19,26 +19,26 @@
 <!-- 同じようにTestServlet.javaにもコピー項目がある -->
 
 <!-- jsファイル内で加工するためここでは非表示--------------------------------- -->
-<c:forEach var="imgPathBuild" items="${elmsImage.imgPathSetBuild}">
-	<img src="${imgPathBuild}" class="imgBuild" style="display: none;">
+<c:forEach var="build" items="${avatar.buildings}">
+	<div class="imgBuild" id="${build.imagePath}"></div>
 </c:forEach>
-<c:forEach var="imgPathCloth" items="${elmsImage.imgPathSetCloth}">
-	<img src="${imgPathCloth}" class="imgCloth" style="display: none;">
-</c:forEach>
-<img src="${elmsImage.imgPathFace}" id="imgFace" style="display: none;">
-<img src="${elmsImage.imgPathPeople}" id="imgPeople" style="display: none;">
-<input type="hidden" id="peopleNum" value="${elmsImage.peopleNum}">
+<div class="cloth" id="${avatar.cloth.imagePath}"></div>
+<div class="cloth" id="${avatar.shoe.imagePath}"></div>
+<div class="cloth" id="${avatar.hat.imagePath}"></div>
+<div class="cloth" id="${avatar.costume.imagePath}"></div>
+<div class="imgPeople" id="${avatar.peopleImage.imagePath}"></div>
+<div class="imgFace" id="${avatar.face.imagePath}"></div>
+<input type="hidden" id="peopleNum" value="${avatar.peopleCount}">
 <!-- --------------------------------------------------------------- -->
 
 <c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
-<c:set var="height" value="500" /> <!-- 実際に画面に表示する際の高さ[px] -->
-<canvas id="myCanvas" width="2000" height="2000" style="width:${width}px; height:${height}px;"></canvas>
+<canvas id="imageCanvas" width="1400" height="1000" style="width:${width}px;"></canvas>
 
 <!-- ここまでコピー -->
 
 
 <!-- 健康記録のカレンダー表示のテスト -->
-<table>
+<!-- <table>
 <tr>
 	<th>ユーザーID</th>
 	<th>日付</th>
@@ -71,7 +71,7 @@
 	<td><c:out value="${hr.free}" /></td>
 	</tr>
 </c:forEach>
-</table>
+</table> -->
 
 </body>
 
