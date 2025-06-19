@@ -89,8 +89,58 @@
     }
 %>
 
+<!-- 健康記録表示 -->
 
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.util.List" %>
+<%@ page import="dto.HealthRecord" %>
 
+<h2>健康記録</h2>
+
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.util.List" %>
+<%@ page import="dto.HealthRecord" %>
+
+<h2>健康記録（簡易表示）</h2>
+
+<%
+    List<HealthRecord> healthList = (List<HealthRecord>) request.getAttribute("healthList");
+
+    if (healthList != null && !healthList.isEmpty()) {
+        for (HealthRecord record : healthList) {
+%>
+            <p>
+                日付: <%= record.getDate() %><br>
+                摂取カロリー: <%= record.getCalorieIntake() %><br>
+                消費カロリー: <%= record.getCalorieConsu() %><br>
+                運動: <%= record.getExerciseType() %>（<%= record.getExerciseTime() %>分）<br>
+                飲酒量: <%= record.getAlcoholConsumed() %><br>
+                禁煙ポイント: <%= record.getNosmoke() %><br>
+                睡眠時間: <%= record.getSleepHours() %>時間<br>
+                メモ: <%= record.getFree() %>
+            </p>
+            <hr>
+<%
+        }
+    } else {
+%>
+        <p>健康記録はありません。</p>
+<%
+    }
+%>
+<div class="summary-box">
+  <p>6月の統計</p>
+  <p>
+    合計消費カロリー：<%= request.getAttribute("sumCalorieConsumed") %> kcal　
+    1日の平均純アルコール量：<%= request.getAttribute("avgPureAlcohol") %> g　
+    1日の平均睡眠時間：<%= request.getAttribute("avgSleep") %> 時間
+  </p>
+  <p>
+    合計禁煙日数：<%= request.getAttribute("sumNosmokeDays") %> 日　
+    1日の平均消費カロリー：<%= request.getAttribute("avgConsumed") %> kcal　
+    1日の平均摂取カロリー：<%= request.getAttribute("avgIntake") %> kcal
+  </p>
+</div>
 <!-- アバター表示 -->
 <div>
 <%

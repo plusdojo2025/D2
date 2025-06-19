@@ -78,7 +78,40 @@ public class CalendarServlet extends HttpServlet {
 		/*
 		 * カレンダーに表示する統計値の計算処理 持ってきた健康記録のリストをもとに統計値を計算しリクエストスコープに格納
 		 */
+		double totalCalorieConsumed = 0;
+		int totalNosmokeDays = 0;
+		double totalPureAlcohol = 0;
+		double totalSleep = 0;
+		double totalCalorieIntake = 0;
 
+		int recordCount = 0;
+
+		for (HealthRecord record : healthList) {
+		    totalCalorieConsumed += record.getCalorieConsu();
+		    totalCalorieIntake += record.getCalorieIntake();
+		    totalSleep += record.getSleepHours();
+		    totalPureAlcohol += record.getAlcoholConsumed();
+
+		    if (record.getNosmoke() > 0) {
+		        totalNosmokeDays++;
+		    }
+
+		    recordCount++;
+		}
+
+		// 平均を算出
+		double avgPureAlcohol = recordCount > 0 ? totalPureAlcohol / recordCount : 0;
+		double avgSleep = recordCount > 0 ? totalSleep / recordCount : 0;
+		double avgConsumed = recordCount > 0 ? totalCalorieConsumed / recordCount : 0;
+		double avgIntake = recordCount > 0 ? totalCalorieIntake / recordCount : 0;
+
+		// スコープに格納
+		request.setAttribute("sumCalorieConsumed", totalCalorieConsumed);
+		request.setAttribute("sumNosmokeDays", totalNosmokeDays);
+		request.setAttribute("avgPureAlcohol", avgPureAlcohol);
+		request.setAttribute("avgSleep", avgSleep);
+		request.setAttribute("avgConsumed", avgConsumed);
+		request.setAttribute("avgIntake", avgIntake);
 		/*
 		 * 街並み・アバター表示のための処理 ImageAllDAOのselectを使用 返り値のTownAvatarElementsをリクエストスコープに格納
 		 */

@@ -15,11 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.ImageAllDAO;
+import dao.ImageDAO;
 import dao.PointDAO;
 import dao.TargetValueDAO;
 import dao.UserDAO;
 import dto.Point;
 import dto.TargetValue;
+import dto.TownAvatarElements;
 
 @WebServlet("/HomeServlet")
 public class HomeServlet extends HttpServlet {
@@ -65,6 +68,34 @@ public class HomeServlet extends HttpServlet {
 					request.setAttribute("errorMsg", "今月のポイントレコードの作成に失敗しました。");
 				}
 			}
+			Point point = pointDAO.selectByUserIdMonth(userId, currentMonth);
+
+			int caloriePoint = 0;
+			int alcoholPoint = 0;
+			int sleepPoint = 0;
+			int noSmokePoint = 0;
+			int totalCalorieConsu = 0;
+
+			if (point != null) {
+			    caloriePoint = point.getTotal_calorie_intake();
+			    alcoholPoint = point.getTotal_alcohol_consumed();
+			    sleepPoint = point.getTotal_sleeptime();
+			    noSmokePoint = point.getTotal_nosmoke();
+			    totalCalorieConsu = point.getTotal_calorie_consumed();
+			}
+
+			// ImageAllDAOを使って画像情報を取得
+			ImageAllDAO imageAllDAO = new ImageAllDAO();
+			
+			int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
+			
+			TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
+
+			// JSPにセットしてフォワード
+			request.setAttribute("avatar", avatar);
+
+			// リクエストスコープにセット
+			request.setAttribute("avatar", avatar);
 
 			// === 通常の目標値とポイントデータの取得処理 ===
 			TargetValueDAO tdao = new TargetValueDAO();

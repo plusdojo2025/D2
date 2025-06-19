@@ -49,37 +49,37 @@ public class ImageDAO {
 	    }
 //服の画像
 	    public Image getClothImage(int stage) {
-	        return getImageByStage(stage);
-	    }
+			return getImageById(1);
+		}
 
-	    // 靴の画像
-	    public Image getShoeImage(int stage) {
-	        return getImageByStage(stage);
-	    }
+		// 靴の画像
+		public Image getShoeImage(int stage) {
+			return getImageById(2);
+		}
 
-	    // 帽子の画像
-	    public Image getHatImage(int stage) {
-	        return getImageByStage(stage);
-	    }
+		// 帽子の画像
+		public Image getHatImage(int stage) {
+			return getImageById(3);
+		}
 
-	    private Image getImageByStage(int stage) {
-	        String sql = "SELECT image_path FROM reward_cloth WHERE stage = ? AND country_order = 0 LIMIT 1";
-	        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	             PreparedStatement ps = conn.prepareStatement(sql)) {
-	            
-	            Class.forName("com.mysql.cj.jdbc.Driver");
-	            ps.setInt(1, stage);
-	            
-	            try (ResultSet rs = ps.executeQuery()) {
-	                if (rs.next()) {
-	                    return new Image(rs.getString("image_path"));
-	                }
-	            }
-	        } catch (SQLException | ClassNotFoundException e) {
-	            e.printStackTrace();
-	        }
-	        return new Image(null);
-	    }
+		private Image getImageById(int id) {
+			String sql = "SELECT image_path FROM reward_cloth WHERE id = ?";
+			try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+					PreparedStatement ps = conn.prepareStatement(sql)) {
+
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				ps.setInt(1, id);
+
+				try (ResultSet rs = ps.executeQuery()) {
+					if (rs.next()) {
+						return new Image(rs.getString("image_path"));
+					}
+				}
+			} catch (SQLException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			return new Image(null);
+		}
 
 	    // 民族衣装の画像（stage=4 & countryOrder指定）
 	    public Image getCountryCostumeImage(int countryOrder) {

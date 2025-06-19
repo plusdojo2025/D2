@@ -166,67 +166,128 @@ public class HealthRecordDAO {
 
 	// selectメソッド 指定された項目で検索して、取得されたデータのリストを返す
 	public List<HealthRecord> select(String userId, int month) {
-		Connection conn = null;
-		List<HealthRecord> RecordList = new ArrayList<HealthRecord>();
+	    Connection conn = null;
+	    List<HealthRecord> recordList = new ArrayList<>();
 
-		try {
-			// JDBCドライバを読み込む
-			Class.forName("com.mysql.cj.jdbc.Driver");
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
 
-			// データベースに接続する
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
-					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
-					"root", "password");
+	        conn = DriverManager.getConnection(
+	            "jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
+	            "root", "password");
 
-			// SQL文を準備する
-			String sql = "SELECT * FROM health_whole AS hw LEFT JOIN health_alcohol AS ha ON hw.user_id = ha.user_id AND hw.date = ha.date "
-					+ "LEFT JOIN health_exercise he ON hw.user_id = he.user_id AND hw.date = he.date "
-					+ "WHERE hw.user_id =? AND hw.date LIKE?;";
-			PreparedStatement pStmt = conn.prepareStatement(sql);
+	        String sql = "SELECT hw.*, " +
+	                     "  (SELECT alcohol_content FROM health_alcohol WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS alcohol_content, " +
+	                     "  (SELECT alcohol_consumed FROM health_alcohol WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS alcohol_consumed, " +
+	                     "  (SELECT pure_alcohol_consumed FROM health_alcohol WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS pure_alcohol_consumed, " +
+	                     "  (SELECT exercise_type FROM health_exercise WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS exercise_type, " +
+	                     "  (SELECT exercise_time FROM health_exercise WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS exercise_time, " +
+	                     "  (SELECT calorie_consu FROM health_exercise WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS calorie_consu " +
+	                     "FROM health_whole hw " +
+	                     "WHERE hw.user_id = ? AND MONTH(hw.date) = ?";
 
-			// ユーザーIDで指定
-			pStmt.setString(1, userId);
+	        PreparedStatement pStmt = conn.prepareStatement(sql);
+	        pStmt.setString(1, userId);
+	        pStmt.setInt(2, month);
 
-			// 月で指定
-			if (month >= 1 && month <= 9) {
-				pStmt.setString(2, "-0" + month + "-%");
-			} else {
-				pStmt.setString(2, "-" + month + "-%");
-			}
+	        ResultSet rs = pStmt.executeQuery();
 
-			// SQL文を実行し、結果表を取得する
-			ResultSet rs = pStmt.executeQuery();
+	        while (rs.next()) {
+	            HealthRecord record = new HealthRecord(
+	                rs.getString("user_id"),
+	                rs.getString("date"),
+	                rs.getString("exercise_type"),
+	                rs.getInt("exercise_time"),
+	                0, // 現体重は使わない想定
+	                rs.getDouble("calorie_consu"),
+	                rs.getInt("nosmoke"),
+	                rs.getDouble("alcohol_content"),
+	                rs.getInt("alcohol_consumed"),
+	                rs.getDouble("pure_alcohol_consumed"),
+	                rs.getDouble("sleep_time"),
+	                rs.getInt("calorie_intake"),
+	                rs.getString("free")
+	            );
+	            recordList.add(record);
+	        }
 
-			// ResultSetはDAOでしか使えないため結果表をコレクションにコピーする
-			while (rs.next()) {
-				HealthRecord record = new HealthRecord(rs.getString("hw.user_id"), rs.getString("hw.date"),
-						rs.getString("exercise_type"), rs.getInt("exercise_time"), 0, // 現在の体重はカレンダーに載せないため値はなんでもよい
-						rs.getDouble("calorie_consu"), rs.getInt("nosmoke"), rs.getDouble("alcohol_content"),
-						rs.getInt("alcohol_consumed"), rs.getDouble("pure_alcohol_consumed"),
-						rs.getDouble("sleep_time"), rs.getInt("calorie_intake"), rs.getString("free"));
-				RecordList.add(record);
-			}
+	    } catch (SQLException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	        recordList = null;
+	    } finally {
+	        if (conn != null) {
+	            try {
+	                conn.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			RecordList = null;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			RecordList = null;
-		} finally {
-			// データベースを切断
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					RecordList = null;
-				}
-			}
-		}
-		// 結果を返す
-		return RecordList;
+	    return recordList;
 	}
+//	public List<HealthRecord> select(String userId, int month) {
+//		Connection conn = null;
+//		List<HealthRecord> RecordList = new ArrayList<HealthRecord>();
+//
+//		try {
+//			// JDBCドライバを読み込む
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//
+//			// データベースに接続する
+//			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+//					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+//					"root", "password");
+//
+//			// SQL文を準備する
+//			String sql = "SELECT * FROM health_whole AS hw LEFT JOIN health_alcohol AS ha ON hw.user_id = ha.user_id AND hw.date = ha.date "
+//					+ "LEFT JOIN health_exercise he ON hw.user_id = he.user_id AND hw.date = he.date "
+//					+ "WHERE hw.user_id =? AND hw.date LIKE?;";
+//			PreparedStatement pStmt = conn.prepareStatement(sql);
+//
+//			// ユーザーIDで指定
+//			pStmt.setString(1, userId);
+//
+//			// 月で指定
+//			if (month >= 1 && month <= 9) {
+//				pStmt.setString(2, "-0" + month + "-%");
+//			} else {
+//				pStmt.setString(2, "-" + month + "-%");
+//			}
+//
+//			// SQL文を実行し、結果表を取得する
+//			ResultSet rs = pStmt.executeQuery();
+//
+//			// ResultSetはDAOでしか使えないため結果表をコレクションにコピーする
+//			while (rs.next()) {
+//				HealthRecord record = new HealthRecord(rs.getString("hw.user_id"), rs.getString("hw.date"),
+//						rs.getString("exercise_type"), rs.getInt("exercise_time"), 0, // 現在の体重はカレンダーに載せないため値はなんでもよい
+//						rs.getDouble("calorie_consu"), rs.getInt("nosmoke"), rs.getDouble("alcohol_content"),
+//						rs.getInt("alcohol_consumed"), rs.getDouble("pure_alcohol_consumed"),
+//						rs.getDouble("sleep_time"), rs.getInt("calorie_intake"), rs.getString("free"));
+//				RecordList.add(record);
+//			}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			RecordList = null;
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			RecordList = null;
+//		} finally {
+//			// データベースを切断
+//			if (conn != null) {
+//				try {
+//					conn.close();
+//				} catch (SQLException e) {
+//					e.printStackTrace();
+//					RecordList = null;
+//				}
+//			}
+//		}
+//		// 結果を返す
+//		return RecordList;
+//	}
 
 	// deleteメソッド：引数cardで指定されたレコードを削除し、成功したらtrueを返す
 	public boolean delete(String userId, int year, int month) {
