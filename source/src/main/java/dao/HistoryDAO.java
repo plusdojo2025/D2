@@ -11,11 +11,6 @@ import dto.History;
 
 public class HistoryDAO {
 
-    // DB接続情報（必要に応じて書き換えてください）
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/your_db_name?useSSL=false&serverTimezone=UTC";
-    private static final String DB_USER = "your_username";
-    private static final String DB_PASS = "your_password";
-
     public List<History> select(String userId) {
         Connection conn = null;
         List<History> hrlist = new ArrayList<>();
@@ -27,7 +22,9 @@ public class HistoryDAO {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // DB接続
-            conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+					"root", "password");
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, userId);
 
@@ -36,10 +33,10 @@ public class HistoryDAO {
                 History h = new History();
                 
               
-                h.setId(rs.getString("userid"));
+                h.setId(rs.getString("user_id"));
                 h.setYear(rs.getInt("year"));
                 h.setMonth(rs.getInt("month"));
-                h.setFileName(rs.getString("filepath"));
+                h.setFileName(rs.getString("file_path"));//---
                 // userIdフィールドがある場合
                 // h.setUserId(rs.getInt("user_id"));
 

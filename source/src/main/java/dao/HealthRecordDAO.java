@@ -228,6 +228,23 @@ public class HealthRecordDAO {
 		return RecordList;
 	}
 
+	/*// deleteメソッド：引数cardで指定されたレコードを削除し、成功したらtrueを返す
+	public boolean delete(String userId, int year, int month ) {
+		Connection conn = null;
+		boolean result = false;
+		try {
+			// JDBCドライバを読み込む
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// データベースに接続する
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+					"root", "password");
+			
+			// SQL文を準備する 2025-06-12
+			String sql = "DELETE * FROM health_whole where user_id = ?, date like ?";
+			//pStmtWhole.setInt(2, year+ "-" + month + "-%" );*/
+			
 	/*// updateメソッド：引数cardで指定されたレコードを更新し、成功したらtrueを返す
 	public boolean update(HealthRecord record) {
 		Connection conn = null;
