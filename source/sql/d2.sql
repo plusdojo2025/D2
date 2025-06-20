@@ -103,12 +103,12 @@ CREATE TABLE point(
     total_nosmoke INT DEFAULT 0,
     total_alcohol_consumed INT DEFAULT 0,
     total_calorie_intake INT DEFAULT 0,
-    total_sleeptime INT DEFAULT 0,
+    total_sleeptime INT DEFAULT 1,
     PRIMARY KEY(user_id, year, month),
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
-INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 7100, 6, 190, 200, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 7200, 6, 190, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 4, 5000, 7, 300, 300, 5);
 INSERT INTO point(user_id, year, month) VALUES  
     ("kazutoshi_t", 2025, 6), 
