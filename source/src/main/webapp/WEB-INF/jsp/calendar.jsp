@@ -192,7 +192,159 @@
 /* TODO:カレンダーの日付をクリックしたときに、その日の健康記録登録・更新フォームをポップアップ
 		 * 	healthRecoed.jspのコピペ
 		 *  その日に既に健康記録がある場合は、健康記録内容をデフォルトでフォーム入力欄に表示
- -->
+		 
+		 <!-- ポップアップエリア -->
+		 
+		<%
+for (int i = 1; i <= 31; i++) {
+  String day = String.format("%02d", i);
+  String date = "2025-06-" + day;
+%>
+  <a href="#" onclick="openPopup('<%= date %>')"><%= i %>日</a><br>
+<%
+}
+%>
+
+<!-- ポップアップ本体（非表示にしておく） -->
+<div id="popup" style="display:none; position:fixed; top:5%; left:5%; width:90%; height:90%; background:white; border:2px solid black; overflow:auto; z-index:9999; padding:1em;">
+  <button onclick="closePopup()">閉じる</button>
+
+  <h2>健康記録登録</h2>
+  <form method="POST" action="HealthRecordServlet">
+    <table>
+      <tr>
+        <td><label>現在の体重 <input type="text" name="now_weight" required>kg</label></td>
+      </tr>
+
+      <tr><td>運動の種類と時間</td></tr>
+      <tr>
+        <td>
+          <label>種類
+            <select name="exercise_type1" onchange="updateMets(1)" id="exercise_type1">
+              <option value="ウォーキング">ウォーキング 3.5メッツ</option>
+              <option value="サイクリング">サイクリング 4.0メッツ</option>
+            </select>
+            <input type="hidden" name="mets1" id="mets1" value="3.5">
+          </label>
+        </td>
+        <td><label>時間 <input type="text" name="exercise_time1" required>分</label></td>
+      </tr>
+
+      <tr>
+        <td>
+          <label>種類
+            <select name="exercise_type2" onchange="updateMets(2)" id="exercise_type2">
+              <option value="ウォーキング">ウォーキング 3.5メッツ</option>
+              <option value="サイクリング">サイクリング 4.0メッツ</option>
+            </select>
+            <input type="hidden" name="mets2" id="mets2" value="3.5">
+          </label>
+        </td>
+        <td><label>時間 <input type="text" name="exercise_time2">分</label></td>
+      </tr>
+
+      <tr>
+        <td><label>禁煙できたか：<input type="radio" name="no_smoke" value="1" checked>できた</label></td>
+        <td><input type="radio" name="no_smoke" value="0">できなかった</td>
+      </tr>
+
+      <tr>
+        <td>飲酒量とアルコール度数</td>
+        <td><label>度数：
+          <select name="alcohol_content1">
+            <option value="5">ビール</option>
+            <option value="40">ウイスキー</option>
+          </select> %
+        </label></td>
+        <td><label>量：
+          <select name="alcohol_consumed1">
+            <option value="300">中ジョッキ</option>
+            <option value="100">ロックグラス</option>
+          </select> ml
+        </label></td>
+      </tr>
+
+      <tr>
+        <td><label>度数：
+          <select name="alcohol_content2">
+            <option value="5">ビール</option>
+            <option value="40">ウイスキー</option>
+          </select> %
+        </label></td>
+        <td><label>量：
+          <select name="alcohol_consumed2">
+            <option value="300">中ジョッキ</option>
+            <option value="100">ロックグラス</option>
+          </select> ml
+        </label></td>
+      </tr>
+
+      <tr>
+        <td><label>睡眠時間
+          <select name="sleep_hours">
+            <option value="0.0">0</option>
+            <option value="7.0">7.0</option>
+            <option value="7.5">7.5</option>
+            <option value="8.0">8.0</option>
+          </select> 時間
+        </label></td>
+      </tr>
+
+      <tr>
+        <td><label>摂取カロリー：
+          <select name="calorie_intake">
+            <option value="0">0</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+            <option value="700">700</option>
+            <option value="2700">2700</option>
+          </select> kcal
+        </label></td>
+      </tr>
+
+      <tr>
+        <td><label>自由欄<br><input type="text" name="free"></label></td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          <input type="hidden" name="date" id="popupDate">
+          <input type="hidden" name="fromCalendar" value="true">
+          <input type="submit" value="登録">
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<script>
+  function openPopup(date) {
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("popupDate").value = date;
+  }
+
+  function closePopup() {
+    document.getElementById("popup").style.display = "none";
+  }
+
+  function updateMets(index) {
+    const select = document.getElementById('exercise_type' + index);
+    const metsInput = document.getElementById('mets' + index);
+    if (select.value === 'ウォーキング') {
+      metsInput.value = '3.5';
+    } else if (select.value === 'サイクリング') {
+      metsInput.value = '4.0';
+    } else {
+      metsInput.value = '0';
+    }
+  }
+
+  window.onload = function () {
+    updateMets(1);
+    updateMets(2);
+  };
+</script>
+ 
 		 
 
 

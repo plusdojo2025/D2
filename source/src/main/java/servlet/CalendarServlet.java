@@ -66,7 +66,7 @@ public class CalendarServlet extends HttpServlet {
 		
 		// 達成した報酬をDBから持ってくる
 		RewardDayDAO rewardDao = new RewardDayDAO();
-		List<RewardDay> rewardList = rewardDao.select(userId, month); // TODO: UserID, 月を引数にする(達成？）
+		List<RewardDay> rewardList = rewardDao.select(userId, month); // TODO: UserID, 月を引数にする
 		request.setAttribute("rewardList", rewardList);
 
 		/*
@@ -99,7 +99,7 @@ public class CalendarServlet extends HttpServlet {
 		    recordCount++;
 		}
 
-		// 平均を算出
+		// 統計を算出
 		double avgPureAlcohol = recordCount > 0 ? totalPureAlcohol / recordCount : 0;
 		double avgSleep = recordCount > 0 ? totalSleep / recordCount : 0;
 		double avgConsumed = recordCount > 0 ? totalCalorieConsumed / recordCount : 0;
@@ -112,9 +112,7 @@ public class CalendarServlet extends HttpServlet {
 		request.setAttribute("avgSleep", avgSleep);
 		request.setAttribute("avgConsumed", avgConsumed);
 		request.setAttribute("avgIntake", avgIntake);
-		/*
-		 * 街並み・アバター表示のための処理 ImageAllDAOのselectを使用 返り値のTownAvatarElementsをリクエストスコープに格納
-		 */
+		
 
 		// PointDAOでユーザーのポイントを取得
 		
@@ -146,13 +144,6 @@ public class CalendarServlet extends HttpServlet {
 		request.setAttribute("avatar", avatar);
 		
 
-//		int caloriePoint = 210;
-//		int alcoholPoint = 150;
-//		int sleepPoint = 4;
-//		int noSmokePoint = 5;
-//		int countryOrder = 1;
-
-		
 
 		// リクエストスコープにセット
 		request.setAttribute("avatar", avatar);

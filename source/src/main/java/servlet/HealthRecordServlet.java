@@ -52,8 +52,8 @@ public class HealthRecordServlet extends HttpServlet {
 		 * HttpSession session = request.getSession(); if (session.getAttribute("id") ==
 		 * null) { response.sendRedirect("/D2/LoginServlet"); return; }
 		 */
-//		String date = (String) request.getAttribute("date");
-		String date = "2025-05-28";
+		String date = (String) request.getAttribute("date");
+//		String date = "2025-05-28";
 		request.setAttribute("date", date);
 		// 登録ページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/healthRecord.jsp");
@@ -68,6 +68,16 @@ public class HealthRecordServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//ポップアップから健康記録した際は、カレンダーページに戻るようにする。
+		String fromCalendar = request.getParameter("fromCalendar");
+		String backPage = "HomeServlet"; // デフォルトはホーム
+
+		if ("true".equals(fromCalendar)) {
+		    backPage = "calendar.jsp";
+		}
+
+		request.setAttribute("result", new Result("登録完了", "健康記録を登録しました", backPage));
+		
 		// リクエストパラメータを取得し、数値型で取りたいものは変換処理を行う。
 		request.setCharacterEncoding("UTF-8");
 
