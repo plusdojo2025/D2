@@ -101,7 +101,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="dto.HealthRecord" %>
 
-<h2>健康記録（簡易表示）</h2>
 
 <%
     List<HealthRecord> healthList = (List<HealthRecord>) request.getAttribute("healthList");
@@ -131,14 +130,14 @@
 <div class="summary-box">
   <p>6月の統計</p>
   <p>
-    合計消費カロリー：<%= request.getAttribute("sumCalorieConsumed") %> kcal　
-    1日の平均純アルコール量：<%= request.getAttribute("avgPureAlcohol") %> g　
-    1日の平均睡眠時間：<%= request.getAttribute("avgSleep") %> 時間
+    合計消費カロリー：<%= String.format("%.1f", request.getAttribute("sumCalorieConsumed")) %> kcal　
+    1日の平均純アルコール量：<%= String.format("%.1f", request.getAttribute("avgPureAlcohol")) %> g　
+    1日の平均睡眠時間：<%= String.format("%.1f", request.getAttribute("avgSleep")) %> 時間
   </p>
   <p>
     合計禁煙日数：<%= request.getAttribute("sumNosmokeDays") %> 日　
-    1日の平均消費カロリー：<%= request.getAttribute("avgConsumed") %> kcal　
-    1日の平均摂取カロリー：<%= request.getAttribute("avgIntake") %> kcal
+    1日の平均消費カロリー：<%= String.format("%.1f", request.getAttribute("avgConsumed")) %> kcal　
+    1日の平均摂取カロリー：<%= String.format("%.1f", request.getAttribute("avgIntake")) %> kcal
   </p>
 </div>
 <!-- アバター表示 -->

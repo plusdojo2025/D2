@@ -90,7 +90,7 @@ public class CalendarServlet extends HttpServlet {
 		    totalCalorieConsumed += record.getCalorieConsu();
 		    totalCalorieIntake += record.getCalorieIntake();
 		    totalSleep += record.getSleepHours();
-		    totalPureAlcohol += record.getAlcoholConsumed();
+		    totalPureAlcohol += record.getAlcoholContent() * record.getAlcoholConsumed() * 0.8 / 100.0;
 
 		    if (record.getNosmoke() > 0) {
 		        totalNosmokeDays++;
