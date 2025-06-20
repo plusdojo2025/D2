@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="js/healthRecord.js"></script>
 <title>健康記録登録</title>
 </head>
 <body>
@@ -27,67 +28,34 @@
 					</label></td>
 				</tr>
 				<tr>
-					<td>運動の種類と時間・現在の体重</td>
+					<td>運動の種類と時間</td>
 				</tr>
-				<tr>
-					<td><label>種類 <select name="exercise_type1" id="">
-								<option value="ウォーキング">ウォーキング 3.5メッツ</option>
-								<option value="サイクリング">サイクリング4.0メッツ</option>
-						</select> <input type="hidden" name="mets1" id="mets1" value="3.5">
-							<script>
-								function updateMets() {
-									const select = document
-											.getElementById('exercise_type1');
-									const metsInput = document
-											.getElementById('mets1');
-
-									if (select.value === 'ウォーキング') {
-										metsInput.value = '3.5';
-									} else if (select.value === 'サイクリング') {
-										metsInput.value = '4.0';
-									} else {
-										metsInput.value = '0';
-									}
-								}
-
-								// ページ読み込み時にも初期化しておく
-								window.onload = updateMets;
-							</script>
-
-					</label></td>
-					<td><label>時間 <input type="text" name="exercise_time1">分
-					</label></td>
-
-				</tr>
-				<tr>
-					<td><label>種類 <select name="exercise_type2" id="">
+				<%-- 運動入力欄：最初はすべて非表示 --%>
+				<%
+				for (int i = 1; i <= 10; i++) {
+				%>
+				<tr id="exercise_row<%=i%>" style="display: none;">
+					<td><label>種類 <select name="exercise_type<%=i%>"
+							id="exercise_type<%=i%>" onchange="updateMets(<%=i%>)">
 								<option value="ウォーキング">ウォーキング 3.5メッツ</option>
 								<option value="サイクリング">サイクリング 4.0メッツ</option>
-						</select> <input type="hidden" name="mets2" id="mets2" value="3.5">
-							<script>
-								function updateMets() {
-									const select = document
-											.getElementById('exercise_type2');
-									const metsInput = document
-											.getElementById('mets2');
-
-									if (select.value === 'ウォーキング') {
-										metsInput.value = '3.5';
-									} else if (select.value === 'サイクリング') {
-										metsInput.value = '4.0';
-									} else {
-										metsInput.value = '0';
-									}
-								}
-
-								// ページ読み込み時にも初期化しておく
-								window.onload = updateMets;
-							</script>
-
+						</select> <input type="hidden" name="mets<%=i%>" id="mets<%=i%>" value="">
 					</label></td>
-					<td><label>時間 <input type="text" name="exercise_time2">分
+					<td><label>時間 <input type="text"
+							name="exercise_time<%=i%>">分
 					</label></td>
 				</tr>
+				<%
+				}
+				%>
+
+				<%-- 追加ボタン行 --%>
+				<tr id="addExerciseRow">
+					<td colspan="2">
+						<button type="button" onclick="addExercise()">＋ 運動を追加</button>
+					</td>
+				</tr>
+
 
 
 				<tr>
