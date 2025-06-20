@@ -108,8 +108,25 @@ CREATE TABLE point(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
-INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 7200, 6, 190, 300, 4);
-INSERT INTO point VALUES  ("kazutoshi_t", 2025, 4, 5000, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 6, 7200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 5000, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 4, 57600, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 3, 54000, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 2, 50400, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 1, 46800, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 12, 43200, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 11, 39600, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 10, 36000, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 9, 32400, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 8, 28800, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 7, 25200, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 6, 21600, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 5, 18000, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 4, 14400, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 3, 10800, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 2, 7200, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("kazutoshi_t", 2024, 1, 3600, 7, 300, 300, 6);
+INSERT INTO point VALUES  ("kazutoshi_t", 2023, 12, 0, 7, 300, 300, 1);
 INSERT INTO point(user_id, year, month) VALUES  
     ("kazutoshi_t", 2025, 6), 
     ("test1", 2025, 6);
@@ -171,19 +188,44 @@ CREATE TABLE health_exercise(
     FOREIGN KEY(user_id, date) REFERENCES health_whole(user_id, date)
 );
 
--- 0601
+-- 2025/0601
 INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-01", 0, 8, 2000, "test0601");
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-01", 30, 300, 5);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-01", 30, 100, 10);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-01", 300, "ウォーキング", 30);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-01", 300, "サイクリング", 60);
--- 0602
+-- 2025/0602
 INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-02", 1, 7.5, 2500, "test0602");
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-02", 30, 300, 5);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-02", 900, "ランニング", 30);
--- 0603
+-- 2025/0603
 INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-03", 0, 8, 3000, "test0603");
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-03", 600, "ウォーキング", 60);
+
+-- 2024/0601
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-06-01", 0, 8, 2000, "test0601");
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-06-01", 30, 300, 5);
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-06-01", 30, 100, 10);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-06-01", 300, "ウォーキング", 30);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-06-01", 300, "サイクリング", 60);
+-- 2024/0401
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-04-01", 0, 8, 2000, "test0601");
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-01", 30, 300, 5);
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-01", 30, 100, 10);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-01", 300, "ウォーキング", 30);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-01", 300, "サイクリング", 60);
+-- 2024/0402
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-04-02", 0, 8, 2000, "test0601");
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-02", 30, 300, 5);
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-02", 30, 100, 10);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-02", 300, "ウォーキング", 30);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-02", 300, "サイクリング", 60);
+-- 2024/0302
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-03-02", 0, 8, 2000, "test0601");
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-03-02", 30, 300, 5);
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-03-02", 30, 100, 10);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-03-02", 300, "ウォーキング", 30);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-03-02", 300, "サイクリング", 60);
 
 SELECT * FROM health_whole;
 SELECT * FROM health_alcohol;
@@ -266,23 +308,23 @@ INSERT INTO reward_cloth(stage, country_order, image_path) VALUES
     (1, 0, "img/cloth1.png"),
     (2, 0, "img/cloth2.png"),
     (3, 0, "img/cloth3.png"),
-    (4, 1, "img/jp_cloth4.png"),
-    (4, 2, "img/au_cloth4.png"),
-    (4, 3, "img/test_cloth4.png"),
-    (4, 4, "img/test_cloth4.png"),
-    (4, 5, "img/test_cloth4.png"),
-    (4, 6, "img/test_cloth4.png"),
-    (4, 7, "img/test_cloth4.png"),
-    (4, 8, "img/test_cloth4.png"),
-    (4, 9, "img/test_cloth4.png"),
-    (4, 10, "img/test_cloth4.png"),
-    (4, 11, "img/test_cloth4.png"),
-    (4, 12, "img/test_cloth4.png"),
-    (4, 13, "img/test_cloth4.png"),
-    (4, 14, "img/test_cloth4.png"),
-    (4, 15, "img/test_cloth4.png"),
-    (4, 16, "img/test_cloth4.png"),
-    (4, 17, "img/test_cloth4.png");
+    (4, 1, "img/jp_cloth4.png"), -- 日本
+    (4, 2, "img/au_cloth4.png"), -- オーストラリア
+    (4, 3, "img/sg_cloth4.png"), -- シンガポール
+    (4, 4, "img/in_cloth4.png"), -- インド
+    (4, 5, "img/cn_cloth4.png"), -- 中国
+    (4, 6, "img/kr_cloth4.png"), -- 韓国
+    (4, 7, "img/mn_cloth4.png"), -- モンゴル
+    (4, 8, "img/ru_cloth4.png"), -- ロシア
+    (4, 9, "img/fr_cloth4.png"), -- フランス
+    (4, 10, "img/gb_cloth4.png"), -- イギリス
+    (4, 11, "img/it_cloth4.png"), -- イタリア
+    (4, 12, "img/eg_cloth4.png"), -- エジプト
+    (4, 13, "img/mg_cloth4.png"), -- マダガスカル
+    (4, 14, "img/br_cloth4.png"), -- ブラジル
+    (4, 15, "img/mx_cloth4.png"), -- メキシコ
+    (4, 16, "img/us_cloth4.png"), -- アメリカ
+    (4, 17, "img/universe_cloth4.png"); -- 宇宙
 
 SELECT * FROM reward_cloth;
 
@@ -304,51 +346,51 @@ INSERT INTO reward_build(stage, country_order, image_path) VALUES
     (1, 2, "img/au_build1.png"),
     (2, 2, "img/au_build2.png"),
     (3, 2, "img/au_build3.png"),
-    (1, 3, "img/test_build1.png"),
-    (2, 3, "img/test_build2.png"),
-    (3, 3, "img/test_build3.png"),
-    (1, 4, "img/test_build1.png"),
-    (2, 4, "img/test_build2.png"),
-    (3, 4, "img/test_build3.png"),
-    (1, 5, "img/test_build1.png"),
-    (2, 5, "img/test_build2.png"),
-    (3, 5, "img/test_build3.png"),
-    (1, 6, "img/test_build1.png"),
-    (2, 6, "img/test_build2.png"),
-    (3, 6, "img/test_build3.png"),
-    (1, 7, "img/test_build1.png"),
-    (2, 7, "img/test_build2.png"),
-    (3, 7, "img/test_build3.png"),
-    (1, 8, "img/test_build1.png"),
-    (2, 8, "img/test_build2.png"),
-    (3, 8, "img/test_build3.png"),
-    (1, 9, "img/test_build1.png"),
-    (2, 9, "img/test_build2.png"),
-    (3, 9, "img/test_build3.png"),
-    (1, 10, "img/test_build1.png"),
-    (2, 10, "img/test_build2.png"),
-    (3, 10, "img/test_build3.png"),
-    (1, 11, "img/test_build1.png"),
-    (2, 11, "img/test_build2.png"),
-    (3, 11, "img/test_build3.png"),
-    (1, 12, "img/test_build1.png"),
-    (2, 12, "img/test_build2.png"),
-    (3, 12, "img/test_build3.png"),
-    (1, 13, "img/test_build1.png"),
-    (2, 13, "img/test_build2.png"),
-    (3, 13, "img/test_build3.png"),
-    (1, 14, "img/test_build1.png"),
-    (2, 14, "img/test_build2.png"),
-    (3, 14, "img/test_build3.png"),
-    (1, 15, "img/test_build1.png"),
-    (2, 15, "img/test_build2.png"),
-    (3, 15, "img/test_build3.png"),
-    (1, 16, "img/test_build1.png"),
-    (2, 16, "img/test_build2.png"),
-    (3, 16, "img/test_build3.png"),
-    (1, 17, "img/test_build1.png"),
-    (2, 17, "img/test_build2.png"),
-    (3, 17, "img/test_build3.png");
+    (1, 3, "img/sg_build1.png"),
+    (2, 3, "img/sg_build2.png"),
+    (3, 3, "img/sg_build3.png"),
+    (1, 4, "img/in_build1.png"),
+    (2, 4, "img/in_build2.png"),
+    (3, 4, "img/in_build3.png"),
+    (1, 5, "img/cn_build1.png"),
+    (2, 5, "img/cn_build2.png"),
+    (3, 5, "img/cn_build3.png"),
+    (1, 6, "img/kr_build1.png"),
+    (2, 6, "img/kr_build2.png"),
+    (3, 6, "img/kr_build3.png"),
+    (1, 7, "img/mn_build1.png"),
+    (2, 7, "img/mn_build2.png"),
+    (3, 7, "img/mn_build3.png"),
+    (1, 8, "img/ru_build1.png"),
+    (2, 8, "img/ru_build2.png"),
+    (3, 8, "img/ru_build3.png"),
+    (1, 9, "img/fr_build1.png"),
+    (2, 9, "img/fr_build2.png"),
+    (3, 9, "img/fr_build3.png"),
+    (1, 10, "img/gb_build1.png"),
+    (2, 10, "img/gb_build2.png"),
+    (3, 10, "img/gb_build3.png"),
+    (1, 11, "img/it_build1.png"),
+    (2, 11, "img/it_build2.png"),
+    (3, 11, "img/it_build3.png"),
+    (1, 12, "img/eg_build1.png"),
+    (2, 12, "img/eg_build2.png"),
+    (3, 12, "img/eg_build3.png"),
+    (1, 13, "img/mg_build1.png"),
+    (2, 13, "img/mg_build2.png"),
+    (3, 13, "img/mg_build3.png"),
+    (1, 14, "img/br_build1.png"),
+    (2, 14, "img/br_build2.png"),
+    (3, 14, "img/br_build3.png"),
+    (1, 15, "img/mx_build1.png"),
+    (2, 15, "img/mx_build2.png"),
+    (3, 15, "img/mx_build3.png"),
+    (1, 16, "img/us_build1.png"),
+    (2, 16, "img/us_build2.png"),
+    (3, 16, "img/us_build3.png"),
+    (1, 17, "img/universe_build1.png"),
+    (2, 17, "img/universe_build2.png"),
+    (3, 17, "img/universe_build3.png");
 
 SELECT * FROM reward_build;
 
@@ -364,21 +406,21 @@ CREATE TABLE reward_people(
 INSERT INTO reward_people(country_order, image_path) VALUES
     (1, "img/jp_people.png"),
     (2, "img/au_people.png"),
-    (3, "img/test_people.png"),
-    (4, "img/test_people.png"),
-    (5, "img/test_people.png"),
-    (6, "img/test_people.png"),
-    (7, "img/test_people.png"),
-    (8, "img/test_people.png"),
-    (9, "img/test_people.png"),
-    (10, "img/test_people.png"),
-    (11, "img/test_people.png"),
-    (12, "img/test_people.png"),
-    (13, "img/test_people.png"),
-    (14, "img/test_people.png"),
-    (15, "img/test_people.png"),
-    (16, "img/test_people.png"),
-    (17, "img/test_people.png");
+    (3, "img/sg_people.png"),
+    (4, "img/in_people.png"),
+    (5, "img/cn_people.png"),
+    (6, "img/kr_people.png"),
+    (7, "img/mn_people.png"),
+    (8, "img/ru_people.png"),
+    (9, "img/fr_people.png"),
+    (10, "img/gb_people.png"),
+    (11, "img/it_people.png"),
+    (12, "img/eg_people.png"),
+    (13, "img/mg_people.png"),
+    (14, "img/br_people.png"),
+    (15, "img/mx_people.png"),
+    (16, "img/us_people.png"),
+    (17, "img/universe_people.png");
 
 SELECT * FROM reward_people;
 
@@ -414,10 +456,10 @@ CREATE TABLE history(
 );
 
 INSERT INTO history VALUES
-    ("kazutoshi_t", 2024, 2, "history/kazutoshi_t/2024-2.txt"),
-    ("kazutoshi_t", 2024, 3, "history/kazutoshi_t/2024-3.txt"),
-    ("kazutoshi_t", 2024, 4, "history/kazutoshi_t/2024-4.txt"),
-    ("kazutoshi_t", 2024, 5, "history/kazutoshi_t/2024-5.txt"),
-    ("kazutoshi_t", 2024, 6, "history/kazutoshi_t/2024-6.txt");
+    ("kazutoshi_t", 2023, 2, "history/kazutoshi_t/2024-2.txt"),
+    ("kazutoshi_t", 2023, 3, "history/kazutoshi_t/2024-3.txt"),
+    ("kazutoshi_t", 2023, 4, "history/kazutoshi_t/2024-4.txt"),
+    ("kazutoshi_t", 2023, 5, "history/kazutoshi_t/2024-5.txt"),
+    ("kazutoshi_t", 2023, 6, "history/kazutoshi_t/2024-6.txt");
 
 SELECT * FROM history;
