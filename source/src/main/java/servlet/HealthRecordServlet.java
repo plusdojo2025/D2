@@ -53,7 +53,7 @@ public class HealthRecordServlet extends HttpServlet {
 		 * null) { response.sendRedirect("/D2/LoginServlet"); return; }
 		 */
 //		String date = (String) request.getAttribute("date");
-		String date = "2025-05-28";
+		String date = "2024-05-20";
 		request.setAttribute("date", date);
 		// 登録ページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/healthRecord.jsp");
