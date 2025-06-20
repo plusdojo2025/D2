@@ -21,6 +21,7 @@ window.onload = function () {
 };
 </script>
 <script src="${pageContext.request.contextPath}/js/targetvalueform.js"></script>
+<script src="${pageContext.request.contextPath}/js/logout.js"></script>
 </head>
 <body>
 <header>
@@ -34,7 +35,7 @@ window.onload = function () {
     <nav>
         <a href="HealthRecordServlet?date=<%= currentDateStr %>">健康記録登録</a>
         <a href="CalendarServlet?year=<%= currentYear %>&month=<%= currentMonth %>">カレンダー</a>
-        <a href="logout">ログアウト</a>
+        <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </nav>
 </header>
 
