@@ -109,6 +109,7 @@ CREATE TABLE point(
 );
 
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 7100, 6, 190, 200, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 4, 5000, 7, 300, 300, 5);
 INSERT INTO point(user_id, year, month) VALUES  
     ("kazutoshi_t", 2025, 6), 
     ("test1", 2025, 6);
@@ -170,15 +171,19 @@ CREATE TABLE health_exercise(
     FOREIGN KEY(user_id, date) REFERENCES health_whole(user_id, date)
 );
 
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-01", 0, 8, 2000, "飲み会した");
-
+-- 0601
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-01", 0, 8, 2000, "test0601");
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-01", 30, 300, 5);
-
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-01", 30, 100, 10);
-
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-01", 300, "ウォーキング", 30);
-
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-01", 300, "サイクリング", 60);
+-- 0602
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-02", 1, 7.5, 2500, "test0602");
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-02", 30, 300, 5);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-02", 900, "ランニング", 30);
+-- 0603
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-03", 0, 8, 3000, "test0603");
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-03", 600, "ウォーキング", 60);
 
 SELECT * FROM health_whole;
 SELECT * FROM health_alcohol;
@@ -416,4 +421,3 @@ INSERT INTO history VALUES
     ("kazutoshi_t", 2024, 6, "history/kazutoshi_t/2024-6.txt");
 
 SELECT * FROM history;
------------------------------
