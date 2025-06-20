@@ -8,9 +8,10 @@ public class HealthWhole implements Serializable {
 	private double sleepHours; // 睡眠時間
 	private int calorieIntake; // 摂取カロリー
 	private String free; // 自由欄
+	private double nowWeight; 
 	
 	//コンストラクタ
-	public HealthWhole(String userId, String date, int nosmoke, double sleepHours, int calorieIntake, String free) {
+	public HealthWhole(String userId, String date, int nosmoke, double sleepHours, int calorieIntake, String free, double nowWeight) {
 		super();
 		this.userId = userId;
 		this.date = date;
@@ -18,6 +19,7 @@ public class HealthWhole implements Serializable {
 		this.sleepHours = sleepHours;
 		this.calorieIntake = calorieIntake;
 		this.free = free;
+		this.nowWeight = nowWeight;
 	}
 	
 	//ゲッターセッター
@@ -67,6 +69,14 @@ public class HealthWhole implements Serializable {
 
 	public void setFree(String free) {
 		this.free = free;
+	}
+	
+	public double getNowWeight() {
+		return nowWeight;
+	}
+
+	public void setNowWeight(double nowWeight) {
+		this.nowWeight = nowWeight;
 	}
 	
 }

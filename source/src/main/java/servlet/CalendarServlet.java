@@ -51,6 +51,7 @@ public class CalendarServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 //		String userId = (String) session.getAttribute("user_id");
 		String userId = "kazutoshi_t";
+		session.setAttribute("userId", userId);
 		
 		
 	
@@ -75,6 +76,18 @@ public class CalendarServlet extends HttpServlet {
 		HealthRecordDAO healthDao = new HealthRecordDAO();
 		List<HealthRecord> healthList = healthDao.select(userId, month);
 		request.setAttribute("healthList", healthList);
+		
+		// 日付指定があれば、その日の記録を1件だけ取り出してスコープに入れる
+		String date = request.getParameter("date");  // 例: 2025-06-15
+		if (date != null && !date.isEmpty()) {
+		    for (HealthRecord record : healthList) {
+		        if (date.equals(record.getDate())) {
+		            request.setAttribute("record", record);  // ← これがJSPで使える
+		            break;
+		        }
+		    }
+		}
+
 		/*
 		 * カレンダーに表示する統計値の計算処理 持ってきた健康記録のリストをもとに統計値を計算しリクエストスコープに格納
 		 */

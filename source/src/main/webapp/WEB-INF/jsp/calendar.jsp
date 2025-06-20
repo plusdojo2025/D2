@@ -9,7 +9,7 @@
 </head>
 <body>
 <!-- タイトル -->
-<h1>ケンコークラフト</h1>
+<a href="HomeServlet">ケンコークラフト</a>
 
 
   <div>
@@ -193,15 +193,27 @@
 		 *  その日に既に健康記録がある場合は、健康記録内容をデフォルトでフォーム入力欄に表示
 		 
 		 <!-- ポップアップエリア -->
-		 
-		<%
-for (int i = 1; i <= 31; i++) {
-  String day = String.format("%02d", i);
-  String date = "2025-06-" + day;
-%>
-  <a href="#" onclick="openPopup('<%= date %>')"><%= i %>日</a><br>
 <%
-}
+  String yearStr = request.getParameter("year");
+  String monthStr = request.getParameter("month");
+
+  int year = now.getYear(); // デフォルトは今
+  int month = now.getMonthValue();
+
+  try {
+      if (yearStr != null) year = Integer.parseInt(yearStr);
+      if (monthStr != null) month = Integer.parseInt(monthStr);
+  } catch (NumberFormatException e) {
+      // 無視して今月のままでOK
+  }
+
+  for (int i = 1; i <= 31; i++) {
+      String day = String.format("%02d", i);
+      String date = year + "-" + String.format("%02d", month) + "-" + day;
+%>
+  <a href="#" onclick="openPopup('<%= date %>'); return false;"><%= i %>日</a><br>
+<%
+  }
 %>
 
 <!-- ポップアップ本体（非表示にしておく） -->
@@ -315,34 +327,27 @@ for (int i = 1; i <= 31; i++) {
     </table>
   </form>
 </div>
-
+<!--  -->
 <script>
-  function openPopup(date) {
-    document.getElementById("popup").style.display = "block";
-    document.getElementById("popupDate").value = date;
-  }
+function openPopup(date) {
+  document.getElementById("popup").style.display = "block";
+  document.getElementById("popupDate").value = date;
 
-  function closePopup() {
-    document.getElementById("popup").style.display = "none";
-  }
+  fetch('HealthRecordFormServlet?date=' + date)
+    .then(response => response.text())
+    .then(script => {
+      console.log("返ってきたスクリプト:");
+      console.log(script);
+      eval(script); // サーバーからのJSを実行
+    });
+}
 
-  function updateMets(index) {
-    const select = document.getElementById('exercise_type' + index);
-    const metsInput = document.getElementById('mets' + index);
-    if (select.value === 'ウォーキング') {
-      metsInput.value = '3.5';
-    } else if (select.value === 'サイクリング') {
-      metsInput.value = '4.0';
-    } else {
-      metsInput.value = '0';
-    }
-  }
 
-  window.onload = function () {
-    updateMets(1);
-    updateMets(2);
-  };
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
 </script>
+
  
 		 
 

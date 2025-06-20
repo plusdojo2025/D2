@@ -31,8 +31,8 @@ public class HealthRecordDAO {
 			// トランザクション開始
 			conn.setAutoCommit(false);
 			// 1つ目の健康記録（全体）に記録するSQL文を準備する
-			String sqlWhole = "INSERT INTO health_whole(user_id, date, nosmoke, sleep_time, calorie_intake, free)"
-					+ "VALUES(?, ?, ?, ?, ?, ?)";
+			String sqlWhole = "INSERT INTO health_whole(user_id, date, nosmoke, sleep_time, calorie_intake, free, now_weight)"
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
 			try (PreparedStatement pStmtWhole = conn.prepareStatement(sqlWhole)) {
 				// SQL文を完成させる
 				// ユーザーIDを？に挿入
@@ -62,6 +62,8 @@ public class HealthRecordDAO {
 				} else {
 					pStmtWhole.setString(6, "");
 				}
+				
+				pStmtWhole.setDouble(7, hw.getNowWeight());
 				// SQL文を実行
 				pStmtWhole.executeUpdate();
 			}
@@ -215,7 +217,66 @@ public class HealthRecordDAO {
 
 		return recordList;
 	}
+	
+	//日付で一日分の健康記録取得
+	public HealthRecord selectByDate(String userId, String date) {
+	    Connection conn = null;
+	    HealthRecord record = null;
 
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
+	                                           "root", "password");
+
+	        String sql = "SELECT hw.*, "
+	                + "  (SELECT alcohol_content FROM health_alcohol WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS alcohol_content, "
+	                + "  (SELECT alcohol_consumed FROM health_alcohol WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS alcohol_consumed, "
+	                + "  (SELECT pure_alcohol_consumed FROM health_alcohol WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS pure_alcohol_consumed, "
+	                + "  (SELECT exercise_type FROM health_exercise WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS exercise_type, "
+	                + "  (SELECT exercise_time FROM health_exercise WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS exercise_time, "
+	                + "  (SELECT calorie_consu FROM health_exercise WHERE user_id = hw.user_id AND date = hw.date ORDER BY id ASC LIMIT 1) AS calorie_consu "
+	                + "FROM health_whole hw WHERE hw.user_id = ? AND hw.date = ?";
+
+	        PreparedStatement pStmt = conn.prepareStatement(sql);
+	        pStmt.setString(1, userId);
+	        pStmt.setString(2, date);
+
+	        ResultSet rs = pStmt.executeQuery();
+
+	        if (rs.next()) {
+	            record = new HealthRecord(
+	                rs.getString("user_id"),
+	                rs.getString("date"),
+	                rs.getString("exercise_type"),
+	                rs.getInt("exercise_time"),
+	                rs.getDouble("now_weight"),
+	                rs.getDouble("calorie_consu"),
+	                rs.getInt("nosmoke"),
+	                rs.getDouble("alcohol_content"),
+	                rs.getInt("alcohol_consumed"),
+	                rs.getDouble("pure_alcohol_consumed"),
+	                rs.getDouble("sleep_time"),
+	                rs.getInt("calorie_intake"),
+	                rs.getString("free")
+	            );
+	        }
+
+	    } catch (SQLException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	        record = null;
+	    } finally {
+	        if (conn != null) {
+	            try {
+	                conn.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+
+	    return record;
+	}
+	
 	// selectAll(健康記録全体の日付だけを古い順に並べなおして取得）
 	public List<String> select(String userId) {
 		Connection conn = null;

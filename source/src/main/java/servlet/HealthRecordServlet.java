@@ -68,16 +68,7 @@ public class HealthRecordServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//ポップアップから健康記録した際は、カレンダーページに戻るようにする。
-				String fromCalendar = request.getParameter("fromCalendar");
-				String backPage = "HomeServlet"; // デフォルトはホーム
-
-				if ("true".equals(fromCalendar)) {
-				    backPage = "calendar.jsp";
-				}
-
-				request.setAttribute("result", new Result("登録完了", "健康記録を登録しました", backPage));
-
+		
 		// リクエストパラメータを取得し、数値型で取りたいものは変換処理を行う。
 		request.setCharacterEncoding("UTF-8");
 
@@ -98,11 +89,13 @@ public class HealthRecordServlet extends HttpServlet {
 		int noSmoke = 0;
 		noSmoke = Integer.parseInt(request.getParameter("no_smoke"));
 		// hwに格納
-		HealthWhole hw = new HealthWhole(userId, date, noSmoke, sleepHours, calorieIntake, free);
+//		HealthWhole hw = new HealthWhole(userId, date, noSmoke, sleepHours, calorieIntake, free, nowWeight);
 
 		// 運動テーブル関係
 		int nowWeight = 0;
 		nowWeight = Integer.parseInt(request.getParameter("now_weight"));
+		
+		HealthWhole hw = new HealthWhole(userId, date, noSmoke, sleepHours, calorieIntake, free, nowWeight);
 
 		List<HealthExercise> heList = new ArrayList<HealthExercise>();
 		int i = 1;
