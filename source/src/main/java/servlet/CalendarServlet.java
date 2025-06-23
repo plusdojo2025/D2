@@ -21,60 +21,48 @@ import dto.Point;
 import dto.RewardDay;
 import dto.TownAvatarElements;
 
-/**
- * Servlet implementation class CalendarServlet
- */
 @WebServlet("/CalendarServlet")
 public class CalendarServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public CalendarServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	private boolean test = true;
+	private String testUserId = "kazutoshi_t"; // テスト用のユーザID
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-//		HttpSession session = request.getSession();
-//		if (session.getAttribute("id") == null) {
-//			response.sendRedirect("/D2/LoginServlet");
-//			return;
-//		}
-
 		HttpSession session = request.getSession();
-//		String userId = (String) session.getAttribute("user_id");
-		String userId = "kazutoshi_t";
-		session.setAttribute("userId", userId);
-		
-		
-	
+		String userId;
+		int month;
+		int year;
 
-		String monthParam = request.getParameter("month");
-		int month = 0;
+		if(this.test){
+			session.setAttribute("user_id", testUserId);
+		}
+
+		if (session.getAttribute("user_id") == null) {
+			// もしもログインしていなかったらログインサーブレットにリダイレクト
+			response.sendRedirect("/D2/LoginServlet");
+			return;
+		}
+
+		userId = (String) session.getAttribute("user_id");
+		
 		try {
-			month = Integer.parseInt(monthParam);
-		} catch (NumberFormatException | NullPointerException e) {
+			month = Integer.parseInt(request.getParameter("month"));
+			year = Integer.parseInt(request.getParameter("year"));
+		} catch (Exception e) {
 			month = java.time.LocalDate.now().getMonthValue(); // デフォルトは今月
+			year = java.time.LocalDate.now().getYear(); // デフォルトは今年
 		}
 		request.setAttribute("displayMonth", month);
+		request.setAttribute("displayYear", year);
 		
 		// 達成した報酬をDBから持ってくる
 		RewardDayDAO rewardDao = new RewardDayDAO();
-		List<RewardDay> rewardList = rewardDao.select(userId, month); // TODO: UserID, 月を引数にする
+		List<RewardDay> rewardList = rewardDao.select(userId, month);
 		request.setAttribute("rewardList", rewardList);
 
-		/*
-		 * 健康記録をDBから持ってくる HealthRecordDAOのselectを使用 リクエストスコープに格納
-		 */
+		// 健康記録をDBから持ってくる
 		HealthRecordDAO healthDao = new HealthRecordDAO();
 //		List<HealthRecord> healthList = healthDao.select(userId, month);
 //		request.setAttribute("healthList", healthList);
@@ -105,13 +93,6 @@ public class CalendarServlet extends HttpServlet {
 		        }
 		    }
 		}
-		
-
-
-	
-	
-		
-
 
 		/*
 		 * カレンダーに表示する統計値の計算処理 持ってきた健康記録のリストをもとに統計値を計算しリクエストスコープに格納

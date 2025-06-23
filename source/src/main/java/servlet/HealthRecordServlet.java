@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.AchievementPointDAO;
 import dao.HealthRecordDAO;
@@ -28,147 +29,138 @@ import dto.Result;
 import dto.RewardDay;
 import dto.TargetValue;
 
-/**
- * Servlet implementation class HealthRecord
- */
 @WebServlet("/HealthRecordServlet")
 public class HealthRecordServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
+	private boolean test = true;
+	private String testUserId = "kazutoshi_t"; // テスト用のユーザID
+	private String testDate = "2024-05-20"; // テスト用の日付
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-		/*
-		 * HttpSession session = request.getSession(); if (session.getAttribute("id") ==
-		 * null) { response.sendRedirect("/D2/LoginServlet"); return; }
-		 */
-//		String date = (String) request.getAttribute("date");
-		String date = "2024-05-20";
+
+		HttpSession session = request.getSession();
+		String date;
+
+		if (!this.test) {
+			date = (String) request.getParameter("date");
+		} else {
+			date = testDate; 
+			session.setAttribute("user_id", testUserId);
+		}
+
+		if (session.getAttribute("user_id") == null) {
+			// もしもログインしていなかったらログインサーブレットにリダイレクト
+			response.sendRedirect("/D2/LoginServlet");
+			return;
+		}
+
+		// スコープに日付をセット
 		request.setAttribute("date", date);
-		// 登録ページにフォワードする
+
+		// 健康記録登録ページにフォワード
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/healthRecord.jsp");
 		dispatcher.forward(request, response);
-		request.getAttribute("date");
-
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		// リクエストパラメータを取得し、数値型で取りたいものは変換処理を行う。
+
 		request.setCharacterEncoding("UTF-8");
 
-		// いったんユーザーIDはkazutoshi_tということにしておく
-		String userId = "kazutoshi_t";
-
-		// JSPからの受け取り
+		// 変数宣言
+		String userId;
 		String date = request.getParameter("date");
-
-		double sleepHours = 0.0;
-		sleepHours = Double.parseDouble(request.getParameter("sleep_hours"));
-
-		int calorieIntake = 0;
-		calorieIntake = Integer.parseInt(request.getParameter("calorie_intake"));
-
+		double sleepHours = Double.parseDouble(request.getParameter("sleep_hours"));
+		int calorieIntake = Integer.parseInt(request.getParameter("calorie_intake"));
 		String free = request.getParameter("free");
-
-		int noSmoke = 0;
-		noSmoke = Integer.parseInt(request.getParameter("no_smoke"));
-		// hwに格納
-//		HealthWhole hw = new HealthWhole(userId, date, noSmoke, sleepHours, calorieIntake, free, nowWeight);
-
-		// 運動テーブル関係
-		double nowWeight = 0;
-		nowWeight = Double.parseDouble(request.getParameter("now_weight"));
-		
+		int noSmoke = Integer.parseInt(request.getParameter("no_smoke"));
+		double nowWeight = Double.parseDouble(request.getParameter("now_weight"));
+		if (!test) {
+			// セッションからユーザIDを取得
+			HttpSession session = request.getSession();
+			userId = (String) session.getAttribute("user_id");
+		} else {
+			userId = testUserId; // テスト用のユーザIDをセット
+		}
 		HealthWhole hw = new HealthWhole(userId, date, noSmoke, sleepHours, calorieIntake, free, nowWeight);
-
 		List<HealthExercise> heList = new ArrayList<HealthExercise>();
-		int i = 0;
-		while (request.getParameter("exercise_type" + i) != null) {
-			String exerciseType = request.getParameter("exercise_type" + i);
-			int exerciseTime = 0;
-
-			exerciseTime = Integer.parseInt(request.getParameter("exercise_time" + i));
-
-			// 消費カロリーを計算し、保持する（消費カロリー＝メッツ*体重kg*運動時間*1.05
-			// jspで保持しておいた運動種類で記録しているメッツ量を持ってくる
-			double mets = Double.parseDouble(request.getParameter("mets" + i));
-			double calorieConsu = mets * nowWeight * (exerciseTime / 60.0) * 1.05;
-			// リストに格納
-			HealthExercise he = new HealthExercise(userId, date, calorieConsu, exerciseType, exerciseTime);
-			heList.add(he);
-			i++;
-		}
-
 		List<HealthAlcohol> haList = new ArrayList<HealthAlcohol>();
-		int m = 0;
-		while (request.getParameter("alcohol_content" + m) != null) {
-			double alcoholContent = 0.0;
-			alcoholContent = Double.parseDouble(request.getParameter("alcohol_content" + m));
 
-			int alcoholConsumed = 0;
-			alcoholConsumed = Integer.parseInt(request.getParameter("alcohol_consumed" + m));
+		HealthRecordDAO HRDao = new HealthRecordDAO(); // 健康記録登録用DAO
+		UserDAO uDao = new UserDAO(); // ユーザの現在体重更新用DAO
 
-			// 純アルコール摂取量を計算し保持する。（(お酒に含まれる純アルコール量の算出式)
-			// 摂取量(ml) × アルコール濃度（度数/100）× 0.8（アルコールの比重））
-			double pureAlcoholConsumed = alcoholConsumed * (alcoholContent / 100.0) * 0.8;
+		int year = Integer.parseInt(date.split("-")[0]);
+		int month = Integer.parseInt(date.split("-")[1]);
+
+		// リクエストパラメータから運動記録を取得し、リストに格納
+		int heIndex = 0;
+		while ((request.getParameter("exercise_type" + heIndex) != null)
+				&& (request.getParameter("mets" + heIndex) != "")
+				&& (request.getParameter("exercise_time" + heIndex) != "")) {
+			String exerciseType = request.getParameter("exercise_type" + heIndex);
+			double mets = Double.parseDouble(request.getParameter("mets" + heIndex));
+			int exerciseTime = Integer.parseInt(request.getParameter("exercise_time" + heIndex));
+			double calorieConsu;
+
+			// 消費カロリー(=メッツ*体重kg*運動時間*1.05)を計算
+			calorieConsu = mets * nowWeight * (exerciseTime / 60.0) * 1.05;
 			// リストに格納
-			HealthAlcohol ha = new HealthAlcohol(userId, date, alcoholContent, alcoholConsumed, pureAlcoholConsumed);
-			haList.add(ha);
-			m++;
+			heList.add(new HealthExercise(userId, date, calorieConsu, exerciseType, exerciseTime));
+			heIndex++;
 		}
 
-		// 登録処理を行う
-		HealthRecordDAO HRDao = new HealthRecordDAO();
+		// リクエストパラメータから飲酒記録を取得し、リストに格納
+		int haIndex = 0;
+		while ((request.getParameter("alcohol_content" + haIndex) != null)
+				&& (request.getParameter("alcohol_consumed" + haIndex)!="")) {
+			double alcoholContent = Double.parseDouble(request.getParameter("alcohol_content" + haIndex));
+			int alcoholConsumed = Integer.parseInt(request.getParameter("alcohol_consumed" + haIndex));
+			double pureAlcoholConsumed;
+
+			// 純アルコール量(=摂取量[ml] * アルコール濃度[%] * 0.8)を計算
+			pureAlcoholConsumed = alcoholConsumed * (alcoholContent / 100.0) * 0.8;
+			// リストに格納
+			haList.add(new HealthAlcohol(userId, date, alcoholContent, alcoholConsumed, pureAlcoholConsumed));
+			haIndex++;
+		}
+
+		// 健康記録登録・現在の体重登録
 		if (HRDao.insert(hw, haList, heList)) { // 登録成功
 			request.setAttribute("result", new Result("登録成功！", "レコードを登録しました。", "/D2/HomeServlet"));
+			uDao.updateWeight(userId, nowWeight);
 		} else { // 登録失敗!
 			request.setAttribute("result", new Result("登録失敗！", "レコードを登録できませんでした。", "/D2/HomeServlet"));
+			// 結果ページにフォワードする
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
+			dispatcher.forward(request, response);
+			return;
 		}
 
-		// 現在の体重に入力された数字をもとにユーザテーブルの現在の体重を更新 UserDAOのupdataWeight()
-		UserDAO uDao = new UserDAO();
-		uDao.updateWeight(userId, nowWeight);
-
-		// ポイント獲得処理 目標値達成しているかの処理(たぶんif文めっちゃ使う) 目標値達成した項目のポイントだけ更新 PointDaoのアップデートを使う
-		// 年と月と日を取得
-		String tempYear = date.split("-")[0];
-		int year = Integer.parseInt(tempYear);
-		String tempMonth = date.split("-")[1];
-		int month = Integer.parseInt(tempMonth);
-		
+		// ポイント獲得処理 目標値達成しているかの処理
+		// 目標値達成した項目のポイントだけ更新
 		TargetValueDAO tvDao = new TargetValueDAO();
-		TargetValue tv = new TargetValue();
-		// 目標値を取得
-		tv = tvDao.getTargetValueByUserId(userId);
-
-		// 今現在の累計ポイントを取得する
+		TargetValue tv = tvDao.getTargetValueByUserId(userId); // 目標値を取得
 		PointDAO pDao = new PointDAO();
-		Point point = new Point();
-		point = pDao.selectByUserIdMonth(userId, month);
-		// 飲酒ポイントの処理
-		// まず合計純アルコール摂取量を取得する
-		double totalPureAlcConsu = 0;
+		Point point = pDao.selectByUserIdMonth(userId, month); // 今現在のポイントを取得
+
+		double totalPureAlcConsu = 0; // 合計純アルコール摂取量
 		for (HealthAlcohol ha : haList) {
 			totalPureAlcConsu += ha.getPureAlcoholConsumed();
+
 		}
-		// 目標値を達成していたら累計報酬ポイント（飲酒）に10足す
+		int totalCalorieConsu = 0; // 合計消費カロリー
+		for (HealthExercise he : heList) {
+			totalCalorieConsu += he.getCalorieConsu();
+		}
+
 		boolean alcoholPointChanged = false;
+		int sleepPointChanged = 0;
+		boolean caloriePointChanged = false;
+		int nosmokePointChanged = 0;
+
+		// 飲酒ポイントの処理
+		// 目標値を達成していたら累計報酬ポイント（飲酒）に10足す
 		if (totalPureAlcConsu < tv.getPure_alcohol_consumed()) {
 			alcoholPointChanged = true;
 			pDao.updateTotalAlcoholConsumed(userId, year, month, point.getTotal_alcohol_consumed() + 10);
@@ -176,7 +168,6 @@ public class HealthRecordServlet extends HttpServlet {
 
 		// 睡眠時間ポイントの処理
 		// 目標値を達成していたら累計報酬ポイント（顔色）に1足す
-		int sleepPointChanged = 0;
 		if (sleepHours >= tv.getSleep_time() - 1 && sleepHours <= tv.getSleep_time() + 1) {
 			if (point.getTotal_sleeptime() < 5) {
 				sleepPointChanged = 1;
@@ -192,7 +183,6 @@ public class HealthRecordServlet extends HttpServlet {
 		// 摂取カロリーのポイントの処理
 		// 目標値を達成していたら累計報酬ポイント（食事）に10を足す
 		// 現在体重が目標体重＋1kgより多い場合、目標摂取カロリー-500～目標摂取カロリーにおさまっていればポイントゲット
-		boolean caloriePointChanged = false;
 		if (nowWeight >= tv.getTarget_weight() + 1) {
 			if (calorieIntake >= tv.getCalorie_intake() - 500 && calorieIntake <= tv.getCalorie_intake()) {
 				pDao.updateTotalCalorieIntake(userId, year, month, point.getTotal_calorie_intake() + 10);
@@ -216,7 +206,7 @@ public class HealthRecordServlet extends HttpServlet {
 
 		// 禁煙ポイントの処理
 		// 禁煙ポイントが７より小さい場合、禁煙できたら1を足す。喫煙したら0にする。
-		int nosmokePointChanged = 0;
+
 		if (noSmoke == 1) {
 			if (point.getTotal_nosmoke() != 7) {
 				pDao.updateTotalNosmoke(userId, year, month, point.getTotal_nosmoke() + 1);
@@ -229,13 +219,8 @@ public class HealthRecordServlet extends HttpServlet {
 		}
 
 		// 累計消費カロリーを更新
-		// まず合計消費カロリーを取得する
-		int totalCalorieConsu = 0;
-		for (HealthExercise he : heList) {
-			totalCalorieConsu += he.getCalorieConsu();
-		}
 		pDao.updateTotalCalorieConsumed(userId, year, month, point.getTotal_calorie_consumed() + totalCalorieConsu);
-		
+
 		/*
 		 * 報酬受け取り処理 更新されたポイントの更新前と更新後のポイントと 各種達成ポイントテーブル(DAO作って)を比較して
 		 * ポイントが達成していたら報酬受け取り処理を行う （RewardDayDAOのinsertを使う）
@@ -308,73 +293,69 @@ public class HealthRecordServlet extends HttpServlet {
 
 		// 消費カロリーポイントの報酬の受け取り処理
 		int shoPrevious = point.getTotal_calorie_consumed() / 3600;
-		int shoToday = (point.getTotal_calorie_consumed()+ totalCalorieConsu) / 3600;
+		int shoToday = (point.getTotal_calorie_consumed() + totalCalorieConsu) / 3600;
 		if (shoPrevious != shoToday) {
 			WorldTourDAO WTDao = new WorldTourDAO();
 			String country = WTDao.select(point.getTotal_calorie_consumed() + totalCalorieConsu);
 			RewardDay rewardDay = new RewardDay(userId, date1, country + "に到達した！");
 			RDDao.insert(rewardDay);
 		}
-		
-		//報酬受け取り処理 更新されたポイントの更新前と更新後のポイントと 各種達成ポイントテーブル(DAO作って)を比較して
 
-		 //ポイントが達成していたら報酬受け取り処理を行う （RewardDayDAOのinsertを使う）
+		// 報酬受け取り処理 更新されたポイントの更新前と更新後のポイントと 各種達成ポイントテーブル(DAO作って)を比較して
 
-		 
+		// ポイントが達成していたら報酬受け取り処理を行う （RewardDayDAOのinsertを使う）
 
 		// Date date1 = Date.valueOf(date);
 
 		// RewardDayDAO RDDao = new RewardDayDAO();
 
-		
-
 		if (alcoholPointChanged) {
 
-           request.setAttribute("alcoholMessage", "飲酒ポイントが増加し、もらえました。");
+			request.setAttribute("alcoholMessage", "飲酒ポイントが増加し、もらえました。");
 
-       } else {
+		} else {
 
-           request.setAttribute("alcoholMessage", "飲酒ポイントが増加せず、もらえませんでした。");
+			request.setAttribute("alcoholMessage", "飲酒ポイントが増加せず、もらえませんでした。");
 
-       }
+		}
 
-       if (sleepPointChanged == 1) {
+		if (sleepPointChanged == 1) {
 
-           request.setAttribute("sleepMessage", "睡眠ポイントが増加し、もらえました。");
+			request.setAttribute("sleepMessage", "睡眠ポイントが増加し、もらえました。");
 
-       } else if (sleepPointChanged == -1) {
+		} else if (sleepPointChanged == -1) {
 
-           request.setAttribute("sleepMessage", "睡眠ポイントが減少し、もらえませんでした。");
+			request.setAttribute("sleepMessage", "睡眠ポイントが減少し、もらえませんでした。");
 
-       } else {
+		} else {
 
-           request.setAttribute("sleepMessage", "睡眠ポイントは変更されませんでした。");
+			request.setAttribute("sleepMessage", "睡眠ポイントは変更されませんでした。");
 
-       }
+		}
 
-       if (caloriePointChanged) {
+		if (caloriePointChanged) {
 
-           request.setAttribute("calorieMessage", "摂取カロリーポイントが増加し、もらえました。");
+			request.setAttribute("calorieMessage", "摂取カロリーポイントが増加し、もらえました。");
 
-       } else {
+		} else {
 
-           request.setAttribute("calorieMessage", "摂取カロリーポイントが増加せず、もらえませんでした。");
+			request.setAttribute("calorieMessage", "摂取カロリーポイントが増加せず、もらえませんでした。");
 
-       }
+		}
 
-       if (nosmokePointChanged == 1) {
+		if (nosmokePointChanged == 1) {
 
-           request.setAttribute("nosmokeMessage", "禁煙ポイントが増加し、もらえました。");
+			request.setAttribute("nosmokeMessage", "禁煙ポイントが増加し、もらえました。");
 
-       } else if (nosmokePointChanged == -1) {
+		} else if (nosmokePointChanged == -1) {
 
-           request.setAttribute("nosmokeMessage", "禁煙ポイントが減少し、もらえませんでした。");
+			request.setAttribute("nosmokeMessage", "禁煙ポイントが減少し、もらえませんでした。");
 
-       } else {
+		} else {
 
-           request.setAttribute("nosmokeMessage", "禁煙ポイントは変更されませんでした。");
+			request.setAttribute("nosmokeMessage", "禁煙ポイントは変更されませんでした。");
 
-       }
+		}
 
 		// 結果ページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");

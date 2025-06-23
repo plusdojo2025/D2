@@ -113,7 +113,7 @@ CREATE TABLE point(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
--- INSERT INTO point VALUES  ("kazutoshi_t", 2025, 6, 7200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 6, 7200, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 5000, 7, 300, 300, 3);
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 4, 57600, 7, 300, 300, 1);
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 3, 54000, 7, 300, 300, 2);
@@ -146,7 +146,11 @@ CREATE TABLE reward_day(
 INSERT INTO reward_day(user_id, date, reward_explain) VALUES  
     ("kazutoshi_t", "2025-05-10", "人であふれた！"),
     ("kazutoshi_t", "2025-05-15", "建物が建った！"),
-    ("kazutoshi_t", "2025-05-31", "民族衣装がもらえた！");
+    ("kazutoshi_t", "2025-05-31", "民族衣装がもらえた！"),
+    ("kazutoshi_t", "2025-06-10", "人であふれた！"),
+    ("kazutoshi_t", "2025-06-15", "建物が建った！"),
+    ("kazutoshi_t", "2025-06-15", "建物が建った！"),
+    ("kazutoshi_t", "2025-06-30", "民族衣装がもらえた！");
 
 SELECT * FROM reward_day;
 
@@ -428,11 +432,11 @@ CREATE TABLE history(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
-INSERT INTO history VALUES
-    ("kazutoshi_t", 2023, 2, "history/kazutoshi_t/2024-2.txt"),
-    ("kazutoshi_t", 2023, 3, "history/kazutoshi_t/2024-3.txt"),
-    ("kazutoshi_t", 2023, 4, "history/kazutoshi_t/2024-4.txt"),
-    ("kazutoshi_t", 2023, 5, "history/kazutoshi_t/2024-5.txt"),
-    ("kazutoshi_t", 2023, 6, "history/kazutoshi_t/2024-6.txt");
+-- INSERT INTO history VALUES
+--     ("kazutoshi_t", 2023, 2, "history/kazutoshi_t/2024-2.txt"),
+--     ("kazutoshi_t", 2023, 3, "history/kazutoshi_t/2024-3.txt"),
+--     ("kazutoshi_t", 2023, 4, "history/kazutoshi_t/2024-4.txt"),
+--     ("kazutoshi_t", 2023, 5, "history/kazutoshi_t/2024-5.txt"),
+--     ("kazutoshi_t", 2023, 6, "history/kazutoshi_t/2024-6.txt");
 
 SELECT * FROM history;

@@ -20,11 +20,21 @@ import dto.TownAvatarElements;
 
 @WebServlet("/Summary")
 public class Summary extends HttpServlet {
+
+  private boolean test = true;
+	private String testUserId = "kazutoshi_t"; // テスト用のユーザID 
+
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     req.setCharacterEncoding("UTF-8");
     res.setContentType("text/html; charset=UTF-8");
 
+
     HttpSession session = req.getSession();
+
+    if (this.test) {
+      session.setAttribute("user_id", testUserId);
+    }
+    
     String userId = (String) session.getAttribute("user_id");
     if (userId == null) {
       res.sendRedirect("LoginServlet");

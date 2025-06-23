@@ -1,15 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 
 <html>
 <head>
 <meta charset="UTF-8">
 <title>カレンダー</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css" />
 </head>
 <body>
 	<!-- タイトル -->
-	<a href="HomeServlet">ケンコークラフト</a>
+	<a href="HomeServlet"><h1>ケンコークラフト</h1></a>
 
 
 	<div>
@@ -54,158 +56,61 @@
 
 
 
-
-
-
-
+	<!-- カレンダー -->
+	<!-- --------------------------------------------------------------- -->
 	<div>
 		<!-- チェックボックス -->
-		<label><input type="checkbox" name="cbhealthRecord"
-			id="cbHealth" checked>健康記録</label> <label><input
-			type="checkbox" name="rewardRecord" id="cbReward" checked>報酬記録</label>
-		<label><input type="checkbox" name="exercise" id="cbExercise"
-			checked>運動記録</label> <label><input type="checkbox"
-			name="noSmoke" id="cbSmoke" checked>禁煙</label> <label><input
-			type="checkbox" name="calorieIntake" id="cbCalorieIntake" checked>摂取カロリー</label>
-		<label><input type="checkbox" name="calorieCounsu"
-			id="cbCalorieConsu" checked>消費カロリー</label> <label><input
-			type="checkbox" name="sleepingTime" id="cbSleep" checked>睡眠</label> <label><input
-			type="checkbox" name="alcohol" id="cbAlcohol" checked>お酒</label> <label><input
-			type="checkbox" name="memo" id="cbMemo" checked>メモ</label>
+		<label><input type="checkbox" name="cbhealthRecord"	id="cbHealth" checked>健康記録</label>
+		<label><input type="checkbox" name="rewardRecord" id="cbReward" checked>報酬記録</label>
+		<label><input type="checkbox" name="exercise" id="cbExercise" checked>運動記録</label>
+		<label><input type="checkbox" name="noSmoke" id="cbSmoke" checked>禁煙</label> 
+		<label><input type="checkbox" name="calorieIntake" id="cbCalorieIntake" checked>摂取カロリー</label>
+		<label><input type="checkbox" name="calorieCounsu" id="cbCalorieConsu" checked>消費カロリー</label> 
+		<label><input type="checkbox" name="sleepingTime" id="cbSleep" checked>睡眠</label>
+		<label><input type="checkbox" name="alcohol" id="cbAlcohol" checked>お酒</label>
+		<label><input type="checkbox" name="memo" id="cbMemo" checked>メモ</label>
 	</div>
+	
+	<table>
+        <tr>
+            <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+        </tr>
+        <tbody id="calendar-body"></tbody>
+    </table> 
+	<!-- --------------------------------------------------------------- -->
 
-	<div>
-		<p>カレンダー</p>
-	</div>
+	<!-- アバター画像 -->
+	<!-- --------------------------------------------------------------- -->
+	 <c:forEach var="build" items="${avatar.buildings}">
+		<div class="imgBuild" id="${build.imagePath}"></div>
+	</c:forEach>
+	<div class="cloth" id="${avatar.cloth.imagePath}"></div>
+	<div class="cloth" id="${avatar.shoe.imagePath}"></div>
+	<div class="cloth" id="${avatar.hat.imagePath}"></div>
+	<div class="cloth" id="${avatar.costume.imagePath}"></div>
+	<div class="imgPeople" id="${avatar.peopleImage.imagePath}"></div>
+	<div class="imgFace" id="${avatar.face.imagePath}"></div>
+	<input type="hidden" id="peopleNum" value="${avatar.peopleCount}">
 
-	<!-- 報酬記録 -->
-	<div class="reward-record">
-		<%
-		java.util.List<dto.RewardDay> rewardList = (java.util.List<dto.RewardDay>) request.getAttribute("rewardList");
+	<c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
+	<canvas id="imageCanvas" width="1400" height="1000" style="width:${width}px;"></canvas>
+	<!-- --------------------------------------------------------------- -->
+	
 
-		if (rewardList != null && !rewardList.isEmpty()) {
-			for (int i = 0; i < rewardList.size(); i++) {
-				dto.RewardDay reward = rewardList.get(i);
-		%>
-		<p>
-			<%=reward.getUserId()%>
-			|
-			<%=reward.getDate()%>
-			|
-			<%=reward.getRewardExplain()%>
-		</p>
-		<%
-		}
-		} else {
-		%>
-		<p>報酬記録はありません</p>
-		<%
-		}
-		%>
-	</div>
-	<!-- 健康記録表示 -->
+	
 
-	<%@ page contentType="text/html; charset=UTF-8"%>
-	<%@ page import="java.util.List"%>
-	<%@ page import="dto.HealthRecord"%>
-
-	<h2>健康記録</h2>
-
-	<%@ page contentType="text/html; charset=UTF-8"%>
-	<%@ page import="java.util.List"%>
-	<%@ page import="dto.HealthRecord"%>
-	<%@ page import="dto.HealthExercise" %>
-
-
-
-	<%
-	List<HealthRecord> healthList = (List<HealthRecord>) request.getAttribute("healthList");
-
-	if (healthList != null && !healthList.isEmpty()) {
-		for (HealthRecord record : healthList) {
-	%>
-	<div class="health-record">
-		<p>
-			日付:
-			<%=record.getDate()%><br>
-		<div class="record-section calorieIntake">
-			摂取カロリー:
-			<%=record.getCalorieIntake()%><br>
-		</div>
-		<div class="record-section calorieConsu">
-			消費カロリー:
-			<%=record.getCalorieConsu()%><br>
-		</div>
-		<!-- ここに入れる感じ -->
-			<div class="record-section exercise">
-		<p>運動記録:</p>
-<%
-List<HealthExercise> exList = record.getExerciseList();
-if (exList != null && !exList.isEmpty()) {
-    for (HealthExercise ex : exList) {
-%>
-    <p>　・<%= ex.getExerciseType() %>（<%= ex.getExerciseTime() %>分 / <%= ex.getCalorieConsu() %> kcal）</p>
-<%
-    }
-} else {
-%>
-    <p>　（運動記録なし）</p>
-<%
-}
-%>
-</div>
-<%
-List<dto.HealthAlcohol> alcList = record.getAlcoholList();
-if (alcList != null && !alcList.isEmpty()) {
-%>
-  <div class="record-section alcohol">
-    <p>飲酒記録：</p>
-<%
-  for (dto.HealthAlcohol alc : alcList) {
-%>
-    <p>　・純アルコール摂取量：<%= String.format("%.1f", alc.getPureAlcoholConsumed()) %> g</p>
-<%
-  }
-%>
-  </div>
-<%
-}
-%>
-		<div class="record-section nosmoke">
-			禁煙ポイント:
-			<%=record.getNosmoke()%><br>
-		</div>
-		<div class="record-section sleep">
-			睡眠時間:
-			<%=record.getSleepHours()%>時間<br>
-		</div>
-		<div class="record-section free">
-			メモ:
-			<%=record.getFree()%>
-		</div>
-	</div>
-
-	<hr>
-	<%
-	}
-	} else {
-	%>
-	<p>健康記録はありません。</p>
-	<%
-	}
-	%>
-
-
+	<!-- 統計値 -->
+	<!-- --------------------------------------------------------------- -->
 	<div class="summary-box">
 		<%
-String[] monthNames = {
-    "1月", "2月", "3月", "4月", "5月", "6月",
-    "7月", "8月", "9月", "10月", "11月", "12月"
-};
-int displayMonth = (Integer) request.getAttribute("displayMonth");
-%>
+	String[] monthNames = {
+		"1月", "2月", "3月", "4月", "5月", "6月",
+		"7月", "8月", "9月", "10月", "11月", "12月"
+	};
+	int displayMonth = (Integer) request.getAttribute("displayMonth");
+	%>
 
-<p><%= monthNames[displayMonth - 1] %>の統計</p>
+	<p><%= monthNames[displayMonth - 1] %>の統計</p>
 		<p>
 			合計消費カロリー：<%=String.format("%.1f", request.getAttribute("sumCalorieConsumed"))%>
 			kcal 1日の平均純アルコール量：<%=String.format("%.1f", request.getAttribute("avgPureAlcohol"))%>
@@ -219,114 +124,17 @@ int displayMonth = (Integer) request.getAttribute("displayMonth");
 			kcal
 		</p>
 	</div>
-	<!-- アバター表示 -->
-	<div>
-		<%
-		dto.TownAvatarElements avatar = (dto.TownAvatarElements) request.getAttribute("avatar");
-		%>
 
-		<p>服の画像:</p>
-		<%
-		if (avatar.getCloth() != null) {
-		%>
-		<img src="<%=avatar.getCloth().getImagePath()%>" alt="服" />
-		<%
-		}
-		%>
-
-		<p>靴の画像:</p>
-		<%
-		if (avatar.getShoe() != null) {
-		%>
-		<img src="<%=avatar.getShoe().getImagePath()%>" alt="靴" />
-		<%
-		}
-		%>
-
-		<p>帽子の画像:</p>
-		<%
-		if (avatar.getHat() != null) {
-		%>
-		<img src="<%=avatar.getHat().getImagePath()%>" alt="帽子" />
-		<%
-		}
-		%>
-
-		<p>民族衣装の画像:</p>
-		<%
-		if (avatar.getCostume() != null) {
-		%>
-		<img src="<%=avatar.getCostume().getImagePath()%>" alt="民族衣装" />
-		<%
-		}
-		%>
-
-		<p>建物の画像:</p>
-		<%
-		if (avatar.getBuildings() != null) {
-			for (dto.Image img : avatar.getBuildings()) {
-		%>
-		<img src="<%=img.getImagePath()%>" alt="建物" />
-		<%
-		}
-		}
-		%>
-
-		<p>顔色の画像:</p>
-		<%
-		if (avatar.getFace() != null) {
-		%>
-		<img src="<%=avatar.getFace().getImagePath()%>" alt="顔色" />
-		<%
-		}
-		%>
-
-		<p>
-			人数:
-			<%=avatar.getPeopleCount()%></p>
-		<p>人の画像:</p>
-		<%
-		if (avatar.getPeopleImage() != null) {
-			for (int i = 0; i < avatar.getPeopleCount(); i++) {
-		%>
-		<img src="<%=avatar.getPeopleImage().getImagePath()%>" alt="人" />
-		<%
-		}
-		}
-		%>
-	</div>
+	<!-- --------------------------------------------------------------- -->
+	
 
 	<!-- 
-/* TODO:カレンダーの日付をクリックしたときに、その日の健康記録登録・更新フォームをポップアップ
+	/* TODO:カレンダーの日付をクリックしたときに、その日の健康記録登録・更新フォームをポップアップ
 		 * 	healthRecoed.jspのコピペ
 		 *  その日に既に健康記録がある場合は、健康記録内容をデフォルトでフォーム入力欄に表示
+		 */
+	-->
 		 
-		 <!-- ポップアップエリア -->
-	<%
-	String yearStr = request.getParameter("year");
-	String monthStr = request.getParameter("month");
-
-	int year = now.getYear(); // デフォルトは今
-	int month = now.getMonthValue();
-
-	try {
-		if (yearStr != null)
-			year = Integer.parseInt(yearStr);
-		if (monthStr != null)
-			month = Integer.parseInt(monthStr);
-	} catch (NumberFormatException e) {
-		// 無視して今月のままでOK
-	}
-
-	for (int i = 1; i <= 31; i++) {
-		String day = String.format("%02d", i);
-		String date = year + "-" + String.format("%02d", month) + "-" + day;
-	%>
-	<a href="#" onclick="openPopup('<%=date%>'); return false;"><%=i%>日</a>
-	<br>
-	<%
-	}
-	%>
 
 	<!-- ポップアップ本体（非表示にしておく） -->
 
@@ -545,10 +353,67 @@ data-readonly="${isReadonly ? 'true' : 'false'}"
 
 
 
+	<script>
+		const rwList = {};
+		const hwList = {};
+		const heList = {};
+		const haList = {};
+		const year = ${displayYear};
+		const month = ${displayMonth};
+
+		<c:forEach var="rw" items="${rewardList}">
+			if (!rwList['${rw.date}']){
+				rwList['${rw.date}'] = [];
+			}
+			rwList['${rw.date}'].push("${rw.rewardExplain}");
+		</c:forEach>;
+
+		<c:forEach var="hw" items="${healthList}">
+			if (!hwList['${hw.date}']){
+				hwList['${hw.date}'] = [];
+			}
+			hwList['${hw.date}'] = {
+				nowWeight: ${hw.nowWeight},
+				calorieIntake: ${hw.calorieIntake},
+				calorieConsu: ${hw.calorieConsu},
+				nosmoke: ${hw.nosmoke},
+				sleepHours: ${hw.sleepHours},
+				free: "${hw.free}"
+			};
+
+			if("${hw.exerciseList}" != null && ${hw.exerciseList.size()} > 0) {
+				heList['${hw.date}'] = [];
+				<c:forEach var="ex" items="${hw.exerciseList}">
+					heList['${hw.date}'].push({
+						exerciseType: "${ex.exerciseType}",
+						exerciseTime: ${ex.exerciseTime},
+						calorieConsu: ${ex.calorieConsu}
+					});
+				</c:forEach>;
+			};
+
+			if("${hw.alcoholList}" != null && ${hw.alcoholList.size()} > 0) {
+				haList['${hw.date}'] = [];
+				<c:forEach var="alc" items="${hw.alcoholList}">
+					haList['${hw.date}'].push({
+						pureAlcoholConsumed: ${alc.pureAlcoholConsumed},
+						alcoholContent: ${alc.alcoholContent},
+						alcoholConsumed: ${alc.alcoholConsumed}
+					});
+				</c:forEach>;
+			};
+			
+		</c:forEach>;
+
+		
 
 
+	</script>
+	
+	
 
 	<script src="js/calendar.js"></script>
 	<script src="js/healthRecord.js"></script>
+	<script src="js/createTownAvatar.js"></script>
 </body>
 </html>

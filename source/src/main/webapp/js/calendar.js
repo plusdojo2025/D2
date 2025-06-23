@@ -99,5 +99,71 @@ function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
 
+function generateCalendar(year, month) {
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0).getDate();
+    const startDay = firstDay.getDay();
 
+    const calendarBody = document.getElementById("calendar-body");
+    calendarBody.innerHTML = "";
+    let row = document.createElement("tr");
+
+    for (let i = 0; i < startDay; i++) {
+        row.appendChild(document.createElement("td"));
+    }
+
+    for (let day = 1; day <= lastDay; day++) {
+        if ((startDay + day - 1) % 7 === 0 && day !== 1) {
+            calendarBody.appendChild(row);
+            row = document.createElement("tr");
+        }
+
+        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const cell = document.createElement("td");
+        cell.addEventListener("click", function () {
+            openPopup(dateStr);});
+        cell.innerHTML = `<strong>${day}</strong><br>`;
+
+        if (rwList[dateStr]) {
+            cell.classList.add("has-reward");
+            rwList[dateStr].forEach(item => {
+                cell.innerHTML += `<div class="reward-record">${item}</div>`;
+            });
+        }
+
+        if (hwList[dateStr]) {
+            cell.classList.add("has-health-record");
+            cell.innerHTML += `<div class="health-record">${hwList[dateStr].nowWeight}kg</div>`;
+            cell.innerHTML += `<div class="health-record calorieIntake">${hwList[dateStr].calorieIntake}kcal</div>`;
+            cell.innerHTML += `<div class="health-record calorieConsu">${hwList[dateStr].calorieConsu}kcal</div>`;
+            cell.innerHTML += `<div class="health-record nosmoke">${hwList[dateStr].nosmoke} 喫煙</div>`;
+            cell.innerHTML += `<div class="health-record sleep">${hwList[dateStr].sleepHours} 時間</div>`;
+            cell.innerHTML += `<div class="health-record free">${hwList[dateStr].free}</div>`;
+        }
+
+        if (heList[dateStr]) {
+            cell.classList.add("has-health-exercise");
+            heList[dateStr].forEach(item => {
+                cell.innerHTML += `<div class="health-record exercise">${item.exerciseType}</div>`;
+                cell.innerHTML += `<div class="health-record exercise">${item.exerciseTime}分</div>`;
+                cell.innerHTML += `<div class="health-record exercise">${item.calorieConsu}kcal</div>`;
+            });
+        }
+
+        if (haList[dateStr]) {
+            cell.classList.add("has-health-alcohol");
+            haList[dateStr].forEach(item => {
+                cell.innerHTML += `<div class="health-record alcohol">${item.pureAlcoholConsumed}g</div>`;
+                cell.innerHTML += `<div class="health-record alcohol">${item.alcoholContent}%</div>`;
+                cell.innerHTML += `<div class="health-record alcohol">${item.alcoholConsumed}ml</div>`;
+            });
+        }
+
+        row.appendChild(cell);
+    }
+
+    calendarBody.appendChild(row);
+}
+
+generateCalendar(year, month);
 
