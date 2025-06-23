@@ -1,7 +1,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-   
+ <% response.sendRedirect("/LoginServlet"); %>
     
 <!DOCTYPE html>
 <html>
@@ -10,6 +10,6 @@
 <title>Insert title here</title>
 </head>
 <body>
- <% response.sendRedirect("/LoginServlet"); %>
+ 
 </body>
 </html>
