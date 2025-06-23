@@ -82,6 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
 function openPopup(date) {
   document.getElementById("popup").style.display = "block";
   document.getElementById("popupDate").value = date;
+  
+   if (exerciseCount === 0) addExercise();
+  if (alcoholCount === 0) addAlcohol();
 
   fetch('HealthRecordFormServlet?date=' + date)
     .then(response => response.text())

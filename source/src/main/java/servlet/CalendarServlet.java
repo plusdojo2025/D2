@@ -65,7 +65,7 @@ public class CalendarServlet extends HttpServlet {
 		} catch (NumberFormatException | NullPointerException e) {
 			month = java.time.LocalDate.now().getMonthValue(); // デフォルトは今月
 		}
-
+		request.setAttribute("displayMonth", month);
 		
 		// 達成した報酬をDBから持ってくる
 		RewardDayDAO rewardDao = new RewardDayDAO();

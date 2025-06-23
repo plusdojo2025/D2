@@ -41,22 +41,44 @@ public class HealthRecordFormServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		if (record != null) {
+		    // --- 基本情報 ---
 		    out.println("document.querySelector('[name=now_weight]').value = '" + record.getNowWeight() + "';");
-		    out.println("document.querySelector('[name=exercise_type1]').value = '" + record.getExerciseType() + "';");
-		    out.println("document.querySelector('[name=exercise_time1]').value = '" + record.getExerciseTime() + "';");
 		    out.println("document.querySelector('[name=calorie_intake]').value = '" + record.getCalorieIntake() + "';");
 		    out.println("document.querySelector('[name=sleep_hours]').value = '" + record.getSleepHours() + "';");
 		    out.println("document.querySelector('[name=free]').value = '" + escapeJs(record.getFree()) + "';");
 		    out.println("document.querySelector('[name=no_smoke][value=\"" + record.getNosmoke() + "\"]').checked = true;");
-		    out.println("document.querySelector('[name=alcohol_content1]').value = '" + record.getAlcoholContent() + "';");
-		    out.println("document.querySelector('[name=alcohol_consumed1]').value = '" + record.getAlcoholConsumed() + "';");
-		    out.println("document.querySelector('input[type=submit]').disabled = true;");
-		} else {
-		    out.println("document.querySelector('form').reset();");
-		    out.println("document.querySelectorAll('input, select').forEach(el => { el.readOnly = false; el.disabled = false; });");
-		}
 
+		    // --- 運動データ（複数）---
+		    if (record.getExerciseList() != null) {
+		        for (int i = 0; i < record.getExerciseList().size(); i++) {
+		            out.println("addExercise();");
+		            out.println("document.querySelector('[name=exercise_type" + i + "]').value = '" + record.getExerciseList().get(i).getType() + "';");
+		            out.println("document.querySelector('[name=mets" + i + "]').value = '" + record.getExerciseList().get(i).getMets() + "';");
+		            out.println("document.querySelector('[name=exercise_time" + i + "]').value = '" + record.getExerciseList().get(i).getTime() + "';");
+		        }
+		    }
+
+		    // --- 飲酒データ（複数）---
+		    if (record.getAlcoholList() != null) {
+		        for (int i = 0; i < record.getAlcoholList().size(); i++) {
+		            out.println("addAlcohol();");
+		            out.println("document.querySelector('[name=alcohol_content" + i + "]').value = '" + record.getAlcoholList().get(i).getAlcoholContent() + "';");
+		            out.println("document.querySelector('[name=alcohol_consumed" + i + "]').value = '" + record.getAlcoholList().get(i).getAlcoholConsumed() + "';");
+		        }
+		    }
+
+		    // --- 編集不可にする ---
+		    out.println("document.querySelectorAll('#healthForm input, #healthForm select, #healthForm textarea').forEach(el => { el.disabled = true; });");
+		    out.println("document.querySelector('#healthForm input[type=submit]').disabled = true;");
+
+		} else {
+		    // --- 新規入力モード ---
+		    out.println("document.querySelector('form').reset();");
+		    out.println("document.querySelectorAll('#healthForm input, #healthForm select, #healthForm textarea').forEach(el => { el.disabled = false; });");
+		    out.println("document.querySelector('#healthForm input[type=submit]').disabled = false;");
+		}
 	}
+
 
 	private String escapeJs(String str) {
 		if (str == null)
