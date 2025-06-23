@@ -44,7 +44,7 @@ const drawAvatar = async () => {
 			[0, 0, 1.0], // 建物1
 			[0, 0, 1.0], // 建物2
 			[0, 0, 1.0] // 建物 3
-		]
+		];
 
 		const relPeoplePos = [ // 周囲の人物の相対位置dx,dy, スケールs 
 			[-400, 400, 0.6], // 1人目
@@ -65,7 +65,7 @@ const drawAvatar = async () => {
 		}
 
 		if(cloth[3].id != ""){
-            clothImages[3] = await loadImage(cloth[3].id)
+            clothImages[3] = await loadImage(cloth[3].id);
         }
         else{
             for (let i = 0; i < cloth.length; i++) {
