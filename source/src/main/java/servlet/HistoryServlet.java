@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -303,65 +304,70 @@ public class HistoryServlet extends HttpServlet {
 				}
 			}
 		} else if (req.getParameter("mode").equals("upload")) {
-			Part part = req.getPart("file");
-			String name = this.getFileName(part);
-			part.write("/" + name);
-			try {
-				// 1.ファイルのパスを指定する
-				File file = new File("C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded/" + name);
-
-				// 2.ファイルが存在しない場合に例外が発生するので確認する
-				if (!file.exists()) {
-					System.out.print("ファイルが存在しません");
-					return;
+			List<TownAvatarElements> avatarList = new ArrayList<>();
+			for (Part part : req.getParts()) {
+				if (!"file".equals(part.getName()) || part.getSize() == 0) {
+					continue; // ファイルパート以外や空のファイルはスキップ
 				}
-				// 3. BufferedReaderクラスのreadLineメソッドを使って1行ずつ読み込み、データを保持する。
-				FileReader fileReader = new FileReader(file);
-				BufferedReader bufferedReader = new BufferedReader(fileReader);
-				String data = bufferedReader.readLine();
+				String name = this.getFileName(part);
+				part.write("/" + name);
+				try {
+					// 1.ファイルのパスを指定する
+					File file = new File("C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded/" + name);
 
-				String userId = data.split(",")[0];
+					// 2.ファイルが存在しない場合に例外が発生するので確認する
+					if (!file.exists()) {
+						System.out.print("ファイルが存在しません");
+						return;
+					}
+					// 3. BufferedReaderクラスのreadLineメソッドを使って1行ずつ読み込み、データを保持する。
+					FileReader fileReader = new FileReader(file);
+					BufferedReader bufferedReader = new BufferedReader(fileReader);
+					String data = bufferedReader.readLine();
 
-				String yearTemp = data.split(",")[1];
-				int year = Integer.parseInt(yearTemp);
+					String userId = data.split(",")[0];
 
-				String monthTemp = data.split(",")[2];
-				int month = Integer.parseInt(monthTemp);
+					String yearTemp = data.split(",")[1];
+					int year = Integer.parseInt(yearTemp);
 
-				String calorieConsuTemp = data.split(",")[3];
-				int calorieConsu = Integer.parseInt(calorieConsuTemp);
+					String monthTemp = data.split(",")[2];
+					int month = Integer.parseInt(monthTemp);
 
-				String nosmokeTemp = data.split(",")[4];
-				int nosmoke = Integer.parseInt(nosmokeTemp);
+					String calorieConsuTemp = data.split(",")[3];
+					int calorieConsu = Integer.parseInt(calorieConsuTemp);
 
-				String alcoholConsuTemp = data.split(",")[5];
-				int alcoholConsu = Integer.parseInt(alcoholConsuTemp);
+					String nosmokeTemp = data.split(",")[4];
+					int nosmoke = Integer.parseInt(nosmokeTemp);
 
-				String calorieIntakeTemp = data.split(",")[6];
-				int calorieIntake = Integer.parseInt(calorieIntakeTemp);
+					String alcoholConsuTemp = data.split(",")[5];
+					int alcoholConsu = Integer.parseInt(alcoholConsuTemp);
 
-				String sleeptimeTemp = data.split(",")[7];
-				int sleeptime = Integer.parseInt(sleeptimeTemp);
+					String calorieIntakeTemp = data.split(",")[6];
+					int calorieIntake = Integer.parseInt(calorieIntakeTemp);
 
-				Point point = new Point(userId, year, month, calorieConsu, nosmoke, alcoholConsu, calorieIntake,
-						sleeptime);
-				ImageAllDAO imageAllDAO = new ImageAllDAO();
-				TownAvatarElements avatar = imageAllDAO.select(point.getTotal_calorie_intake(),
-						point.getTotal_alcohol_consumed(), point.getTotal_sleeptime(), point.getTotal_nosmoke(),
-						ImageDAO.getCountryOrder(point.getTotal_calorie_consumed()));
+					String sleeptimeTemp = data.split(",")[7];
+					int sleeptime = Integer.parseInt(sleeptimeTemp);
 
-				// JSPにセットしてフォワード
-				req.setAttribute("avatar", avatar);
-				// 4.最後にファイルを閉じてリソースを開放する
-				bufferedReader.close();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				// 結果ページにフォワードする
-				RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
-				dispatcher.forward(req, resp);
+					Point point = new Point(userId, year, month, calorieConsu, nosmoke, alcoholConsu, calorieIntake,
+							sleeptime);
+					ImageAllDAO imageAllDAO = new ImageAllDAO();
+					TownAvatarElements avatar = imageAllDAO.select(point.getTotal_calorie_intake(),
+							point.getTotal_alcohol_consumed(), point.getTotal_sleeptime(), point.getTotal_nosmoke(),
+							ImageDAO.getCountryOrder(point.getTotal_calorie_consumed()));
+					avatarList.add(avatar);
+					// 4.最後にファイルを閉じてリソースを開放する
+					bufferedReader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+
+			// JSPにセットしてフォワード
+			req.setAttribute("avatarList", avatarList);
+			// History。jspにフォワードする
+			RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
+			dispatcher.forward(req, resp);
+
 		}
 	}
 
