@@ -2,8 +2,10 @@ package servlet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
@@ -12,22 +14,29 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import dao.HealthRecordDAO;
 import dao.HistoryDAO;
+import dao.ImageAllDAO;
+import dao.ImageDAO;
 import dao.PointDAO;
 import dao.RewardDayDAO;
 import dto.History;
 import dto.Point;
+import dto.TownAvatarElements;
 
 /**
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/HistoryServlet")
+@MultipartConfig(location = "C:\\plusdojo2025\\D2\\source\\src\\main\\webapp\\WEB-INF\\uploaded", maxFileSize = 1048576)
 public class HistoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -125,13 +134,13 @@ public class HistoryServlet extends HttpServlet {
 						String folderPath;
 						if (test) {
 							folderPath = "c:/plusdojo2025/" + request.getContextPath() + "/source/src/main/webapp/"
-									+ "history/" + userId ; 
+									+ "history/" + userId;
 							filename = (oldestDayYear3 + 1) + "-" + (oldestDayMonth3 + i) + ".txt";
 
 						} else {
-							folderPath = request.getContextPath() + "/source/src/main/webapp/" + "history/" + userId ;
+							folderPath = request.getContextPath() + "/source/src/main/webapp/" + "history/" + userId;
 							filename = (oldestDayYear3 + 1) + "-" + (oldestDayMonth3 + i) + ".txt";
-									
+
 						}
 						String filePath = folderPath + "/" + filename;
 						try {
@@ -139,7 +148,7 @@ public class HistoryServlet extends HttpServlet {
 							File folder, file;
 
 							folder = new File(folderPath);
-							 file  = new File(filePath);
+							file = new File(filePath);
 
 							// フォルダの作成
 							if (folder.mkdirs()) {
@@ -186,13 +195,13 @@ public class HistoryServlet extends HttpServlet {
 						String folderPath;
 						if (test) {
 							folderPath = "c:/plusdojo2025/" + request.getContextPath() + "/source/src/main/webapp/"
-									+ "history/" + userId ; 
+									+ "history/" + userId;
 							filename = (oldestDayYear3) + "-" + (oldestDayMonth3 + i) + ".txt";
 
 						} else {
-							folderPath = request.getContextPath() + "/source/src/main/webapp/" + "history/" + userId ;
+							folderPath = request.getContextPath() + "/source/src/main/webapp/" + "history/" + userId;
 							filename = (oldestDayYear3) + "-" + (oldestDayMonth3 + i) + ".txt";
-									
+
 						}
 						String filePath = folderPath + "/" + filename;
 						try {
@@ -200,7 +209,7 @@ public class HistoryServlet extends HttpServlet {
 							File folder, file;
 
 							folder = new File(folderPath);
-							 file  = new File(filePath);
+							file = new File(filePath);
 
 							// フォルダの作成
 							if (folder.mkdirs()) {
@@ -220,8 +229,7 @@ public class HistoryServlet extends HttpServlet {
 							System.out.println("エラーが発生しました。");
 							e.printStackTrace();
 						}
-						try (FileWriter writer = new FileWriter(
-								filePath)) {
+						try (FileWriter writer = new FileWriter(filePath)) {
 							writer.write(pointList.get(i).getUser_id() + "," + pointList.get(i).getYear() + ","
 									+ pointList.get(i).getMonth() + "," + pointList.get(i).getTotal_calorie_consumed()
 									+ "," + pointList.get(i).getTotal_nosmoke() + ","
@@ -233,7 +241,7 @@ public class HistoryServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 						HistoryDAO hDao = new HistoryDAO();
-						History history = new History(userId, oldestDayYear3 , oldestDayMonth3 + i, filename);
+						History history = new History(userId, oldestDayYear3, oldestDayMonth3 + i, filename);
 						hDao.insert(history);
 						pDao.delete(userId, oldestDayYear3, oldestDayMonth3 + i);
 						j++;
@@ -251,43 +259,124 @@ public class HistoryServlet extends HttpServlet {
 		// ログインページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
 		dispatcher.forward(request, response);
-		
 
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = req.getSession();
 
-		// ヘルプはjavascriptで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		 // JSPから送信されたファイル名を取得（例: history/kazutoshi_t/2024-2.txt）
-	    String fileName = req.getParameter("fileName");
+		// セッションからuser_idを取得
+		session.setAttribute("user_id", "kazutoshi_t");
+		String userIdSession = (String) session.getAttribute("user_id");
 
-	    if (fileName == null || fileName.isEmpty()) {
-	        resp.getWriter().write("ファイルが選択されていません。");
-	        return;
-	    }
+		if (req.getParameter("mode") == "download") {
+			// ヘルプはjavascriptで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// JSPから送信されたファイル名を取得（例: history/kazutoshi_t/2024-2.txt）
+			String fileName = req.getParameter("fileName");
 
-	    // 実際のファイルパス（webappフォルダの中を指す）
-	    String filePath = getServletContext().getRealPath("/" + fileName);
-	    File file = new File(filePath);
+			if (fileName == null || fileName.isEmpty()) {
+				resp.getWriter().write("ファイルが選択されていません。");
+				return;
+			}
 
-	    if (!file.exists()) {
-	        resp.getWriter().write("指定されたファイルが存在しません: " + fileName);
-	        return;
-	    }
+			// 実際のファイルパス（webappフォルダの中を指す）
+			String filePath = getServletContext().getRealPath("history/" + userIdSession + "/" + fileName);
+			File file = new File(filePath);
 
-	    // ファイルをレスポンスとして返す（ダウンロード）
-	    resp.setContentType("application/octet-stream");
-	    resp.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+			if (!file.exists()) {
+				resp.getWriter().write("指定されたファイルが存在しません: " + fileName);
+				return;
+			}
 
-	    try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-	         BufferedOutputStream out = new BufferedOutputStream(resp.getOutputStream())) {
+			// ファイルをレスポンスとして返す（ダウンロード）
+			resp.setContentType("application/octet-stream");
+			resp.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
 
-	        byte[] buffer = new byte[4096];
-	        int bytesRead;
-	        while ((bytesRead = in.read(buffer)) != -1) {
-	            out.write(buffer, 0, bytesRead);
-	        }
-	    }
+			try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+					BufferedOutputStream out = new BufferedOutputStream(resp.getOutputStream())) {
 
+				byte[] buffer = new byte[4096];
+				int bytesRead;
+				while ((bytesRead = in.read(buffer)) != -1) {
+					out.write(buffer, 0, bytesRead);
+				}
+			}
+		} else if (req.getParameter("mode").equals("upload")) {
+			Part part = req.getPart("file");
+			String name = this.getFileName(part);
+			part.write("/" + name);
+			try {
+				// 1.ファイルのパスを指定する
+				File file = new File("C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded/" + name);
+
+				// 2.ファイルが存在しない場合に例外が発生するので確認する
+				if (!file.exists()) {
+					System.out.print("ファイルが存在しません");
+					return;
+				}
+				// 3. BufferedReaderクラスのreadLineメソッドを使って1行ずつ読み込み、データを保持する。
+				FileReader fileReader = new FileReader(file);
+				BufferedReader bufferedReader = new BufferedReader(fileReader);
+				String data = bufferedReader.readLine();
+
+				String userId = data.split(",")[0];
+
+				String yearTemp = data.split(",")[1];
+				int year = Integer.parseInt(yearTemp);
+
+				String monthTemp = data.split(",")[2];
+				int month = Integer.parseInt(monthTemp);
+
+				String calorieConsuTemp = data.split(",")[3];
+				int calorieConsu = Integer.parseInt(calorieConsuTemp);
+
+				String nosmokeTemp = data.split(",")[4];
+				int nosmoke = Integer.parseInt(nosmokeTemp);
+
+				String alcoholConsuTemp = data.split(",")[5];
+				int alcoholConsu = Integer.parseInt(alcoholConsuTemp);
+
+				String calorieIntakeTemp = data.split(",")[6];
+				int calorieIntake = Integer.parseInt(calorieIntakeTemp);
+
+				String sleeptimeTemp = data.split(",")[7];
+				int sleeptime = Integer.parseInt(sleeptimeTemp);
+
+				Point point = new Point(userId, year, month, calorieConsu, nosmoke, alcoholConsu, calorieIntake,
+						sleeptime);
+				ImageAllDAO imageAllDAO = new ImageAllDAO();
+				TownAvatarElements avatar = imageAllDAO.select(point.getTotal_calorie_intake(),
+						point.getTotal_alcohol_consumed(), point.getTotal_sleeptime(), point.getTotal_nosmoke(),
+						ImageDAO.getCountryOrder(point.getTotal_calorie_consumed()));
+
+				// JSPにセットしてフォワード
+				req.setAttribute("avatar", avatar);
+				// 4.最後にファイルを閉じてリソースを開放する
+				bufferedReader.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				// 結果ページにフォワードする
+				RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
+				dispatcher.forward(req, resp);
+			}
+		}
 	}
+
+	// ヘルプはjavascriphtで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	private String getFileName(Part part) {
+		String name = null;
+		for (String dispotion : part.getHeader("Content-Disposition").split(";")) {
+			if (dispotion.trim().startsWith("filename")) {
+				name = dispotion.substring(dispotion.indexOf("=") + 1).replace("\"", "").trim();
+				name = name.substring(name.lastIndexOf("\\") + 1);
+				break;
+			}
+		}
+		return name;
+	}
+
 }

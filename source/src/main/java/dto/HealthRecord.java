@@ -1,6 +1,8 @@
 package dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HealthRecord implements Serializable {
 	private String userId; // ユーザーID
@@ -16,6 +18,10 @@ public class HealthRecord implements Serializable {
 	private double sleepHours; // 睡眠時間
 	private int calorieIntake; // 摂取カロリー
 	private String free; // 自由欄
+	
+	private List<HealthExercise> exerciseList = new ArrayList<>();
+	private List<HealthAlcohol> alcoholList;
+
 
 	// コンストラクタ
 	public HealthRecord(String userId, String date, String exerciseType, int exerciseTime, double nowWeight,
@@ -153,5 +159,21 @@ public class HealthRecord implements Serializable {
 	public void setFree(String free) {
 		this.free = free;
 	}
+	public List<HealthExercise> getExerciseList() {
+	    return exerciseList;
+	}
+
+	public void setExerciseList(List<HealthExercise> exerciseList) {
+	    this.exerciseList = exerciseList;
+	}
+	
+	public void setAlcoholList(List<HealthAlcohol> alcoholList) {
+	    this.alcoholList = alcoholList;
+	}
+
+	public List<HealthAlcohol> getAlcoholList() {
+	    return alcoholList;
+	}
+	
 
 }
