@@ -197,7 +197,15 @@ if (alcList != null && !alcList.isEmpty()) {
 
 
 	<div class="summary-box">
-		<p>6月の統計</p>
+		<%
+String[] monthNames = {
+    "1月", "2月", "3月", "4月", "5月", "6月",
+    "7月", "8月", "9月", "10月", "11月", "12月"
+};
+int displayMonth = (Integer) request.getAttribute("displayMonth");
+%>
+
+<p><%= monthNames[displayMonth - 1] %>の統計</p>
 		<p>
 			合計消費カロリー：<%=String.format("%.1f", request.getAttribute("sumCalorieConsumed"))%>
 			kcal 1日の平均純アルコール量：<%=String.format("%.1f", request.getAttribute("avgPureAlcohol"))%>
@@ -323,7 +331,9 @@ if (alcList != null && !alcList.isEmpty()) {
 	<!-- ポップアップ本体（非表示にしておく） -->
 
 <div id="popup"
+data-readonly="${isReadonly ? 'true' : 'false'}"
 	style="display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 90%; background: white; border: 2px solid black; overflow: auto; z-index: 9999; padding: 1em;">
+	
 	<button onclick="closePopup()">閉じる</button>
 
 	<h2>健康記録登録</h2>
@@ -339,7 +349,20 @@ if (alcList != null && !alcList.isEmpty()) {
 		<button type="button" id="add_exercise_button">＋ 運動を追加</button>
 		<button type="button" id="remove_exercise_button">－</button>
 		<br>
-		<div id="exercise_container"></div>
+
+		<!-- 運動入力欄コンテナ -->
+		<div id="exercise_container" style="display: none;">
+			<div class="exercise_field">
+				<label for="exercise_select0">運動の種類：</label>
+				<select id="exercise_select0"></select>
+
+				<input type="hidden" name="exercise_type0" id="exercise_type0">
+				<input type="hidden" name="mets0" id="mets0">
+
+				<label for="exercise_time0">時間（分）：</label>
+				<input type="number" name="exercise_time0" id="exercise_time0" min="0" required>
+			</div>
+		</div>
 
 		<br>
 
@@ -358,7 +381,31 @@ if (alcList != null && !alcList.isEmpty()) {
 		<button type="button" id="add_alcohol_button">＋ 飲酒を追加</button>
 		<button type="button" id="remove_alcohol_button">－</button>
 		<br>
-		<div id="alcohol_container"></div>
+
+		<!-- 飲酒入力欄コンテナ -->
+		<div id="alcohol_container" style="display: none;">
+			<div class="alcohol_field">
+				<label for="alcohol_content0">アルコール度数：</label>
+				<input type="number" name="alcohol_content0" id="alcohol_content0" readonly>
+
+				<select id="categorySelect0">
+					<option value="">--カテゴリー--</option>
+				</select>
+
+				<select id="typeSelect0" disabled>
+					<option value="">--種類--</option>
+				</select>
+
+				<label for="alcohol_consumed0">摂取量（ml）：</label>
+				<input type="number" name="alcohol_consumed0" id="alcohol_consumed0" readonly>
+
+				<select id="glassSelect0">
+					<option value="">参考: 器の種類</option>
+				</select>
+
+				<input type="number" id="cupCount0" value="1" min="1" disabled>
+			</div>
+		</div>
 
 		<br>
 
