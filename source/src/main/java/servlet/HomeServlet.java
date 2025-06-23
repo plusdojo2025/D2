@@ -90,12 +90,11 @@ public class HomeServlet extends HttpServlet {
 			int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
 			
 			TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
+					ImageDAO.getCountryOrder(point.getTotal_calorie_consumed());
 
 			// JSPにセットしてフォワード
 			request.setAttribute("avatar", avatar);
 
-			// リクエストスコープにセット
-			request.setAttribute("avatar", avatar);
 
 			// === 通常の目標値とポイントデータの取得処理 ===
 			TargetValueDAO tdao = new TargetValueDAO();

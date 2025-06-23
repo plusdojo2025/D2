@@ -22,6 +22,8 @@ window.onload = function () {
 </script>
 <script src="${pageContext.request.contextPath}/js/targetvalueform.js"></script>
 <script src="${pageContext.request.contextPath}/js/logout.js"></script>
+<script src="${pageContext.request.contextPath}/js/home.js"></script>
+
 </head>
 <body>
 <header>
@@ -65,8 +67,8 @@ window.onload = function () {
     <h3>目標値</h3>
     <label>目標体重 (kg): <input type="number" step="0.1" name="target_weight" min="0" required></label><br>
     <label>純アルコール摂取量 (g/日): <input type="number" step="0.1" name="pure_alcohol_consumed" min="0" required></label><br>
-    <label>睡眠時間 (時間): <input type="number" step="0.1" name="sleep_time" min="0" required></label><br>
-    <label>カロリー摂取量 (kcal/日): <input type="number" name="calorie_intake" min="0" required></label><br>
+    <label>睡眠時間 (時間): <input type="number" step="0.5" name="sleep_time" min="0" required></label><br>
+    <label>カロリー摂取量 (kcal/日): <input type="number" step="1" name="calorie_intake" min="0" required></label><br>
 
     <h3>プロフィール</h3>
     <label>体重 (kg): <input type="number" step="0.1" name="weight" min="0" required></label><br>
@@ -87,6 +89,22 @@ window.onload = function () {
 
 <h3>今月の街並み・アバター</h3>
 <p>ここに画像やアバターが表示されます。</p>
+
+<c:forEach var="build" items="${avatar.buildings}">
+	<div class="imgBuild" id="${build.imagePath}"></div>
+</c:forEach>
+<div class="cloth" id="${avatar.cloth.imagePath}"></div>
+<div class="cloth" id="${avatar.shoe.imagePath}"></div>
+<div class="cloth" id="${avatar.hat.imagePath}"></div>
+<div class="cloth" id="${avatar.costume.imagePath}"></div>
+<div class="imgPeople" id="${avatar.peopleImage.imagePath}"></div>
+<div class="imgFace" id="${avatar.face.imagePath}"></div>
+<input type="hidden" id="peopleNum" value="${avatar.peopleCount}">
+<!-- --------------------------------------------------------------- -->
+
+<c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
+<canvas id="imageCanvas" width="1400" height="1000" style="width:${width}px;"></canvas>
+
 <div>
 <%
     dto.TownAvatarElements avatar = (dto.TownAvatarElements) request.getAttribute("avatar");
@@ -131,6 +149,8 @@ window.onload = function () {
         <img src="<%= avatar.getPeopleImage().getImagePath() %>" alt="人" />
 <%  }
 } %>
+
+
 </div>
 </body>
 </html>

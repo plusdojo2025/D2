@@ -11,6 +11,11 @@
 <h1><c:out value="${result.title}" /></h1>
 <hr>
 <p><c:out value="${result.message}" /></p>
+
+<p>飲酒ポイント: <c:out value="${alcoholMessage}" /></p>
+<p>睡眠ポイント: <c:out value="${sleepMessage}" /></p>
+<p>摂取カロリーポイント: <c:out value="${calorieMessage}" /></p>
+<p>禁煙ポイント: <c:out value="${nosmokeMessage}" /></p>
 <a href="${result.backTo}">戻る</a>
 </body>
 </html>
