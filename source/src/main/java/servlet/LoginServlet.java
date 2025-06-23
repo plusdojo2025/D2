@@ -86,7 +86,7 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("user_id",id);
 
 			// メニューサーブレットにリダイレクトする
-			response.sendRedirect("/D2/HomeServlet"); // TODO: /D2/...に変更
+			response.sendRedirect(request.getContextPath() + "/HomeServlet"); // TODO: /D2/...に変更
 		} else { 
 			// ログイン失敗時に表示する文字
 

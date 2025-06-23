@@ -62,26 +62,22 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 		%>
 	</div>
 
-	<!-- ⑥ ファイルリスト（フィルタ検索と連動はしていない簡易版） -->
+	<!-- ⑥ ファイルリスト -->
 	<div style="float: right; border: 1px solid #000; padding: 10px;">
-		<form method="post" action="DownloadServlet">
-			<!-- ダウンロード処理用 -->
-			<%
-			if (fileList != null) {
-				for (History h : fileList) {
-			%>
-			<label> <input type="checkbox" name="fileNames"
-				value="<%=h.getFileName()%>"> <%=h.getFileName()%>
-			</label><br>
-			<%
-			}
-			}
-			%>
+		<form method="post" action="HistoryServlet"> <%-- OK --%>
+    <%
+    if (fileList != null) {
+        for (History h : fileList) {
+    %>
+    <label>
+        <input type="radio" name="fileName" value="<%=h.getFileName()%>"> <%=h.getFileName()%>
+    </label><br>
+    <%
+        }
+    }
+    %>
 
-			<!-- ⑦ ダウンロードボタン -->
-			<input type="text" name="searchDate" placeholder="日付を入力"><br>
-			<button class="btn" type="submit">ダウンロード</button>
-		</form>
+    <button class="btn" type="submit">ダウンロード</button>
 	</div>
 
 </body>

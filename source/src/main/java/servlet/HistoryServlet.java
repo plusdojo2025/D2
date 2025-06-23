@@ -1,6 +1,9 @@
 package servlet;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
@@ -255,6 +258,36 @@ public class HistoryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		// ヘルプはjavascriptで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 // JSPから送信されたファイル名を取得（例: history/kazutoshi_t/2024-2.txt）
+	    String fileName = req.getParameter("fileName");
+
+	    if (fileName == null || fileName.isEmpty()) {
+	        resp.getWriter().write("ファイルが選択されていません。");
+	        return;
+	    }
+
+	    // 実際のファイルパス（webappフォルダの中を指す）
+	    String filePath = getServletContext().getRealPath("/" + fileName);
+	    File file = new File(filePath);
+
+	    if (!file.exists()) {
+	        resp.getWriter().write("指定されたファイルが存在しません: " + fileName);
+	        return;
+	    }
+
+	    // ファイルをレスポンスとして返す（ダウンロード）
+	    resp.setContentType("application/octet-stream");
+	    resp.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+
+	    try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+	         BufferedOutputStream out = new BufferedOutputStream(resp.getOutputStream())) {
+
+	        byte[] buffer = new byte[4096];
+	        int bytesRead;
+	        while ((bytesRead = in.read(buffer)) != -1) {
+	            out.write(buffer, 0, bytesRead);
+	        }
+	    }
 
 	}
 }
