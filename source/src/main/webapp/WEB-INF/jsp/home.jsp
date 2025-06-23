@@ -105,52 +105,7 @@ window.onload = function () {
 <c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
 <canvas id="imageCanvas" width="1400" height="1000" style="width:${width}px;"></canvas>
 
-<div>
-<%
-    dto.TownAvatarElements avatar = (dto.TownAvatarElements) request.getAttribute("avatar");
-%>
+<script src="js/createTownAvatar.js"></script>
 
-<p>服の画像:</p>
-<% if (avatar.getCloth() != null) { %>
-    <img src="<%= avatar.getCloth().getImagePath() %>" alt="服" />
-<% } %>
-
-<p>靴の画像:</p>
-<% if (avatar.getShoe() != null) { %>
-    <img src="<%= avatar.getShoe().getImagePath() %>" alt="靴" />
-<% } %>
-
-<p>帽子の画像:</p>
-<% if (avatar.getHat() != null) { %>
-    <img src="<%= avatar.getHat().getImagePath() %>" alt="帽子" />
-<% } %>
-
-<p>民族衣装の画像:</p>
-<% if (avatar.getCostume() != null) { %>
-    <img src="<%= avatar.getCostume().getImagePath() %>" alt="民族衣装" />
-<% } %>
-
-<p>建物の画像:</p>
-<% if (avatar.getBuildings() != null) {
-    for (dto.Image img : avatar.getBuildings()) { %>
-        <img src="<%= img.getImagePath() %>" alt="建物" />
-<%  } 
-} %>
-
-<p>顔色の画像:</p>
-<% if (avatar.getFace() != null) { %>
-    <img src="<%= avatar.getFace().getImagePath() %>" alt="顔色" />
-<% } %>
-
-<p>人数: <%= avatar.getPeopleCount() %></p>
-<p>人の画像:</p>
-<% if (avatar.getPeopleImage() != null) {
-    for (int i=0; i < avatar.getPeopleCount(); i++) { %>
-        <img src="<%= avatar.getPeopleImage().getImagePath() %>" alt="人" />
-<%  }
-} %>
-
-
-</div>
 </body>
 </html>
