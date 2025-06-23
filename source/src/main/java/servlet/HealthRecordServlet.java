@@ -92,13 +92,13 @@ public class HealthRecordServlet extends HttpServlet {
 //		HealthWhole hw = new HealthWhole(userId, date, noSmoke, sleepHours, calorieIntake, free, nowWeight);
 
 		// 運動テーブル関係
-		int nowWeight = 0;
-		nowWeight = Integer.parseInt(request.getParameter("now_weight"));
+		double nowWeight = 0;
+		nowWeight = Double.parseDouble(request.getParameter("now_weight"));
 		
 		HealthWhole hw = new HealthWhole(userId, date, noSmoke, sleepHours, calorieIntake, free, nowWeight);
 
 		List<HealthExercise> heList = new ArrayList<HealthExercise>();
-		int i = 1;
+		int i = 0;
 		while (request.getParameter("exercise_type" + i) != null) {
 			String exerciseType = request.getParameter("exercise_type" + i);
 			int exerciseTime = 0;
@@ -116,7 +116,7 @@ public class HealthRecordServlet extends HttpServlet {
 		}
 
 		List<HealthAlcohol> haList = new ArrayList<HealthAlcohol>();
-		int m = 1;
+		int m = 0;
 		while (request.getParameter("alcohol_content" + m) != null) {
 			double alcoholContent = 0.0;
 			alcoholContent = Double.parseDouble(request.getParameter("alcohol_content" + m));
@@ -315,6 +315,66 @@ public class HealthRecordServlet extends HttpServlet {
 			RewardDay rewardDay = new RewardDay(userId, date1, country + "に到達した！");
 			RDDao.insert(rewardDay);
 		}
+		
+		//報酬受け取り処理 更新されたポイントの更新前と更新後のポイントと 各種達成ポイントテーブル(DAO作って)を比較して
+
+		 //ポイントが達成していたら報酬受け取り処理を行う （RewardDayDAOのinsertを使う）
+
+		 
+
+		// Date date1 = Date.valueOf(date);
+
+		// RewardDayDAO RDDao = new RewardDayDAO();
+
+		
+
+		if (alcoholPointChanged) {
+
+           request.setAttribute("alcoholMessage", "飲酒ポイントが増加し、もらえました。");
+
+       } else {
+
+           request.setAttribute("alcoholMessage", "飲酒ポイントが増加せず、もらえませんでした。");
+
+       }
+
+       if (sleepPointChanged == 1) {
+
+           request.setAttribute("sleepMessage", "睡眠ポイントが増加し、もらえました。");
+
+       } else if (sleepPointChanged == -1) {
+
+           request.setAttribute("sleepMessage", "睡眠ポイントが減少し、もらえませんでした。");
+
+       } else {
+
+           request.setAttribute("sleepMessage", "睡眠ポイントは変更されませんでした。");
+
+       }
+
+       if (caloriePointChanged) {
+
+           request.setAttribute("calorieMessage", "摂取カロリーポイントが増加し、もらえました。");
+
+       } else {
+
+           request.setAttribute("calorieMessage", "摂取カロリーポイントが増加せず、もらえませんでした。");
+
+       }
+
+       if (nosmokePointChanged == 1) {
+
+           request.setAttribute("nosmokeMessage", "禁煙ポイントが増加し、もらえました。");
+
+       } else if (nosmokePointChanged == -1) {
+
+           request.setAttribute("nosmokeMessage", "禁煙ポイントが減少し、もらえませんでした。");
+
+       } else {
+
+           request.setAttribute("nosmokeMessage", "禁煙ポイントは変更されませんでした。");
+
+       }
 
 		// 結果ページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");

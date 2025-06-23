@@ -66,7 +66,12 @@ CREATE TABLE user(
 
 INSERT INTO user(id, pw) VALUES 
     ("kazutoshi_t", "password"), 
-    ("test1", "test1");
+    ("test1", "test1"),
+    ("dojouser1", "#SEplus2025SEplus"),
+    ("dojouser2", "#SEplus2025SEplus"),
+    ("dojouser3", "#SEplus2025SEplus"),
+    ("dojouser4", "#SEplus2025SEplus"),
+    ("dojouser5", "#SEplus2025SEplus");
 
 SELECT * FROM user;
 
@@ -164,6 +169,7 @@ CREATE TABLE health_whole(
     sleep_time FLOAT,
     calorie_intake INT,
     free  VARCHAR(100),
+    now_weight FLOAT,
     PRIMARY KEY(user_id, date),
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
@@ -189,39 +195,39 @@ CREATE TABLE health_exercise(
 );
 
 -- 2025/0601
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-01", 0, 8, 2000, "test0601");
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-01", 0, 8, 2000, "test0601", 60);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-01", 30, 300, 5);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-01", 30, 100, 10);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-01", 300, "ウォーキング", 30);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-01", 300, "サイクリング", 60);
 -- 2025/0602
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-02", 1, 7.5, 2500, "test0602");
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-02", 1, 7.5, 2500, "test0602", 60);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2025-06-02", 30, 300, 5);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-02", 900, "ランニング", 30);
 -- 2025/0603
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-03", 0, 8, 3000, "test0603");
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-03", 0, 8, 3000, "test0603", 60);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-03", 600, "ウォーキング", 60);
 
 -- 2024/0601
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-06-01", 0, 8, 2000, "test0601");
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-06-01", 0, 8, 2000, "test0601", 60);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-06-01", 30, 300, 5);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-06-01", 30, 100, 10);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-06-01", 300, "ウォーキング", 30);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-06-01", 300, "サイクリング", 60);
 -- 2024/0401
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-04-01", 0, 8, 2000, "test0601");
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-04-01", 0, 8, 2000, "test0601", 60);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-01", 30, 300, 5);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-01", 30, 100, 10);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-01", 300, "ウォーキング", 30);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-01", 300, "サイクリング", 60);
 -- 2024/0402
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-04-02", 0, 8, 2000, "test0601");
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-04-02", 0, 8, 2000, "test0601", 60);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-02", 30, 300, 5);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-04-02", 30, 100, 10);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-02", 300, "ウォーキング", 30);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-04-02", 300, "サイクリング", 60);
 -- 2024/0302
-INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-03-02", 0, 8, 2000, "test0601");
+INSERT INTO health_whole VALUES ("kazutoshi_t", "2024-03-02", 0, 8, 2000, "test0601", 60);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-03-02", 30, 300, 5);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("kazutoshi_t", "2024-03-02", 30, 100, 10);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2024-03-02", 300, "ウォーキング", 30);

@@ -1,1 +1,44 @@
 @charset "UTF-8";
+
+
+
+.alcohol_field, .exercise_field{
+    /* 立体感を出すための影 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin: 10px;
+    background-color: #ddd;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+   
+}
+
+.input-group label {
+    width: 150px;
+}
+
+.input-group input {
+    width: 100px;
+    margin-right: 10px;
+}
+
+#form{
+    background-color: #ccc;
+}
+
+input[type="number"]:hover,
+input[type="number"]:active
+{
+    background-color:bisque
+}
+
+input[name="free"]{
+    width: 70%;
+    height: 100px;
+    margin: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
