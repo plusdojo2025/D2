@@ -276,7 +276,160 @@ public class HealthRecordDAO {
 
 	    return record;
 	}
-	
+	//運動だけのリスト
+	public List<HealthRecord> selectWithExercises(String userId, int month) {
+	    Connection conn = null;
+	    List<HealthRecord> recordList = new ArrayList<>();
+	    
+
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+
+	        conn = DriverManager.getConnection(
+	            "jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
+	            "root", "password");
+
+	        // 1. ベースの health_whole を取得
+	        String sql = "SELECT * FROM health_whole WHERE user_id = ? AND MONTH(date) = ?";
+	        PreparedStatement pStmt = conn.prepareStatement(sql);
+	        pStmt.setString(1, userId);
+	        pStmt.setInt(2, month);
+
+	        ResultSet rs = pStmt.executeQuery();
+
+	        while (rs.next()) {
+	            String date = rs.getString("date");
+
+	            // 2. HealthRecord のベースデータ（運動は一旦 null/0）
+	            HealthRecord record = new HealthRecord(
+	                rs.getString("user_id"),
+	                date,
+	                null,    // exerciseType → 今回は使わない
+	                0,       // exerciseTime → 同上
+	                0.0,     // nowWeight（未使用）
+	                0.0,     // calorieConsu（個別で管理）
+	                rs.getInt("nosmoke"),
+	                0.0,     // alcoholContent（今回は未使用）
+	                0,
+	                0.0,
+	                rs.getDouble("sleep_time"),
+	                rs.getInt("calorie_intake"),
+	                rs.getString("free")
+	            );
+	            	
+	            // 3. 運動記録をすべて取得
+	            String exSql = "SELECT * FROM health_exercise WHERE user_id = ? AND date = ?";
+	            PreparedStatement exStmt = conn.prepareStatement(exSql);
+	            exStmt.setString(1, userId);
+	            exStmt.setString(2, date);
+
+	            ResultSet exRs = exStmt.executeQuery();
+	            List<HealthExercise> exList = new ArrayList<>();
+	            double totalCalorieConsu = 0.0;
+	            while (exRs.next()) {
+	            	 double calorie = exRs.getDouble("calorie_consu");
+	            	    totalCalorieConsu += calorie;
+
+	            	    HealthExercise ex = new HealthExercise(
+	            	        userId,
+	            	        date,
+	            	        calorie,
+	            	        exRs.getString("exercise_type"),
+	            	        exRs.getInt("exercise_time")
+	            	    );
+	            	    exList.add(ex);
+	            }
+	            
+	            record.setExerciseList(exList);
+	            record.setCalorieConsu(totalCalorieConsu);
+	            recordList.add(record);
+	        }
+
+	    } catch (SQLException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	        recordList = null;
+	    } finally {
+	        if (conn != null) {
+	            try {
+	                conn.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+
+	    return recordList;
+	}
+	//アルコール
+	public List<HealthRecord> selectWithAlcohols(String userId, int month) {
+	    Connection conn = null;
+	    List<HealthRecord> recordList = new ArrayList<>();
+
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        conn = DriverManager.getConnection(
+	            "jdbc:mysql://localhost:3306/d2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
+	            "root", "password");
+
+	        // ベースの health_whole を取得
+	        String sql = "SELECT * FROM health_whole WHERE user_id = ? AND MONTH(date) = ?";
+	        PreparedStatement pStmt = conn.prepareStatement(sql);
+	        pStmt.setString(1, userId);
+	        pStmt.setInt(2, month);
+	        ResultSet rs = pStmt.executeQuery();
+
+	        while (rs.next()) {
+	            String date = rs.getString("date");
+
+	            HealthRecord record = new HealthRecord(
+	                rs.getString("user_id"),
+	                date,
+	                null, 0, // 運動
+	                rs.getDouble("now_weight"),
+	                0.0,     // 消費カロリー
+	                rs.getInt("nosmoke"),
+	                0.0, 0, 0.0, // アルコール系は後から入れる
+	                rs.getDouble("sleep_time"),
+	                rs.getInt("calorie_intake"),
+	                rs.getString("free")
+	            );
+
+	            // アルコール記録を取得
+	            String alcSql = "SELECT * FROM health_alcohol WHERE user_id = ? AND date = ?";
+	            PreparedStatement alcStmt = conn.prepareStatement(alcSql);
+	            alcStmt.setString(1, userId);
+	            alcStmt.setString(2, date);
+	            ResultSet alcRs = alcStmt.executeQuery();
+
+	            List<HealthAlcohol> alcList = new ArrayList<>();
+	            while (alcRs.next()) {
+	                HealthAlcohol ha = new HealthAlcohol(
+	                		userId,
+	                	    date,
+	                	    alcRs.getDouble("pure_alcohol_consumed"), // ← ① OK
+	                	    alcRs.getInt("alcohol_consumed"),         // ← ② OK
+	                	    alcRs.getDouble("alcohol_content")        
+	                );
+	                alcList.add(ha);
+	            }
+
+	            record.setAlcoholList(alcList);
+	            recordList.add(record);
+	        }
+
+	    } catch (SQLException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	        recordList = null;
+	    } finally {
+	        try {
+	            if (conn != null) conn.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return recordList;
+	}
 	// selectAll(健康記録全体の日付だけを古い順に並べなおして取得）
 	public List<String> select(String userId) {
 		Connection conn = null;

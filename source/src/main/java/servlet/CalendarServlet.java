@@ -15,10 +15,12 @@ import dao.ImageAllDAO;
 import dao.ImageDAO;
 import dao.PointDAO;
 import dao.RewardDayDAO;
+import dto.HealthAlcohol;
 import dto.HealthRecord;
 import dto.Point;
 import dto.RewardDay;
 import dto.TownAvatarElements;
+
 /**
  * Servlet implementation class CalendarServlet
  */
@@ -74,7 +76,23 @@ public class CalendarServlet extends HttpServlet {
 		 * 健康記録をDBから持ってくる HealthRecordDAOのselectを使用 リクエストスコープに格納
 		 */
 		HealthRecordDAO healthDao = new HealthRecordDAO();
-		List<HealthRecord> healthList = healthDao.select(userId, month);
+//		List<HealthRecord> healthList = healthDao.select(userId, month);
+//		request.setAttribute("healthList", healthList);
+		List<HealthRecord> healthList = healthDao.selectWithExercises(userId, month);
+
+		// アルコールつきHealthRecordを取得
+		List<HealthRecord> alcoholList = healthDao.selectWithAlcohols(userId, month);
+
+		// alcoholList の情報を healthList にマージ
+		for (HealthRecord record : healthList) {
+		    for (HealthRecord alcRecord : alcoholList) {
+		        if (record.getDate().equals(alcRecord.getDate())) {
+		            record.setAlcoholList(alcRecord.getAlcoholList()); // アルコールリストだけ上書き
+		            break;
+		        }
+		    }
+		}
+
 		request.setAttribute("healthList", healthList);
 		
 		// 日付指定があれば、その日の記録を1件だけ取り出してスコープに入れる
@@ -87,6 +105,13 @@ public class CalendarServlet extends HttpServlet {
 		        }
 		    }
 		}
+		
+
+
+	
+	
+		
+
 
 		/*
 		 * カレンダーに表示する統計値の計算処理 持ってきた健康記録のリストをもとに統計値を計算しリクエストスコープに格納
@@ -103,7 +128,12 @@ public class CalendarServlet extends HttpServlet {
 		    totalCalorieConsumed += record.getCalorieConsu();
 		    totalCalorieIntake += record.getCalorieIntake();
 		    totalSleep += record.getSleepHours();
-		    totalPureAlcohol += record.getAlcoholContent() * record.getAlcoholConsumed() * 0.8 / 100.0;
+		    if (record.getAlcoholList() != null) {
+		        for (HealthAlcohol alc : record.getAlcoholList()) {
+		            totalPureAlcohol += alc.getPureAlcoholConsumed();
+		        }
+		    }
+
 
 		    if (record.getNosmoke() > 0) {
 		        totalNosmokeDays++;
@@ -126,6 +156,8 @@ public class CalendarServlet extends HttpServlet {
 		request.setAttribute("avgConsumed", avgConsumed);
 		request.setAttribute("avgIntake", avgIntake);
 		
+	
+		
 
 		// PointDAOでユーザーのポイントを取得
 		
@@ -145,6 +177,9 @@ public class CalendarServlet extends HttpServlet {
 		    noSmokePoint = point.getTotal_nosmoke();
 		    totalCalorieConsu = point.getTotal_calorie_consumed();
 		}
+		
+		
+		
 
 		// ImageAllDAOを使って画像情報を取得
 		ImageAllDAO imageAllDAO = new ImageAllDAO();
@@ -154,7 +189,7 @@ public class CalendarServlet extends HttpServlet {
 		TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
 
 		// JSPにセットしてフォワード
-		request.setAttribute("avatar", avatar);
+
 		
 
 
