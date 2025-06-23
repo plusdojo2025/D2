@@ -22,7 +22,6 @@ window.onload = function () {
 </script>
 <script src="${pageContext.request.contextPath}/js/targetvalueform.js"></script>
 <script src="${pageContext.request.contextPath}/js/logout.js"></script>
-<script src="${pageContext.request.contextPath}/js/home.js"></script>
 
 </head>
 <body>
