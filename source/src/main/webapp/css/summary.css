@@ -1,1 +1,21 @@
 @charset "UTF-8";
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+  padding: 10px;
+}
+
+.month-block {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  background-color: #f9f9f9;
+  min-height: 200px;
+}
+
+.month-block img {
+  max-width: 60px;
+  margin: 3px;
+  vertical-align: middle;
+}
