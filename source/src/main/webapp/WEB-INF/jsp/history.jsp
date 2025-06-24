@@ -8,10 +8,10 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>ケンコークラフト</title>
-	<link rel="stylesheet" href="<c:url value='/css/history.css'/>">
-	<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
+<meta charset="UTF-8">
+<title>ケンコークラフト</title>
+<link rel="stylesheet" href="<c:url value='/css/history.css'/>">
+<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
 
 <body>
@@ -32,9 +32,17 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 
 	<!-- ④ 街を見るボタン -->
 	<form method="POST" enctype="multipart/form-data"
-		action="<c:url value='/HistoryServlet?mode=upload' />">
-		<input type="file" name="file" multiple /><br /> <input type="submit"
-			value="アップロード" />
+		action="HistoryServlet?mode=upload" class="upload-form">
+		<!-- ファイル選択エリア -->
+		<label class="file-box"> <span id="file-name">ファイルを選択してください</span>
+			<input type="file" name="file" id="file-input" multiple
+			hidden="hidden" />
+			<button type="button" class="select-button"
+				onclick="document.getElementById('file-input').click();">選択</button>
+		</label>
+
+		<!-- アップロードボタン -->
+		<button type="submit" class="upload-button">アップロード</button>
 	</form>
 	<!--  <form action="HistoryServlet" method="post" style="display: inline;">
 		
@@ -43,34 +51,35 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 
 	<br>
 	<br>
-	
+
 
 	<c:set var="width" value="500" />
 	<!-- 実際に画面に表示する際の横幅[px] -->
 	<c:forEach var="avatar" items="${avatarList}">
-		<canvas class="imageCanvas" id="canvas_${avatar.year}_${avatar.month}" width="1627" height="1021" style="width:${width}px;"></canvas>
+		<canvas class="imageCanvas" id="canvas_${avatar.year}_${avatar.month}"
+			width="1627" height="1021" style="width:${width}px;"></canvas>
 	</c:forEach>
 
 
 	<!-- ⑥ ファイルリスト -->
 	<div style="float: right; border: 1px solid #000; padding: 10px;">
-		<form method="post" action="<c:url value='/HistoryServlet?mode=download' />">
-	<%
-	if (fileList != null) {
-		for (History h : fileList) {
-	%>
-	<label>
-		<input type="checkbox" name="fileNames" value="<%=h.getFileName()%>">
-		<%=h.getFileName()%>
-	</label><br>
-	<%
-		}
-	}
-	%>
-	<button class="btn" type="submit">ダウンロード</button>
-</form>
+		<form method="post"
+			action="<c:url value='/HistoryServlet?mode=download' />">
+			<%
+			if (fileList != null) {
+				for (History h : fileList) {
+			%>
+			<label> <input type="checkbox" name="fileNames"
+				value="<%=h.getFileName()%>"> <%=h.getFileName()%>
+			</label><br>
+			<%
+			}
+			}
+			%>
+			<button class="btn" type="submit">ダウンロード</button>
+		</form>
 
-	<script>
+		<script>
 		const taList = {}; // タウンアバターのリスト
 		const yearMonthList = [];
 		<c:forEach var="avatar" items="${avatarList}">
@@ -101,9 +110,9 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 					+ "検索ボックスで日付をフィルタし、「街を見る」で表示、「ダウンロード」で保存できます。");
 		}
 	</script>
-	<script src="<c:url value='/js/history.js' />"></script>
-	<script src="<c:url value='/js/test.js' />"></script>
-	<script src="<c:url value='/js/common.js' />"></script>
+		<script src="<c:url value='/js/history.js' />"></script>
+		<script src="<c:url value='/js/test.js' />"></script>
+		<script src="<c:url value='/js/common.js' />"></script>
 </body>
 
 </html>
