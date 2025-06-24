@@ -33,7 +33,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 	<!-- ④ 街を見るボタン -->
 	<form method="POST" enctype="multipart/form-data"
 		action="<c:url value='/HistoryServlet?mode=upload' />">
-		<input type="file" name="file" /><br /> <input type="submit"
+		<input type="file" name="file" multiple /><br /> <input type="submit"
 			value="アップロード" />
 	</form>
 	<!--  <form action="HistoryServlet" method="post" style="display: inline;">
