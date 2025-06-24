@@ -265,145 +265,135 @@ public class HistoryServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		HttpSession session = req.getSession();
-		String userIdSession;
-		String uploadFolderPath;
-		String historyFolderPath;
+	    HttpSession session = req.getSession();
+	    String userIdSession;
+	    String uploadFolderPath;
+	    String historyFolderPath;
 
-		if(this.test){
-			session.setAttribute("user_id", testUserId);
-			uploadFolderPath = "C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded";
-		} else {
-			uploadFolderPath = req.getContextPath() + "/source/src/main/webapp/WEB-INF/uploaded";
-		}
+	    if (this.test) {
+	        session.setAttribute("user_id", testUserId);
+	        uploadFolderPath = "C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded";
+	    } else {
+	        uploadFolderPath = req.getServletContext().getRealPath("/WEB-INF/uploaded");
+	    }
 
-		userIdSession = (String) session.getAttribute("user_id");
+	    userIdSession = (String) session.getAttribute("user_id");
 
-		if (this.test) {
-			historyFolderPath = "c:/plusdojo2025/D2/source/src/main/webapp/history/" + userIdSession;
-		} else {
-			historyFolderPath = req.getContextPath() + "/source/src/main/webapp/history/" + userIdSession;
-		}
+	    if (this.test) {
+	        historyFolderPath = "C:/plusdojo2025/D2/source/src/main/webapp/history/" + userIdSession;
+	    } else {
+	        historyFolderPath = req.getServletContext().getRealPath("/history/" + userIdSession);
+	    }
 
-		// もしupdateフォルダーがなかったら作成
-		File uploadFolder = new File(uploadFolderPath);
-		if (!uploadFolder.exists()) {
-			if (uploadFolder.mkdirs()) {
-				System.out.println("アップロードフォルダが作成されました: " + uploadFolderPath);
-			} else {
-				System.out.println("アップロードフォルダの作成に失敗しました。");
-			}
-		}
+	    // アップロードフォルダがなければ作成
+	    File uploadFolder = new File(uploadFolderPath);
+	    if (!uploadFolder.exists()) {
+	        uploadFolder.mkdirs();
+	    }
 
-		if (req.getParameter("mode").equals("download")) {
-			// JSPから送信されたファイル名を取得（例: history/kazutoshi_t/2024-2.txt）
-			String fileName = req.getParameter("fileName");
+	    // ---- ダウンロード処理（複数ZIP） ----
+	    if ("download".equals(req.getParameter("mode"))) {
+	        String[] fileNames = req.getParameterValues("fileNames");
 
-			if (fileName == null || fileName.isEmpty()) {
-				resp.getWriter().write("ファイルが選択されていません。");
-				return;
-			}
+	        if (fileNames == null || fileNames.length == 0) {
+	            resp.getWriter().write("ファイルが選択されていません。");
+	            return;
+	        }
 
-			// 実際のファイルパス（webappフォルダの中を指す）
-			String filePath = historyFolderPath + "/" + fileName;
-			File file = new File(filePath);
+	        resp.setContentType("application/zip");
+	        resp.setHeader("Content-Disposition", "attachment; filename=\"history_files.zip\"");
 
-			if (!file.exists()) {
-				resp.getWriter().write("指定されたファイルが存在しません: " + fileName);
-				return;
-			}
+	        try (BufferedOutputStream out = new BufferedOutputStream(resp.getOutputStream());
+	             java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(out)) {
 
-			// ファイルをレスポンスとして返す（ダウンロード）
-			resp.setContentType("application/octet-stream");
-			resp.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+	            for (String fileName : fileNames) {
+	                if (fileName == null || fileName.trim().isEmpty()) continue;
 
-			try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-					BufferedOutputStream out = new BufferedOutputStream(resp.getOutputStream())) {
+	                File file = new File(historyFolderPath, fileName.trim());
+	                if (!file.exists()) {
+	                    System.out.println("存在しないファイルをスキップ: " + file.getName());
+	                    continue;
+	                }
 
-				byte[] buffer = new byte[4096];
-				int bytesRead;
-				while ((bytesRead = in.read(buffer)) != -1) {
-					out.write(buffer, 0, bytesRead);
-				}
-			}
-			
-		} else if (req.getParameter("mode").equals("upload")) {
-			List<TownAvatarElements> avatarList = new ArrayList<>();
-			for (Part part : req.getParts()) {
-				if (!"file".equals(part.getName()) || part.getSize() == 0) {
-					continue; // ファイルパート以外や空のファイルはスキップ
-				}
-				String name = this.getFileName(part);
-				part.write("/" + name);
-				try {
-					// 1.ファイルのパスを指定する
-					File file = new File(uploadFolderPath + "/" + name);
+	                try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
+	                    java.util.zip.ZipEntry entry = new java.util.zip.ZipEntry(file.getName());
+	                    zos.putNextEntry(entry);
 
-					// 2.ファイルが存在しない場合に例外が発生するので確認する
-					if (!file.exists()) {
-						System.out.print("ファイルが存在しません");
-						return;
-					}
-					// 3. BufferedReaderクラスのreadLineメソッドを使って1行ずつ読み込み、データを保持する。
-					FileReader fileReader = new FileReader(file);
-					BufferedReader bufferedReader = new BufferedReader(fileReader);
-					String data = bufferedReader.readLine();
+	                    byte[] buffer = new byte[4096];
+	                    int bytesRead;
+	                    while ((bytesRead = in.read(buffer)) != -1) {
+	                        zos.write(buffer, 0, bytesRead);
+	                    }
+	                    zos.closeEntry();
+	                }
+	            }
 
-					String userId = data.split(",")[0];
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            resp.getWriter().write("ZIP作成中にエラーが発生しました。");
+	        }
 
-					String yearTemp = data.split(",")[1];
-					int year = Integer.parseInt(yearTemp);
+	        return; // ダウンロード完了後に他の処理をしない
+	    }
 
-					String monthTemp = data.split(",")[2];
-					int month = Integer.parseInt(monthTemp);
+	    // ---- アップロード処理 ----
+	    if ("upload".equals(req.getParameter("mode"))) {
+	        List<TownAvatarElements> avatarList = new ArrayList<>();
 
-					String calorieConsuTemp = data.split(",")[3];
-					int calorieConsu = Integer.parseInt(calorieConsuTemp);
+	        for (Part part : req.getParts()) {
+	            if (!"file".equals(part.getName()) || part.getSize() == 0) {
+	                continue;
+	            }
 
-					String nosmokeTemp = data.split(",")[4];
-					int nosmoke = Integer.parseInt(nosmokeTemp);
+	            String fileName = getFileName(part);
+	            part.write(fileName); // location に保存される
 
-					String alcoholConsuTemp = data.split(",")[5];
-					int alcoholConsu = Integer.parseInt(alcoholConsuTemp);
+	            File file = new File(uploadFolderPath + "/" + fileName);
+	            if (!file.exists()) continue;
 
-					String calorieIntakeTemp = data.split(",")[6];
-					int calorieIntake = Integer.parseInt(calorieIntakeTemp);
+	            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+	                String data = reader.readLine();
+	                if (data == null) continue;
 
-					String sleeptimeTemp = data.split(",")[7];
-					int sleeptime = Integer.parseInt(sleeptimeTemp);
+	                String[] parts = data.split(",");
+	                String userId = parts[0];
+	                int year = Integer.parseInt(parts[1]);
+	                int month = Integer.parseInt(parts[2]);
+	                int calCon = Integer.parseInt(parts[3]);
+	                int nosmoke = Integer.parseInt(parts[4]);
+	                int alcohol = Integer.parseInt(parts[5]);
+	                int calIntake = Integer.parseInt(parts[6]);
+	                int sleep = Integer.parseInt(parts[7]);
 
-					Point point = new Point(userId, year, month, calorieConsu, nosmoke, alcoholConsu, calorieIntake,
-							sleeptime);
-					ImageAllDAO imageAllDAO = new ImageAllDAO();
-					TownAvatarElements avatar = imageAllDAO.select(
-							point.getMonth(),
-							point.getYear(),
-							point.getTotal_calorie_intake(),
-							point.getTotal_alcohol_consumed(), 
-							point.getTotal_sleeptime(), 
-							point.getTotal_nosmoke(),
-							ImageDAO.getCountryOrder(point.getTotal_calorie_consumed())
-							);
-					avatarList.add(avatar);
-					// 4.最後にファイルを閉じてリソースを開放する
-					bufferedReader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			// 過去ファイルのリストを取得
-			HistoryDAO dao = new HistoryDAO();
-			List<History> hrList = dao.select("kazutoshi_t");
-			req.setAttribute("fileList", hrList);
+	                Point point = new Point(userId, year, month, calCon, nosmoke, alcohol, calIntake, sleep);
 
-			// JSPにセットしてフォワード
-			req.setAttribute("avatarList", avatarList);
-			// History。jspにフォワードする
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
-			dispatcher.forward(req, resp);
+	                ImageAllDAO imageAllDAO = new ImageAllDAO();
+	                TownAvatarElements avatar = imageAllDAO.select(
+	                    point.getMonth(),
+	                    point.getYear(),
+	                    point.getTotal_calorie_intake(),
+	                    point.getTotal_alcohol_consumed(),
+	                    point.getTotal_sleeptime(),
+	                    point.getTotal_nosmoke(),
+	                    ImageDAO.getCountryOrder(point.getTotal_calorie_consumed())
+	                );
+	                avatarList.add(avatar);
 
-		}
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+
+	        // 過去ファイルのリストを取得してセット
+	        HistoryDAO dao = new HistoryDAO();
+	        List<History> hrList = dao.select(userIdSession);
+	        req.setAttribute("fileList", hrList);
+	        req.setAttribute("avatarList", avatarList);
+
+	        // JSPへフォワード
+	        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
+	        dispatcher.forward(req, resp);
+	    }
 	}
 
 	// ヘルプはjavascriphtで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
