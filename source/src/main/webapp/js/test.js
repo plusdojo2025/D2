@@ -54,6 +54,7 @@ const drawAvatar = async (year, month) => {
 		// Load base images
 		const avatar = taList[`${year}-${month}`];;
 		const backgroundImage = await loadImage('img/background.png');
+		const defaultClothImage = await loadImage('img/cloth0.png')
 		const faceImage = await loadImage(avatar.facePath); 
 		const peopleImage = await loadImage(avatar.peoplePath);
 		const peopleNum = avatar.peopleCount;
@@ -65,15 +66,18 @@ const drawAvatar = async (year, month) => {
             clothImages[3] = await loadImage(avatar.costumePath);
         }
         else{
-			let clothNames = ["服", "靴", "帽子"];
+			let clothNames = ["cloth", "shoe", "hat"];
 			for (let i = 0; i < clothNames.length; i++) {
-				if (avatar[clothNames[i]] == "") break;
-				if (clothNames[i] == "服") {
-					clothImages[i] = await loadImage(avatar[avatar.clothPath]);
-				} else if (clothNames[i] == "靴") {
-					clothImages[i] = await loadImage(avatar[avatar.shoesPath]);
-				} else if (clothNames[i] == "帽子") {
-					clothImages[i] = await loadImage(avatar[avatar.hatPath]);
+				
+				if (clothNames[i] === "cloth") {
+					if (avatar.clothPath == "") break;
+					clothImages[i] = await loadImage(avatar.clothPath);
+				} else if (clothNames[i] === "shoe") {
+					if (avatar.shoePath == "") break;
+					clothImages[i] = await loadImage(avatar.shoePath);
+				} else if (clothNames[i] == "hat") {
+					if (avatar.hatPath == "") break;
+					clothImages[i] = await loadImage(avatar.hatPath);
 				}
 			}
         }
@@ -101,6 +105,7 @@ const drawAvatar = async (year, month) => {
 			ctx.drawImage(clothImages[3], x, y, clothImages[3].width * scaleCloth4, clothImages[3].height * scaleCloth4);
 			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
 		} else {
+			ctx.drawImage(defaultClothImage, x, y, defaultClothImage.width * scaleAvatar, defaultClothImage.height * scaleAvatar);
 			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
 			for (let i = 0; i < clothImages.length; i++) {
 				ctx.drawImage(clothImages[i], x + relClothPos[i][0], y + relClothPos[i][1], clothImages[i].width * relClothPos[i][2], clothImages[i].height * relClothPos[i][2]);
@@ -156,6 +161,7 @@ const drawAvatar2 = async (year, month) => {
 		// Load base images
 		const avatar = taList[`${year}-${month}`];;
 		const backgroundImage = await loadImage('img/background.png');
+		const defaultClothImage = await loadImage('img/cloth0.png')
 		const faceImage = await loadImage(avatar.facePath); 
 		const peopleImage = await loadImage(avatar.peoplePath);
 		const peopleNum = avatar.peopleCount;
@@ -167,15 +173,18 @@ const drawAvatar2 = async (year, month) => {
             clothImages[3] = await loadImage(avatar.costumePath);
         }
         else{
-			let clothNames = ["服", "靴", "帽子"];
+			let clothNames = ["cloth", "shoe", "hat"];
 			for (let i = 0; i < clothNames.length; i++) {
-				if (avatar[clothNames[i]] == "") break;
-				if (clothNames[i] == "服") {
-					clothImages[i] = await loadImage(avatar[avatar.clothPath]);
-				} else if (clothNames[i] == "靴") {
-					clothImages[i] = await loadImage(avatar[avatar.shoesPath]);
-				} else if (clothNames[i] == "帽子") {
-					clothImages[i] = await loadImage(avatar[avatar.hatPath]);
+				
+				if (clothNames[i] === "cloth") {
+					if (avatar.clothPath == "") break;
+					clothImages[i] = await loadImage(avatar.clothPath);
+				} else if (clothNames[i] === "shoe") {
+					if (avatar.shoePath == "") break;
+					clothImages[i] = await loadImage(avatar.shoePath);
+				} else if (clothNames[i] == "hat") {
+					if (avatar.hatPath == "") break;
+					clothImages[i] = await loadImage(avatar.hatPath);
 				}
 			}
         }
@@ -203,6 +212,7 @@ const drawAvatar2 = async (year, month) => {
 			ctx.drawImage(clothImages[3], x, y, clothImages[3].width * scaleCloth4, clothImages[3].height * scaleCloth4);
 			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
 		} else {
+			ctx.drawImage(defaultClothImage, x, y, defaultClothImage.width * scaleAvatar, defaultClothImage.height * scaleAvatar);
 			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
 			for (let i = 0; i < clothImages.length; i++) {
 				ctx.drawImage(clothImages[i], x + relClothPos[i][0], y + relClothPos[i][1], clothImages[i].width * relClothPos[i][2], clothImages[i].height * relClothPos[i][2]);

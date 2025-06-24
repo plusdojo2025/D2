@@ -58,6 +58,7 @@ const drawAvatar = async () => {
 
 		// Load base images
 		const backgroundImage = await loadImage('img/background.png');
+		const defaultClothImage = await loadImage('img/cloth0.png')
 		const faceImage = await loadImage(face[0].id); // Face image
 		const peopleImage = await loadImage(people[0].id); // People image
 		for (let i = 0; i < build.length; i++) {
@@ -99,6 +100,7 @@ const drawAvatar = async () => {
 			ctx.drawImage(clothImages[3], x, y, clothImages[3].width * scaleCloth4, clothImages[3].height * scaleCloth4);
 			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
 		} else {
+			ctx.drawImage(defaultClothImage, x, y, defaultClothImage.width * scaleAvatar, defaultClothImage.height * scaleAvatar);
 			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
 			for (let i = 0; i < clothImages.length; i++) {
 				ctx.drawImage(clothImages[i], x + relClothPos[i][0], y + relClothPos[i][1], clothImages[i].width * relClothPos[i][2], clothImages[i].height * relClothPos[i][2]);

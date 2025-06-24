@@ -132,7 +132,11 @@ INSERT INTO point VALUES  ("kazutoshi_t", 2024, 3, 10800, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2024, 2, 7200, 7, 300, 300, 5);
 INSERT INTO point VALUES  ("kazutoshi_t", 2024, 1, 3600, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2023, 12, 0, 7, 300, 300, 1);
-INSERT INTO point(user_id, year, month) VALUES  
+INSERT INTO point VALUES  ("kazutoshi_t", 2023, 11, 0, 7, 300, 0, 1);
+INSERT INTO point VALUES  ("kazutoshi_t", 2023, 10, 0, 7, 300, 70, 1);
+INSERT INTO point VALUES  ("kazutoshi_t", 2023, 9, 0, 7, 300, 140, 1);
+INSERT INTO point VALUES  ("kazutoshi_t", 2023, 8, 0, 7, 300, 210, 1);
+INSERT INTO point(user_id, year, month) VALUES
     -- ("kazutoshi_t", 2025, 6), 
     ("test1", 2025, 6);
 
