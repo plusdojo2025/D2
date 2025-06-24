@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -43,17 +44,24 @@ public class Summary extends HttpServlet {
 
     List<TownAvatarElements> avatars = new ArrayList<>();
     List<Integer> monthList = new ArrayList<>();
+    List<Integer> yearList = new ArrayList<>();
     PointDAO pointDAO = new PointDAO();
     ImageAllDAO imageAllDAO = new ImageAllDAO();
 
     Calendar cal = Calendar.getInstance();
+    int currentYear = cal.get(Calendar.YEAR);
     int currentMonth = cal.get(Calendar.MONTH); // 0〜11 (0=1月)
     req.setAttribute("currentMonth", currentMonth);
 
     // 「今月」から「11ヶ月前」へ逆順に並べる
     for (int i = 0; i <= 11; i++) {
       int m = (currentMonth - i + 12) % 12;
+     int year = currentYear;
+     if(currentMonth - i < 0) {
+    	 year--;
+     }
       monthList.add(m + 1); // 月を1〜12に変換
+      yearList.add(year);
       Point p = pointDAO.selectByUserIdMonth(userId, m + 1);
       if (p == null) avatars.add(null);
       else {
@@ -68,7 +76,11 @@ public class Summary extends HttpServlet {
         ));
       }
     }
-
+    Collections.reverse(monthList);
+    Collections.reverse(yearList);
+    Collections.reverse(avatars);
+    
+    req.setAttribute("yearList", yearList);
     req.setAttribute("monthList", monthList);
     req.setAttribute("avatars", avatars);
     req.getRequestDispatcher("/WEB-INF/jsp/summary.jsp").forward(req, res);

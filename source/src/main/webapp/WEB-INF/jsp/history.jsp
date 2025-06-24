@@ -55,22 +55,20 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 	<!-- ⑥ ファイルリスト -->
 	<div style="float: right; border: 1px solid #000; padding: 10px;">
 		<form method="post" action="<c:url value='/HistoryServlet?mode=download' />">
-			<%-- OK --%>
-			<%
-			if (fileList != null) {
-				for (History h : fileList) {
-			%>
-			<label> <input type="radio" name="fileName"
-				value="<%=h.getFileName()%>"> <%=h.getFileName()%>
-			</label><br>
-			<%
-			}
-			}
-			%>
-
-			<button class="btn" type="submit">ダウンロード</button>
-		</form>
-	</div>
+	<%
+	if (fileList != null) {
+		for (History h : fileList) {
+	%>
+	<label>
+		<input type="checkbox" name="fileNames" value="<%=h.getFileName()%>">
+		<%=h.getFileName()%>
+	</label><br>
+	<%
+		}
+	}
+	%>
+	<button class="btn" type="submit">ダウンロード</button>
+</form>
 
 	<script>
 		const taList = {}; // タウンアバターのリスト
