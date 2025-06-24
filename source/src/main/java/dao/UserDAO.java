@@ -19,7 +19,7 @@ public class UserDAO {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
 			// データベースに接続する
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/D2?"
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
 					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
 					"root", "password");
 
