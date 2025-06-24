@@ -13,10 +13,11 @@ let currentMonthIndex = 0;
 
 // 表示更新とボタン状態切り替え
 function updateDisplay() {
-  const month = monthList[currentMonthIndex];
-  monthDisplay.textContent = month + "月";
-  avatarContainer.innerHTML = ""; // 既存のアバターをクリア
   const yearMonth = yearMonthList[currentMonthIndex];
+  if (!yearMonth) return;
+  monthDisplay.textContent =  `${yearMonth.year}年 ${yearMonth.month}月`;
+  avatarContainer.innerHTML = ""; // 既存のアバターをクリア
+
   // canvas要素を作成
   const canvas = document.createElement("canvas");
   canvas.id = `canvas2`;
