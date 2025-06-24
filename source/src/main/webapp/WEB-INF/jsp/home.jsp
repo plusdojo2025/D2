@@ -36,6 +36,8 @@ window.onload = function () {
     <nav>
         <a href="HealthRecordServlet?date=<%= currentDateStr %>">健康記録登録</a>
         <a href="CalendarServlet?year=<%= currentYear %>&month=<%= currentMonth %>">カレンダー</a>
+        <a href="Summary">サマリー</a>
+        <a href="HistoryServlet">過去のファイル</a>
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </nav>
 </header>
@@ -65,14 +67,14 @@ window.onload = function () {
     <form id="targetForm" action="${pageContext.request.contextPath}/HomeServlet" method="POST" onsubmit="return validateForm()">
     <h3>目標値</h3>
     <label>目標体重 (kg): <input type="number" step="0.1" name="target_weight" min="0" required></label><br>
-    <label>純アルコール摂取量 (g/日): <input type="number" step="0.1" name="pure_alcohol_consumed" min="0" required></label><br>
+    <label>純アルコール摂取量 (g/日): <input type="number" step="1" name="pure_alcohol_consumed" min="0" required></label><br>
     <label>睡眠時間 (時間): <input type="number" step="0.5" name="sleep_time" min="0" required></label><br>
-    <label>カロリー摂取量 (kcal/日): <input type="number" step="1" name="calorie_intake" min="0" required></label><br>
+    <label>カロリー摂取量 (kcal/日): <input type="number" step="100" name="calorie_intake" min="0" required></label><br>
 
     <h3>プロフィール</h3>
     <label>体重 (kg): <input type="number" step="0.1" name="weight" min="0" required></label><br>
     <label>身長 (cm): <input type="number" step="0.1" name="height" min="0" required></label><br>
-    <label>年齢: <input type="number" name="age" min="0" required></label><br>
+    <label>年齢: <input type="number" name="age" min="0" max="120" required></label><br>
     <label>活動レベル (1~5): <input type="number" name="active_level_id" min="1" max="5" required></label><br>
 
     性別:
