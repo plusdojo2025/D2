@@ -113,7 +113,7 @@ CREATE TABLE point(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
--- INSERT INTO point VALUES  ("kazutoshi_t", 2025, 6, 7200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("kazutoshi_t", 2025, 6, 7200, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 5, 5000, 7, 300, 300, 3);
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 4, 57600, 7, 300, 300, 1);
 INSERT INTO point VALUES  ("kazutoshi_t", 2025, 3, 54000, 7, 300, 300, 2);
@@ -133,7 +133,7 @@ INSERT INTO point VALUES  ("kazutoshi_t", 2024, 2, 7200, 7, 300, 300, 5);
 INSERT INTO point VALUES  ("kazutoshi_t", 2024, 1, 3600, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2023, 12, 0, 7, 300, 300, 1);
 INSERT INTO point(user_id, year, month) VALUES  
-    ("kazutoshi_t", 2025, 6), 
+    -- ("kazutoshi_t", 2025, 6), 
     ("test1", 2025, 6);
 
 SELECT * FROM point;

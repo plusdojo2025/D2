@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,8 +24,9 @@ import dto.TownAvatarElements;
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		// ここからコピー-------------------------------------------
 		// 同じようにtest.jspにもコピー項目がある
 //		List<String> imgPathSetBuild = new ArrayList<String>();
@@ -35,18 +38,18 @@ public class TestServlet extends HttpServlet {
 //		imgPathSetCloth.add("img/cloth1.png");
 //		imgPathSetCloth.add("img/cloth2.png");
 //		imgPathSetCloth.add("img/cloth3.png");
-		// imgPathSetCloth.add("img/cloth4_jp.png"); //　コメント外すと民族衣装に切り替わる
-	
+		// imgPathSetCloth.add("img/cloth4_jp.png"); // コメント外すと民族衣装に切り替わる
+
 //		TownAvatarElements elementsTownAvatar = new TownAvatarElements(
 //				imgPathSetBuild,
 //				imgPathSetCloth,
 //				"img/face1.png", // face2, face3, face4, face5 選べる
 //				"img/people_jp.png",
 //				7);
-		
+
 //		request.setAttribute("elmsImage", elementsTownAvatar);
 		// ここまでコピー-------------------------------------------
-		
+
 		// 健康記録のカレンダー表示のテスト-------------------
 //		HealthRecordDAO HRDao = new HealthRecordDAO();
 //		List<HealthRecord> hrList = HRDao.select("kazutoshi_t", 6);
@@ -56,22 +59,24 @@ public class TestServlet extends HttpServlet {
 
 		// 街並み表示のテスト-----------------------------
 		PointDAO pointDAO = new PointDAO();
-		Point point = pointDAO.selectByUserIdMonth("kazutoshi_t", 5);
-		ImageAllDAO imageAllDAO = new ImageAllDAO();		
-		TownAvatarElements avatar = imageAllDAO.select(
-				point.getYear(),
-				point.getMonth(),
-				point.getTotal_calorie_intake(), 
-				point.getTotal_alcohol_consumed(), 
-				point.getTotal_sleeptime(), 
-				point.getTotal_nosmoke(), 
-				ImageDAO.getCountryOrder(point.getTotal_calorie_consumed()));
-
-		// JSPにセットしてフォワード
-		request.setAttribute("avatar", avatar);
 		// -------------------------------------------
-		
-		
+
+		List<TownAvatarElements> avatars = new ArrayList<>();
+		List<Point> p = pointDAO.selectByUserId("kazutoshi_t");
+		for (Point point : p) {
+			if (point == null) {
+				avatars.add(null);
+			} else {
+				ImageAllDAO imageAllDAO = new ImageAllDAO();
+				avatars.add(imageAllDAO.select(point.getYear(), point.getMonth(), point.getTotal_calorie_intake(),
+						point.getTotal_alcohol_consumed(), point.getTotal_sleeptime(), point.getTotal_nosmoke(),
+						ImageDAO.getCountryOrder(point.getTotal_calorie_consumed())));
+			}
+
+			
+		}
+		request.setAttribute("avatars", avatars);
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/test.jsp");
 		dispatcher.forward(request, response);
 	}
