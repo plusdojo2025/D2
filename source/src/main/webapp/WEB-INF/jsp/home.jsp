@@ -22,7 +22,6 @@ window.onload = function () {
 </script>
 <script src="<c:url value='/js/targetvalueform.js' />"></script>
 <script src="<c:url value='/js/logout.js' />"></script>
-<script src="<c:url value='/js/home.js' />"></script>
 <script src="<c:url value='/js/common.js' />"></script>
 
 <link rel="stylesheet" href="<c:url value='/css/home.css'/>">

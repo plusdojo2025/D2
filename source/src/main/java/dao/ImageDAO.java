@@ -20,7 +20,7 @@ public class ImageDAO {
 	    static public int getCountryOrder(int totalCalorieConsumed) {
 	        int countryOrder = 0;
 
-	        countryOrder  = totalCalorieConsumed / 3600;
+	        countryOrder  = totalCalorieConsumed / 3600 + 1;
 	        
 	        return countryOrder;
 	    }

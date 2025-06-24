@@ -16,7 +16,7 @@
 <body>
 
 
-	<c:forEach var="i" begin="0" end="16" varStatus="status">
+	<c:forEach var="i" begin="0" end="24" varStatus="status">
 		<c:set var="avatar" value="${avatars[i]}" />
         <c:set var="width" value="500" />
         <canvas class="imageCanvas" id="canvas_${avatar.year}_${avatar.month}" width="1627" height="1021" style="width:${width}px;"></canvas>
