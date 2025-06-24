@@ -432,11 +432,13 @@ CREATE TABLE history(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
--- INSERT INTO history VALUES
---     ("kazutoshi_t", 2023, 2, "history/kazutoshi_t/2024-2.txt"),
---     ("kazutoshi_t", 2023, 3, "history/kazutoshi_t/2024-3.txt"),
---     ("kazutoshi_t", 2023, 4, "history/kazutoshi_t/2024-4.txt"),
---     ("kazutoshi_t", 2023, 5, "history/kazutoshi_t/2024-5.txt"),
---     ("kazutoshi_t", 2023, 6, "history/kazutoshi_t/2024-6.txt");
+INSERT INTO history VALUES
+    ("kazutoshi_t", 2023, 12, "2023-12.txt"),
+    ("kazutoshi_t", 2024, 1, "2024-1.txt"),
+    ("kazutoshi_t", 2024, 2, "2024-2.txt"),
+    ("kazutoshi_t", 2024, 3, "2024-3.txt"),
+    ("kazutoshi_t", 2024, 4, "2024-4.txt"),
+    ("kazutoshi_t", 2024, 5, "2024-5.txt"),
+    ("kazutoshi_t", 2024, 6, "2024-6.txt");
 
 SELECT * FROM history;

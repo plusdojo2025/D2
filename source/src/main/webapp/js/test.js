@@ -1,72 +1,215 @@
-
-
-/*
-街並みやアバターをjspファイル内のcanvasタグで表示する
-	TODO：一つのcanvasにのみ対応しているため、サマリーではこのファイルは使えない
-*/
-
+// avatar.js
 "use strict"
 
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
-
-var images = {};
-
-const build = document.getElementsByClassName("imgBuild");
-const cloth = document.getElementsByClassName("imgCloth");
-const face = document.getElementById("imgFace");
-const people = document.getElementById("imgPeople");
-const peopleNum = document.getElementById("peopleNum").value;
-
-drawTownAvatar();
+// Get the canvas and context
+const canvasList = document.getElementsByClassName('imageCanvas');
 
 
-// ----------------------------------------------------------
-function drawTownAvatar() {
-	const x = 400; // アバターの位置
-	const y = 400; // アバターの位置
+// Load images for layering
+const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+};
 
-	const relClothPos = [ // 衣服の相対位置
-		[-120, 150], // 服
-		[-100, 375], // 靴
-		[-100, -200] // 帽子
-	];
+// Draw images on the canvas
+const drawAvatar = async (year, month) => {
+	const buildImages = [];
+	const clothImages = [];
+	const canvas = canvasList[yearMonthList.findIndex(item => item.year === year && item.month === month)];
+	const ctx = canvas.getContext('2d');
+	try {
+		const x = 0; // アバターの位置
+		const y = 0; // アバターの位置
+		const x_people = 400; // 周りの人の位置
+		const y_people = 400; // 周りの人の位置
+		const scaleAvatar = 1.0; // アバターの大きさ
+		const scaleCloth4 = 1.0; //　民族衣装の大きさ
 
-	const relBuildPos = [ // 建物の相対位置
-		[-400, -400], // 建物1
-		[400, 400], // 建物2
-		[400, -300] // 建物 3
-	]
+		const relClothPos = [ // 衣服の相対位置dx,dy, スケールs 
+			[0, 0, 1.0], // 服
+			[0, 0, 1.0], // 靴
+			[0, 0, 1.0] // 帽子
+		];
 
-	const relPeoplePos = [ // 周囲の人物の相対位置
-		[-400, 400], // 1人目
-		[400, 0], // 2人目
-		[-300, -100], // 3人目
-		[500, 400], // 4人目
-		[400, -300], // 5人目
-		[100, 500], // 6人目
-		[-100, -500] // 7人目
-	];
+		const relBuildPos = [ // 建物の相対位置dx,dy, スケールs 
+			[0, 0, 1.0], // 建物1
+			[0, 0, 1.0], // 建物2
+			[0, 0, 1.0] // 建物 3
+		];
 
-	// アバターの描画
-	if (cloth.length == 4) {
-		ctx.drawImage(cloth[3], x, y);
-	} else {
-		ctx.drawImage(face, x, y);
+		const relPeoplePos = [ // 周囲の人物の相対位置dx,dy, スケールs 
+			[-400, 400, 0.6], // 1人目
+			[400, 0, 0.6], // 2人目
+			[-300, -100, 0.6], // 3人目
+			[500, 400, 0.6], // 4人目
+			[700, -300, 0.6], // 5人目
+			[100, 350, 0.6], // 6人目
+			[-100, -400, 0.5] // 7人目
+		];
 
-		for (let i = 0; i < cloth.length; i++) {
-			ctx.drawImage(cloth[i], x + relClothPos[i][0], y + relClothPos[i][1]);
+		// Load base images
+		const avatar = taList[`${year}-${month}`];;
+		const backgroundImage = await loadImage('img/background.png');
+		const faceImage = await loadImage(avatar.facePath); 
+		const peopleImage = await loadImage(avatar.peoplePath);
+		const peopleNum = avatar.peopleCount;
+		for (let i = 0; i < avatar.buildPaths.length; i++) {
+			buildImages[i] = await loadImage(avatar.buildPaths[i]);
 		}
-	}
 
-	// 建物の描画
-	for (let i = 0; i < build.length; i++) {
-		ctx.drawImage(build[i], x + relBuildPos[i][0], y + relBuildPos[i][1]);
-	}
+		if(avatar.costumePath != ""){
+            clothImages[3] = await loadImage(avatar.costumePath);
+        }
+        else{
+			let clothNames = ["服", "靴", "帽子"];
+			for (let i = 0; i < clothNames.length; i++) {
+				if (avatar[clothNames[i]] == "") break;
+				if (clothNames[i] == "服") {
+					clothImages[i] = await loadImage(avatar[avatar.clothPath]);
+				} else if (clothNames[i] == "靴") {
+					clothImages[i] = await loadImage(avatar[avatar.shoesPath]);
+				} else if (clothNames[i] == "帽子") {
+					clothImages[i] = await loadImage(avatar[avatar.hatPath]);
+				}
+			}
+        }
 
-	// 周囲の人物の描写;
-	for (let i = 0; i < peopleNum; i++) {		
-		ctx.drawImage(people, x + relPeoplePos[i][0], y + relPeoplePos[i][1]);
+
+		// Clear canvas
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		// Draw layers in order
+		ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+		// Draw buildings
+		for (let i = 0; i < buildImages.length; i++) {
+			ctx.drawImage(buildImages[i], x + relBuildPos[i][0], y + relBuildPos[i][1],
+				buildImages[i].width * relBuildPos[i][2], buildImages[i].height * relBuildPos[i][2]
+			);
+		}
+		// Draw surrounding people
+		for (let i = 0; i < peopleNum; i++) {
+			ctx.drawImage(peopleImage, x_people + relPeoplePos[i][0], y_people + relPeoplePos[i][1],
+				peopleImage.width * relPeoplePos[i][2], peopleImage.height * relPeoplePos[i][2]
+			);
+		}
+		// cloth and face
+		if (clothImages.length === 4) {
+			ctx.drawImage(clothImages[3], x, y, clothImages[3].width * scaleCloth4, clothImages[3].height * scaleCloth4);
+			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
+		} else {
+			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
+			for (let i = 0; i < clothImages.length; i++) {
+				ctx.drawImage(clothImages[i], x + relClothPos[i][0], y + relClothPos[i][1], clothImages[i].width * relClothPos[i][2], clothImages[i].height * relClothPos[i][2]);
+			}
+		}
+
+	} catch (error) {
+		console.error('Error loading images:', error);
 	}
 };
 
+// Initialize the avatar creation
+yearMonthList.forEach(({ year, month }) => {
+	drawAvatar(year, month);
+});
+
+// Draw images on the canvas
+const drawAvatar2 = async (year, month) => {
+	const buildImages = [];
+	const clothImages = [];
+	const canvas = document.getElementById('canvas2');
+	const ctx = canvas.getContext('2d');
+	try {
+		const x = 0; // アバターの位置
+		const y = 0; // アバターの位置
+		const x_people = 400; // 周りの人の位置
+		const y_people = 400; // 周りの人の位置
+		const scaleAvatar = 1.0; // アバターの大きさ
+		const scaleCloth4 = 1.0; //　民族衣装の大きさ
+
+		const relClothPos = [ // 衣服の相対位置dx,dy, スケールs 
+			[0, 0, 1.0], // 服
+			[0, 0, 1.0], // 靴
+			[0, 0, 1.0] // 帽子
+		];
+
+		const relBuildPos = [ // 建物の相対位置dx,dy, スケールs 
+			[0, 0, 1.0], // 建物1
+			[0, 0, 1.0], // 建物2
+			[0, 0, 1.0] // 建物 3
+		];
+
+		const relPeoplePos = [ // 周囲の人物の相対位置dx,dy, スケールs 
+			[-400, 400, 0.6], // 1人目
+			[400, 0, 0.6], // 2人目
+			[-300, -100, 0.6], // 3人目
+			[500, 400, 0.6], // 4人目
+			[700, -300, 0.6], // 5人目
+			[100, 350, 0.6], // 6人目
+			[-100, -400, 0.5] // 7人目
+		];
+
+		// Load base images
+		const avatar = taList[`${year}-${month}`];;
+		const backgroundImage = await loadImage('img/background.png');
+		const faceImage = await loadImage(avatar.facePath); 
+		const peopleImage = await loadImage(avatar.peoplePath);
+		const peopleNum = avatar.peopleCount;
+		for (let i = 0; i < avatar.buildPaths.length; i++) {
+			buildImages[i] = await loadImage(avatar.buildPaths[i]);
+		}
+
+		if(avatar.costumePath != ""){
+            clothImages[3] = await loadImage(avatar.costumePath);
+        }
+        else{
+			let clothNames = ["服", "靴", "帽子"];
+			for (let i = 0; i < clothNames.length; i++) {
+				if (avatar[clothNames[i]] == "") break;
+				if (clothNames[i] == "服") {
+					clothImages[i] = await loadImage(avatar[avatar.clothPath]);
+				} else if (clothNames[i] == "靴") {
+					clothImages[i] = await loadImage(avatar[avatar.shoesPath]);
+				} else if (clothNames[i] == "帽子") {
+					clothImages[i] = await loadImage(avatar[avatar.hatPath]);
+				}
+			}
+        }
+
+
+		// Clear canvas
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		// Draw layers in order
+		ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+		// Draw buildings
+		for (let i = 0; i < buildImages.length; i++) {
+			ctx.drawImage(buildImages[i], x + relBuildPos[i][0], y + relBuildPos[i][1],
+				buildImages[i].width * relBuildPos[i][2], buildImages[i].height * relBuildPos[i][2]
+			);
+		}
+		// Draw surrounding people
+		for (let i = 0; i < peopleNum; i++) {
+			ctx.drawImage(peopleImage, x_people + relPeoplePos[i][0], y_people + relPeoplePos[i][1],
+				peopleImage.width * relPeoplePos[i][2], peopleImage.height * relPeoplePos[i][2]
+			);
+		}
+		// cloth and face
+		if (clothImages.length === 4) {
+			ctx.drawImage(clothImages[3], x, y, clothImages[3].width * scaleCloth4, clothImages[3].height * scaleCloth4);
+			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
+		} else {
+			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
+			for (let i = 0; i < clothImages.length; i++) {
+				ctx.drawImage(clothImages[i], x + relClothPos[i][0], y + relClothPos[i][1], clothImages[i].width * relClothPos[i][2], clothImages[i].height * relClothPos[i][2]);
+			}
+		}
+
+	} catch (error) {
+		console.error('Error loading images:', error);
+	}
+};

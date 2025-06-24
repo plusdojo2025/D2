@@ -70,6 +70,8 @@ public class HomeServlet extends HttpServlet {
 			}
 			Point point = pointDAO.selectByUserIdMonth(userId, currentMonth);
 
+			int year = 0;
+			int month = 0;
 			int caloriePoint = 0;
 			int alcoholPoint = 0;
 			int sleepPoint = 0;
@@ -77,6 +79,8 @@ public class HomeServlet extends HttpServlet {
 			int totalCalorieConsu = 0;
 
 			if (point != null) {
+				year = point.getYear();
+				month = point.getMonth();
 			    caloriePoint = point.getTotal_calorie_intake();
 			    alcoholPoint = point.getTotal_alcohol_consumed();
 			    sleepPoint = point.getTotal_sleeptime();
@@ -89,7 +93,7 @@ public class HomeServlet extends HttpServlet {
 			
 			int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
 			
-			TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
+			TownAvatarElements avatar = imageAllDAO.select(year, month, caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
 					ImageDAO.getCountryOrder(point.getTotal_calorie_consumed());
 
 			// JSPにセットしてフォワード

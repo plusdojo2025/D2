@@ -19,7 +19,7 @@ public class ImageAllDAO {
      * @return TownAvatarElements まとめた画像群
      */
     
-    public TownAvatarElements select(int caloriePoint, int alcoholPoint, int sleepPoint, int noSmokeAchievementPoint, int countryOrder) {
+    public TownAvatarElements select(int year, int month, int caloriePoint, int alcoholPoint, int sleepPoint, int noSmokeAchievementPoint, int countryOrder) {
         TownAvatarElements avatar = new TownAvatarElements();
 
         // 食事ポイントから服のステージ判定
@@ -69,6 +69,8 @@ public class ImageAllDAO {
         Image peopleImage = imageDAO.getPeopleImage(countryOrder);
 
         // セット
+        avatar.setYear(year);
+        avatar.setMonth(month);
         avatar.setCloth(cloth);
         avatar.setShoe(shoe);
         avatar.setHat(hat);

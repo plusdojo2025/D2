@@ -37,7 +37,7 @@ public class Summary extends HttpServlet {
     
     String userId = (String) session.getAttribute("user_id");
     if (userId == null) {
-      res.sendRedirect("LoginServlet");
+      res.sendRedirect(req.getContextPath() + "/LoginServlet");
       return;
     }
 
@@ -58,6 +58,8 @@ public class Summary extends HttpServlet {
       if (p == null) avatars.add(null);
       else {
         avatars.add(imageAllDAO.select(
+		  p.getYear(),
+		  p.getMonth(),
           p.getTotal_calorie_intake(),
           p.getTotal_alcohol_consumed(),
           p.getTotal_sleeptime(),

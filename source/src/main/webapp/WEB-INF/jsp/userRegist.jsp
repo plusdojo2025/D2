@@ -1,21 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>ユーザー登録</title>
-
-<!-- JavaScript読み込み -->
-<script src="js/UserRegist.js"></script>
+	<meta charset="UTF-8">
+	<title>ユーザー登録</title>
+	<link rel="stylesheet" href="<c:url value='/css/userRegist.css'/>">
+	<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
-<body>
 
+<body>
 	<hr>
 
 	<h2>ユーザー登録フォーム</h2>
 
-	<form action="UserRegistServlet" method="post" onsubmit="return validateUserRegistForm();">
+	<form action="<c:url value='/UserRegistServlet' />" method="post" onsubmit="return validateUserRegistForm();">
 		<label for="id">ID：</label> 
 		<input type="text" id="id" name="id"><br><br>
 
@@ -29,7 +30,10 @@
 	</form>
 
 	<br>
-	<a href="LoginServlet">ログインページに戻る</a>
+	<a href="<c:url value='/LoginServlet' />">ログインページに戻る</a>
+	
+	<script src="<c:url value='/js/userRegist.js' />"></script>
+	<script src="<c:url value='/js/common.js' />"></script>
 
 </body>
 </html>

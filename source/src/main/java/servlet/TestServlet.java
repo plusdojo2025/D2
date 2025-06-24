@@ -59,6 +59,8 @@ public class TestServlet extends HttpServlet {
 		Point point = pointDAO.selectByUserIdMonth("kazutoshi_t", 5);
 		ImageAllDAO imageAllDAO = new ImageAllDAO();		
 		TownAvatarElements avatar = imageAllDAO.select(
+				point.getYear(),
+				point.getMonth(),
 				point.getTotal_calorie_intake(), 
 				point.getTotal_alcohol_consumed(), 
 				point.getTotal_sleeptime(), 

@@ -39,16 +39,36 @@ import dto.TownAvatarElements;
 @WebServlet("/HistoryServlet")
 @MultipartConfig(location = "C:\\plusdojo2025\\D2\\source\\src\\main\\webapp\\WEB-INF\\uploaded", maxFileSize = 1048576)
 public class HistoryServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
+	private boolean test = true;
+	private String testUserId = "kazutoshi_t"; // テスト用のユーザID
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		boolean test = true;
-		String userId = "kazutoshi_t";
+
+		HttpSession session = request.getSession();
+		String userId;
+		String folderPath;
+
+		if(this.test){
+			session.setAttribute("user_id", testUserId);
+		}
+
+		if (session.getAttribute("user_id") == null) {
+			// もしもログインしていなかったらログインサーブレットにリダイレクト
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
+
+		userId = (String) session.getAttribute("user_id");
+
+		if (this.test) {
+			folderPath = "c:/plusdojo2025/D2/source/src/main/webapp/"
+					+ "history/" + userId;
+		} else {
+			folderPath = request.getContextPath() + "/source/src/main/webapp/history/" + userId;
+			}
+
 		/*
 		 * 今日の西暦と月から、12か月以上前の健康記録と報酬達成日のレコードをそれぞれのテーブルから削除する HealthRecordDAOのdelete(),
 		 * RewardDayDAOのdelete()を使用
@@ -131,18 +151,8 @@ public class HistoryServlet extends HttpServlet {
 					if (pointList.get(j).getYear() == (oldestDayYear3 + 1)
 							&& pointList.get(j).getMonth() == (oldestDayMonth3 + i)) {
 
-						String filename;
-						String folderPath;
-						if (test) {
-							folderPath = "c:/plusdojo2025/" + request.getContextPath() + "/source/src/main/webapp/"
-									+ "history/" + userId;
-							filename = (oldestDayYear3 + 1) + "-" + (oldestDayMonth3 + i) + ".txt";
-
-						} else {
-							folderPath = request.getContextPath() + "/source/src/main/webapp/" + "history/" + userId;
-							filename = (oldestDayYear3 + 1) + "-" + (oldestDayMonth3 + i) + ".txt";
-
-						}
+						String filename;						
+						filename = (oldestDayYear3 + 1) + "-" + (oldestDayMonth3 + i) + ".txt";
 						String filePath = folderPath + "/" + filename;
 						try {
 
@@ -193,17 +203,7 @@ public class HistoryServlet extends HttpServlet {
 					if (pointList.get(j).getYear() == oldestDayYear3
 							&& pointList.get(j).getMonth() == (oldestDayMonth3 + i)) {
 						String filename;
-						String folderPath;
-						if (test) {
-							folderPath = "c:/plusdojo2025/" + request.getContextPath() + "/source/src/main/webapp/"
-									+ "history/" + userId;
-							filename = (oldestDayYear3) + "-" + (oldestDayMonth3 + i) + ".txt";
-
-						} else {
-							folderPath = request.getContextPath() + "/source/src/main/webapp/" + "history/" + userId;
-							filename = (oldestDayYear3) + "-" + (oldestDayMonth3 + i) + ".txt";
-
-						}
+						filename = (oldestDayYear3) + "-" + (oldestDayMonth3 + i) + ".txt";
 						String filePath = folderPath + "/" + filename;
 						try {
 
@@ -264,15 +264,38 @@ public class HistoryServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+
 		HttpSession session = req.getSession();
+		String userIdSession;
+		String uploadFolderPath;
+		String historyFolderPath;
 
-		// セッションからuser_idを取得
-		session.setAttribute("user_id", "kazutoshi_t");
-		String userIdSession = (String) session.getAttribute("user_id");
+		if(this.test){
+			session.setAttribute("user_id", testUserId);
+			uploadFolderPath = "C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded";
+		} else {
+			uploadFolderPath = req.getContextPath() + "/source/src/main/webapp/WEB-INF/uploaded";
+		}
 
-		if (req.getParameter("mode") == "download") {
-			// ヘルプはjavascriptで表示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		userIdSession = (String) session.getAttribute("user_id");
+
+		if (this.test) {
+			historyFolderPath = "c:/plusdojo2025/D2/source/src/main/webapp/history/" + userIdSession;
+		} else {
+			historyFolderPath = req.getContextPath() + "/source/src/main/webapp/history/" + userIdSession;
+		}
+
+		// もしupdateフォルダーがなかったら作成
+		File uploadFolder = new File(uploadFolderPath);
+		if (!uploadFolder.exists()) {
+			if (uploadFolder.mkdirs()) {
+				System.out.println("アップロードフォルダが作成されました: " + uploadFolderPath);
+			} else {
+				System.out.println("アップロードフォルダの作成に失敗しました。");
+			}
+		}
+
+		if (req.getParameter("mode").equals("download")) {
 			// JSPから送信されたファイル名を取得（例: history/kazutoshi_t/2024-2.txt）
 			String fileName = req.getParameter("fileName");
 
@@ -282,7 +305,7 @@ public class HistoryServlet extends HttpServlet {
 			}
 
 			// 実際のファイルパス（webappフォルダの中を指す）
-			String filePath = getServletContext().getRealPath("history/" + userIdSession + "/" + fileName);
+			String filePath = historyFolderPath + "/" + fileName;
 			File file = new File(filePath);
 
 			if (!file.exists()) {
@@ -303,6 +326,7 @@ public class HistoryServlet extends HttpServlet {
 					out.write(buffer, 0, bytesRead);
 				}
 			}
+			
 		} else if (req.getParameter("mode").equals("upload")) {
 			List<TownAvatarElements> avatarList = new ArrayList<>();
 			for (Part part : req.getParts()) {
@@ -313,7 +337,7 @@ public class HistoryServlet extends HttpServlet {
 				part.write("/" + name);
 				try {
 					// 1.ファイルのパスを指定する
-					File file = new File("C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded/" + name);
+					File file = new File(uploadFolderPath + "/" + name);
 
 					// 2.ファイルが存在しない場合に例外が発生するので確認する
 					if (!file.exists()) {
@@ -351,9 +375,15 @@ public class HistoryServlet extends HttpServlet {
 					Point point = new Point(userId, year, month, calorieConsu, nosmoke, alcoholConsu, calorieIntake,
 							sleeptime);
 					ImageAllDAO imageAllDAO = new ImageAllDAO();
-					TownAvatarElements avatar = imageAllDAO.select(point.getTotal_calorie_intake(),
-							point.getTotal_alcohol_consumed(), point.getTotal_sleeptime(), point.getTotal_nosmoke(),
-							ImageDAO.getCountryOrder(point.getTotal_calorie_consumed()));
+					TownAvatarElements avatar = imageAllDAO.select(
+							point.getMonth(),
+							point.getYear(),
+							point.getTotal_calorie_intake(),
+							point.getTotal_alcohol_consumed(), 
+							point.getTotal_sleeptime(), 
+							point.getTotal_nosmoke(),
+							ImageDAO.getCountryOrder(point.getTotal_calorie_consumed())
+							);
 					avatarList.add(avatar);
 					// 4.最後にファイルを閉じてリソースを開放する
 					bufferedReader.close();
@@ -361,6 +391,11 @@ public class HistoryServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
+			
+			// 過去ファイルのリストを取得
+			HistoryDAO dao = new HistoryDAO();
+			List<History> hrList = dao.select("kazutoshi_t");
+			req.setAttribute("fileList", hrList);
 
 			// JSPにセットしてフォワード
 			req.setAttribute("avatarList", avatarList);

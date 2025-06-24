@@ -80,16 +80,8 @@ const drawAvatar = async () => {
 
 		// Draw layers in order
 		ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-		// cloth and face
-		if (clothImages.length === 4) {
-			ctx.drawImage(clothImages[3], x, y, clothImages[3].width * scaleCloth4, clothImages[3].height * scaleCloth4);
-			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
-		} else {
-			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
-			for (let i = 0; i < clothImages.length; i++) {
-				ctx.drawImage(clothImages[i], x + relClothPos[i][0], y + relClothPos[i][1], clothImages[i].width * relClothPos[i][2], clothImages[i].height * relClothPos[i][2]);
-			}
-		}
+		
+		
 		// Draw buildings
 		for (let i = 0; i < buildImages.length; i++) {
 			ctx.drawImage(buildImages[i], x + relBuildPos[i][0], y + relBuildPos[i][1],
@@ -102,11 +94,21 @@ const drawAvatar = async () => {
 				peopleImage.width * relPeoplePos[i][2], peopleImage.height * relPeoplePos[i][2]
 			);
 		}
+		// cloth and face
+		if (clothImages.length === 4) {
+			ctx.drawImage(clothImages[3], x, y, clothImages[3].width * scaleCloth4, clothImages[3].height * scaleCloth4);
+			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
+		} else {
+			ctx.drawImage(faceImage, x, y, faceImage.width * scaleAvatar, faceImage.height * scaleAvatar);
+			for (let i = 0; i < clothImages.length; i++) {
+				ctx.drawImage(clothImages[i], x + relClothPos[i][0], y + relClothPos[i][1], clothImages[i].width * relClothPos[i][2], clothImages[i].height * relClothPos[i][2]);
+			}
+		}
 
 	} catch (error) {
 		console.error('Error loading images:', error);
 	}
-};
+}
 
 // Initialize the avatar creation
 drawAvatar();

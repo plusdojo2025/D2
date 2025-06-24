@@ -51,7 +51,7 @@ public class HealthRecordServlet extends HttpServlet {
 
 		if (session.getAttribute("user_id") == null) {
 			// もしもログインしていなかったらログインサーブレットにリダイレクト
-			response.sendRedirect("/D2/LoginServlet");
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
 			return;
 		}
 

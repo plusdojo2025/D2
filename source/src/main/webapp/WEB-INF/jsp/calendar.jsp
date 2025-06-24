@@ -5,14 +5,15 @@
 
 <html>
 <head>
-<meta charset="UTF-8">
-<title>カレンダー</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css" />
+	<meta charset="UTF-8">
+	<title>カレンダー</title>
+	<link rel="stylesheet" href="<c:url value='/css/calendar.css'/>">
+	<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
+
 <body>
 	<!-- タイトル -->
-	<a href="HomeServlet"><h1>ケンコークラフト</h1></a>
-
+	<h1><a href="<c:url value='/HomeServlet' />">ケンコークラフト</a></h1>
 
 	<div>
 		<!-- TODO: 〇月と書かれているところをクリックすると年と月を選べるプルダウンを作成する。 -->
@@ -93,7 +94,7 @@
 	<input type="hidden" id="peopleNum" value="${avatar.peopleCount}">
 
 	<c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
-	<canvas id="imageCanvas" width="1400" height="1000" style="width:${width}px;"></canvas>
+	<canvas id="imageCanvas" width="1627" height="1021" style="width:${width}px;"></canvas>
 	<!-- --------------------------------------------------------------- -->
 	
 
@@ -411,9 +412,9 @@ data-readonly="${isReadonly ? 'true' : 'false'}"
 	</script>
 	
 	
-
-	<script src="js/calendar.js"></script>
-	<script src="js/healthRecord.js"></script>
-	<script src="js/createTownAvatar.js"></script>
+	<script src="<c:url value='/js/calendar.js' />"></script>
+	<script src="<c:url value='/js/healthRecord.js' />"></script>
+	<script src="<c:url value='/js/createTownAvatar.js' />"></script>
+	<script src="<c:url value='/js/common.js' />"></script>
 </body>
 </html>

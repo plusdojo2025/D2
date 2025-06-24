@@ -20,8 +20,13 @@ window.onload = function () {
     }
 };
 </script>
-<script src="${pageContext.request.contextPath}/js/targetvalueform.js"></script>
-<script src="${pageContext.request.contextPath}/js/logout.js"></script>
+<script src="<c:url value='/js/targetvalueform.js' />"></script>
+<script src="<c:url value='/js/logout.js' />"></script>
+<script src="<c:url value='/js/home.js' />"></script>
+<script src="<c:url value='/js/common.js' />"></script>
+
+<link rel="stylesheet" href="<c:url value='/css/home.css'/>">
+<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 
 </head>
 <body>
@@ -34,10 +39,10 @@ window.onload = function () {
     	int currentMonth = now.getMonthValue();
 	%>
     <nav>
-        <a href="HealthRecordServlet?date=<%= currentDateStr %>">健康記録登録</a>
-        <a href="CalendarServlet?year=<%= currentYear %>&month=<%= currentMonth %>">カレンダー</a>
-        <a href="Summary">サマリー</a>
-        <a href="HistoryServlet">過去のファイル</a>
+        <a href="<c:url value='/HealthRecordServlet?date=<%= currentDateStr %>' />">健康記録登録</a>
+        <a href="<c:url value='/CalendarServlet?year=<%= currentYear %>&month=<%= currentMonth %>' />">カレンダー</a>
+        <a href="<c:url value='/Summary' />">サマリー</a>
+        <a href="<c:url value='/HistoryServlet' />">過去のファイル</a>
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </nav>
 </header>
@@ -64,7 +69,7 @@ window.onload = function () {
 <div id="popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#ffffffcc; z-index:1000; padding:30px;">
     <!-- フォーム内容 -->
     <h2>今月の目標値とプロフィールを入力してください</h2>
-    <form id="targetForm" action="${pageContext.request.contextPath}/HomeServlet" method="POST" onsubmit="return validateForm()">
+    <form id="targetForm" action="<c:url value='/HomeServlet' />" method="POST" onsubmit="return validateForm()">
     <h3>目標値</h3>
     <label>目標体重 (kg): <input type="number" step="0.1" name="target_weight" min="0" required></label><br>
     <label>純アルコール摂取量 (g/日): <input type="number" step="1" name="pure_alcohol_consumed" min="0" required></label><br>
@@ -104,9 +109,9 @@ window.onload = function () {
 <!-- --------------------------------------------------------------- -->
 
 <c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
-<canvas id="imageCanvas" width="1400" height="1000" style="width:${width}px;"></canvas>
+<canvas id="imageCanvas" width="1627" height="1021" style="width:${width}px;"></canvas>
 
-<script src="js/createTownAvatar.js"></script>
+<script src="<c:url value='/js/createTownAvatar.js' />"></script>
 
 </body>
 </html>

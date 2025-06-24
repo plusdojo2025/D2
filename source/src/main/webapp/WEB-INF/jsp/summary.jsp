@@ -3,12 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>12か月サマリー</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/summary.css" />
+	<meta charset="UTF-8" />
+	<title>12か月サマリー</title>
+	<link rel="stylesheet" href="<c:url value='/css/summary.css'/>">
+	<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
 <body>
-  <h1><a href="HomeServlet">ケンコークラフト</a></h1>
+  <h1><a href="<c:url value='/HomeServlet' />">ケンコークラフト</a></h1>
   <h2>12か月サマリー</h2>
 
   <script>
@@ -25,55 +26,54 @@
       <c:set var="avatar" value="${avatars[i]}" />
       <div class="month-block">
         <h3>${monthList[i]}月</h3>
-        <c:choose>
-          <c:when test="${avatar != null}">
-            <c:forEach var="b" items="${avatar.buildings}">
-              <img src="${b.imagePath}" alt="建物" />
-            </c:forEach>
-            <c:if test="${avatar.cloth != null}"><img src="${avatar.cloth.imagePath}" alt="服" /></c:if>
-            <c:if test="${avatar.shoe != null}"><img src="${avatar.shoe.imagePath}" alt="靴" /></c:if>
-            <c:if test="${avatar.hat != null}"><img src="${avatar.hat.imagePath}" alt="帽子" /></c:if>
-            <c:if test="${avatar.costume != null}"><img src="${avatar.costume.imagePath}" alt="コスチューム" /></c:if>
-            <img src="${avatar.face.imagePath}" alt="顔" />
-            <c:forEach var="n" begin="1" end="${avatar.peopleCount}">
-              <img src="${avatar.peopleImage.imagePath}" alt="人物" />
-            </c:forEach>
-          </c:when>
-          <c:otherwise><p>データなし</p></c:otherwise>
-        </c:choose>
+        <c:set var="width" value="300" />
+        <canvas class="imageCanvas" id="canvas_${avatar.year}_${avatar.month}" width="1627" height="1021" style="width:${width}px;"></canvas>
       </div>
     </c:forEach>
   </div>
 
-  <a href="HistoryServlet">1年以上前の街並みはこちら</a>
+  <a href="<c:url value='/HistoryServlet' />">1年以上前の街並みはこちら</a>
 
   <div style="text-align:center; margin-top:40px;">
     <button id="prev-btn">← 前の月</button>
     <span id="month-display" style="margin:0 15px; font-weight:bold; font-size:24px;"></span>
     <button id="next-btn">次の月 →</button>
     <br /><br />
-    <canvas id="myCanvas" width="1000" height="800" style="border:1px solid black; margin-top:10px;"></canvas>
+
+    <!-- <c:set var="avatar" value="${avatars[i]}" />
+    <c:set var="width" value="600" />
+    <canvas class="imageCanvas" id="canvas_${avatar.year}_${avatar.month}" width="1400" height="1000" style="width:${width}px;"></canvas> -->
+    <div id="avatar-container"></div> 
   </div>
 
   <script>
-    // avatarDataList生成
-    const avatarDataList = [
-      <c:forEach var="avatar" items="${avatars}" varStatus="status">
-        {
-          month: ${monthList[status.index]},
-          face: "${avatar != null && avatar.face != null ? avatar.face.imagePath : ''}",
-          cloth: "${avatar != null && avatar.cloth != null ? avatar.cloth.imagePath : ''}",
-          shoe: "${avatar != null && avatar.shoe != null ? avatar.shoe.imagePath : ''}",
-          hat: "${avatar != null && avatar.hat != null ? avatar.hat.imagePath : ''}",
-          costume: "${avatar != null && avatar.costume != null ? avatar.costume.imagePath : ''}",
-          buildings: [<c:forEach var="b" items="${avatar.buildings}" varStatus="bs">${bs.index > 0 ? ',' : ''}"${b.imagePath}"</c:forEach>],
-          peopleImage: "${avatar != null && avatar.peopleImage != null ? avatar.peopleImage.imagePath : ''}",
-          peopleCount: ${avatar != null ? avatar.peopleCount : 0}
-        }<c:if test="${!status.last}">,</c:if>
-      </c:forEach>
-    ];
+    const taList = {}; // タウンアバターのリスト
+		const yearMonthList = [];
+		<c:forEach var="avatar" items="${avatars}">
+			if(!taList[`${avatar.year}-${avatar.month}`]) {
+				taList[`${avatar.year}-${avatar.month}`] = [];
+			}
+			taList[`${avatar.year}-${avatar.month}`] = {
+				buildPaths: [<c:forEach var="build" items="${avatar.buildings}">
+					"${build.imagePath}",</c:forEach>],
+				peopleCount: ${avatar.peopleCount},
+				peoplePath: "${avatar.peopleImage.imagePath}",
+				clothPath: "${avatar.cloth.imagePath}",
+				shoePath: "${avatar.shoe.imagePath}",
+				hatPath: "${avatar.hat.imagePath}",
+				costumePath: "${avatar.costume.imagePath}",
+				facePath: "${avatar.face.imagePath}"
+			}
+
+			yearMonthList.push({
+				year: ${avatar.year},
+				month: ${avatar.month},
+			});
+		</c:forEach>;
   </script>
 
-  <script src="${pageContext.request.contextPath}/js/summary.js"></script>
+<script src="<c:url value='/js/test.js' />"></script>
+<script src="<c:url value='/js/summary.js' />"></script>
+	<script src="<c:url value='/js/common.js' />"></script>
 </body>
 </html>

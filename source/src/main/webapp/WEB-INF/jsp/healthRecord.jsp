@@ -1,20 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<!-- css -->
-<link rel="stylesheet" type="text/css" href="css/healthRecord.css">
-
-<title>健康記録登録</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="<c:url value='/css/healthRecord.css'/>">
+	<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
+	<title>健康記録登録</title>
 </head>
+
 <body>
 
 	<div class="wrapper">
 		<!-- ヘッダー（ここから） -->
 		<h1>
-			<a href="HomeServlet">ケンコークラフト</a>
+			<a href="<c:url value='/HomeServlet' />">ケンコークラフト</a>
 		</h1>
 
 
@@ -23,7 +24,7 @@
 
 		<!-- メイン（ここから） -->
 		<h2>健康記録登録</h2>
-		<form method="POST" id="form" action="HealthRecordServlet">
+		<form method="POST" id="form" action="<c:url value='/HealthRecordServlet' />">
 
 			<label>
 				現在の体重[kg]：
@@ -151,6 +152,7 @@
 		<!-- フッター（ここまで） -->
 	</div>
 
+	<script src="<c:url value='/js/healthRecord.js' />"></script>
+	<script src="<c:url value='/js/common.js' />"></script>
 </body>
-<script src="js/healthRecord.js"></script>
 </html>

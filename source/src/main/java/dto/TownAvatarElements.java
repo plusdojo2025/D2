@@ -11,8 +11,22 @@ public class TownAvatarElements {
     private Image face;
     private Image peopleImage;
     private int peopleCount;
+    private int year;
+    private int month;
 
-    // ゲッター・セッター
+	// ゲッター・セッター
+    public int getYear() {
+    	return year;
+    }
+    public void setYear(int year) {
+    	this.year = year;
+    }
+    public int getMonth() {
+    	return month;
+    }
+    public void setMonth(int month) {
+    	this.month = month;
+    }
     public Image getCloth() { return cloth; }
     public void setCloth(Image cloth) { this.cloth = cloth; }
 

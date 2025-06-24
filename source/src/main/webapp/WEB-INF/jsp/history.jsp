@@ -8,21 +8,17 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>ケンコークラフト</title>
-
-<script>
-	function showHelp() {
-		alert("このページでは、過去ファイルのダウンロード・街並みの表示ができます。\n"
-				+ "検索ボックスで日付をフィルタし、「街を見る」で表示、「ダウンロード」で保存できます。");
-	}
-</script>
+	<meta charset="UTF-8">
+	<title>ケンコークラフト</title>
+	<link rel="stylesheet" href="<c:url value='/css/history.css'/>">
+	<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
+
 <body>
 
 	<!-- ① タイトル（ホームボタン） -->
 	<h1>
-		<a href="HomeServlet">ケンコークラフト</a>
+		<a href="<c:url value='/HomeServlet' />">ケンコークラフト</a>
 	</h1>
 
 	<!-- ② ヘルプボタン -->
@@ -36,7 +32,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 
 	<!-- ④ 街を見るボタン -->
 	<form method="POST" enctype="multipart/form-data"
-		action="HistoryServlet?mode=upload">
+		action="<c:url value='/HistoryServlet?mode=upload' />">
 		<input type="file" name="file" /><br /> <input type="submit"
 			value="アップロード" />
 	</form>
@@ -48,49 +44,17 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 	<br>
 	<br>
 	
-	<c:forEach var="build" items="${avatar.buildings}">
-			<div class="imgBuild" id="${build.imagePath}"></div>
-		</c:forEach>
-		<div class="cloth" id="${avatar.cloth.imagePath}"></div>
-		<div class="cloth" id="${avatar.shoe.imagePath}"></div>
-		<div class="cloth" id="${avatar.hat.imagePath}"></div>
-		<div class="cloth" id="${avatar.costume.imagePath}"></div>
-		<div class="imgPeople" id="${avatar.peopleImage.imagePath}"></div>
-		<div class="imgFace" id="${avatar.face.imagePath}"></div>
-		<input type="hidden" id="peopleNum" value="${avatar.peopleCount}">
-		<!-- --------------------------------------------------------------- -->
 
-		<c:set var="width" value="500" />
-		<!-- 実際に画面に表示する際の横幅[px] -->
-		<canvas id="imageCanvas" width="1400" height="1000"
-			style="width:${width}px;"></canvas>
+	<c:set var="width" value="500" />
+	<!-- 実際に画面に表示する際の横幅[px] -->
+	<c:forEach var="avatar" items="${avatarList}">
+		<canvas class="imageCanvas" id="canvas_${avatar.year}_${avatar.month}" width="1627" height="1021" style="width:${width}px;"></canvas>
+	</c:forEach>
 
-	<!-- ⑤ 表示領域 -->
-	<div>
-		<%
-		if (fileList != null) {
-			for (History h : fileList) {
-		%>
-		<div class="file-box">
-			<strong><%=h.getYear()%>の街並み</strong><br> <img
-				src="<%=h.getFileName()%>" width="100" height="100" alt="街の画像">
-
-		</div>
-		
-
-		<%
-		}
-		} else {
-		%>
-		<p>街並みはまだ表示されていません。</p>
-		<%
-		}
-		%>
-	</div>
 
 	<!-- ⑥ ファイルリスト -->
 	<div style="float: right; border: 1px solid #000; padding: 10px;">
-		<form method="post" action="HistoryServlet?mode=download">
+		<form method="post" action="<c:url value='/HistoryServlet?mode=download' />">
 			<%-- OK --%>
 			<%
 			if (fileList != null) {
@@ -108,7 +72,40 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 		</form>
 	</div>
 
+	<script>
+		const taList = {}; // タウンアバターのリスト
+		const yearMonthList = [];
+		<c:forEach var="avatar" items="${avatarList}">
+			if(!taList[`${avatar.year}-${avatar.month}`]) {
+				taList[`${avatar.year}-${avatar.month}`] = [];
+			}
+			taList[`${avatar.year}-${avatar.month}`] = {
+				buildPaths: [<c:forEach var="build" items="${avatar.buildings}">
+					"${build.imagePath}",</c:forEach>],
+				peopleCount: ${avatar.peopleCount},
+				peoplePath: "${avatar.peopleImage.imagePath}",
+				clothPath: "${avatar.cloth.imagePath}",
+				shoePath: "${avatar.shoe.imagePath}",
+				hatPath: "${avatar.hat.imagePath}",
+				costumePath: "${avatar.costume.imagePath}",
+				facePath: "${avatar.face.imagePath}"
+			}
+
+			yearMonthList.push({
+				year: ${avatar.year},
+				month: ${avatar.month},
+			});
+		</c:forEach>;
+
+
+		function showHelp() {
+			alert("このページでは、過去ファイルのダウンロード・街並みの表示ができます。\n"
+					+ "検索ボックスで日付をフィルタし、「街を見る」で表示、「ダウンロード」で保存できます。");
+		}
+	</script>
+	<script src="<c:url value='/js/history.js' />"></script>
+	<script src="<c:url value='/js/test.js' />"></script>
+	<script src="<c:url value='/js/common.js' />"></script>
 </body>
 
-<script src="js/createTownAvatar.js"></script>
 </html>

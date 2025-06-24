@@ -41,7 +41,7 @@ public class CalendarServlet extends HttpServlet {
 
 		if (session.getAttribute("user_id") == null) {
 			// もしもログインしていなかったらログインサーブレットにリダイレクト
-			response.sendRedirect("/D2/LoginServlet");
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
 			return;
 		}
 
@@ -145,6 +145,8 @@ public class CalendarServlet extends HttpServlet {
 		PointDAO pointDAO = new PointDAO();
 		Point point = pointDAO.selectByUserIdMonth(userId, month);
 
+		int yearP = 0;
+		int monthP = 0;
 		int caloriePoint = 0;
 		int alcoholPoint = 0;
 		int sleepPoint = 0;
@@ -152,6 +154,8 @@ public class CalendarServlet extends HttpServlet {
 		int totalCalorieConsu = 0;
 
 		if (point != null) {
+			yearP = point.getYear();
+			monthP = point.getMonth();
 		    caloriePoint = point.getTotal_calorie_intake();
 		    alcoholPoint = point.getTotal_alcohol_consumed();
 		    sleepPoint = point.getTotal_sleeptime();
@@ -167,7 +171,7 @@ public class CalendarServlet extends HttpServlet {
 		
 		int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
 		
-		TownAvatarElements avatar = imageAllDAO.select(caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
+		TownAvatarElements avatar = imageAllDAO.select(yearP, monthP, caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
 
 		// JSPにセットしてフォワード
 
