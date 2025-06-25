@@ -43,9 +43,10 @@
 	<div class="checkbox-group">
 	
 	 <label class="month-label">
-    年月：
-    <input type="month" id="monthInput" min="<%=min%>" max="<%=max%>" />
-  </label>
+	  <%--  ${displayYear}年 ${displayMonth}月 --%>
+	   <input type="month" id="monthInput" min="<%=min%>" max="<%=max%>" 
+	   value="${displayYear}-${String.format('%02d', displayMonth)}">
+	</label>
 	
 		<!-- チェックボックス -->
 		<label class="cb-label health"><input type="checkbox" name="cbhealthRecord"	id="cbHealth" checked>健康記録</label>
@@ -233,7 +234,7 @@
 			<br>
 
 			<label for="free">自由欄</label>
-<textarea name="free" id="free"></textarea>
+<textarea name="free" id="input_free"></textarea>
 
 			<br>
 
