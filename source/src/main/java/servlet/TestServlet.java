@@ -62,7 +62,7 @@ public class TestServlet extends HttpServlet {
 		// -------------------------------------------
 
 		List<TownAvatarElements> avatars = new ArrayList<>();
-		List<Point> p = pointDAO.selectByUserId("kazutoshi_t");
+		List<Point> p = pointDAO.selectByUserId("test1");
 		for (Point point : p) {
 			if (point == null) {
 				avatars.add(null);

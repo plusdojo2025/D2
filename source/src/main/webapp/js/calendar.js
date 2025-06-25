@@ -126,20 +126,22 @@ function openPopup(date) {
 		}
 	}
 
-  // 健康記録alcohol
-  for (let i = 0; i < 30; i++) {
-    deleteAlcohol();
-  }
-  if (haList[date]) {
-    // 健康アルコール記録があったらフォームにデフォで表示
-    for (let i = 0; i < haList[date].length; i++) {
-      addAlcohol();
-      const alcoholContent = document.getElementById("alcohol_content" + i);
-      const alcoholConsumed = document.getElementById("alcohol_consumed" + i);
-      alcoholContent.value = haList[date][i].alcoholContent;
-      alcoholConsumed.value = haList[date][i].alcoholConsumed;
-    }
-  }
+	// 健康記録alcohol
+	for (let i = 0; i < 30; i++) {
+		deleteAlcohol();
+	}
+	if (haList[date]) {
+		// 健康アルコール記録があったらフォームにデフォで表示
+		for (let i = 0; i < haList[date].length; i++) {
+		addAlcohol();
+		const alcoholContent = document.getElementById("alcohol_content" + i);
+		const alcoholConsumed = document.getElementById("alcohol_consumed" + i);
+		alcoholContent.value = haList[date][i].alcoholContent;
+		alcoholConsumed.value = haList[date][i].alcoholConsumed;
+		}
+	}
+
+	controlFormAccessibility(date);
 }
 
 
@@ -156,6 +158,60 @@ window.addEventListener('load', function() {
 	});
 });
 
+function controlFormAccessibility(date) {
+	let isNewest = false; // 初期値は登録不可
+    const today = new Date();
+    const selectedDate = new Date(date);
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);   
+	
+	
+	// 年月が一致なら次の処理へ
+	if (selectedDate.getFullYear() === today.getFullYear() && selectedDate.getMonth() === today.getMonth()) {
+		// 選択した日付以降健康記録が登録されていなければ、登録可能
+		while (selectedDate <= today) {
+			const dateStr = toISOStringWithTimezone(selectedDate).split('T')[0];
+			if (hwList[dateStr]) { // 健康記録があった...
+				isNewest = false; // 登録不可
+				break;
+			} else {
+				isNewest = true; // 登録可能
+			}
+			selectedDate.setDate(selectedDate.getDate() + 1);
+		}
+	} else {
+		// 年月が一致しない場合は登録不可
+	}
+
+    const inputs = document.querySelectorAll('#popup input, #popup select, #popup textarea, #add_exercise_button, #remove_exercise_button, #add_alcohol_button, #remove_alcohol_button');
+    inputs.forEach(el => {
+        el.disabled = !isNewest; // 当日なら有効、それ以外は無効
+    });
+
+    const saveButton = document.getElementById('save_button'); // 保存ボタンも対象
+    if (saveButton) {
+        saveButton.disabled = !isNewest;
+    }
+}
+
+function toISOStringWithTimezone(date) {
+	// https://qiita.com/h53/items/05139982c6fd81212b08
+    const pad = function (str) {
+        return ('0' + str).slice(-2);
+    };
+    const year = (date.getFullYear()).toString();
+    const month = pad((date.getMonth() + 1).toString());
+    const day = pad(date.getDate().toString());
+    const hour = pad(date.getHours().toString());
+    const min = pad(date.getMinutes().toString());
+    const sec = pad(date.getSeconds().toString());
+    const tz = -date.getTimezoneOffset();
+    const sign = tz >= 0 ? '+' : '-';
+    const tzHour = pad((tz / 60).toString());
+    const tzMin = pad((tz % 60).toString());
+
+    return `${year}-${month}-${day}T${hour}:${min}:${sec}${sign}${tzHour}:${tzMin}`;
+}
 
 // カレンダー関連 -------------------------------------
 function generateCalendar(year, month) {
@@ -193,31 +249,28 @@ function generateCalendar(year, month) {
 
 		if (hwList[dateStr]) {
 			cell.classList.add("has-health-record");
-			cell.innerHTML += `<div class="health-record">${hwList[dateStr].nowWeight}kg</div>`;
+			cell.innerHTML += `<div class="health-record nowweight">${hwList[dateStr].nowWeight}kg</div>`;
 			cell.innerHTML += `<div class="health-record calorieIntake">${hwList[dateStr].calorieIntake}kcal</div>`;
 			cell.innerHTML += `<div class="health-record calorieConsu">${hwList[dateStr].calorieConsu}kcal</div>`;
-			cell.innerHTML += `<div class="health-record nosmoke">${hwList[dateStr].nosmoke} 喫煙</div>`;
+			const smokeText = hwList[dateStr].nosmoke == 1 ? "喫煙なし" : "喫煙あり";
+			cell.innerHTML += `<div class="health-record nosmoke">${smokeText}</div>`;
 			cell.innerHTML += `<div class="health-record sleep">${hwList[dateStr].sleepHours} 時間</div>`;
 			cell.innerHTML += `<div class="health-record free">${hwList[dateStr].free}</div>`;
 		}
 
 		if (heList[dateStr]) {
-			cell.classList.add("has-health-exercise");
-			heList[dateStr].forEach(item => {
-				cell.innerHTML += `<div class="health-record exercise">${item.exerciseType}</div>`;
-				cell.innerHTML += `<div class="health-record exercise">${item.exerciseTime}分</div>`;
-				cell.innerHTML += `<div class="health-record exercise">${item.calorieConsu}kcal</div>`;
-			});
-		}
+	cell.classList.add("has-health-exercise");
+	heList[dateStr].forEach(item => {
+		cell.innerHTML += `<div class="health-record exercise">${item.exerciseType} ${item.exerciseTime}分</div>`;
+	});
+}
 
 		if (haList[dateStr]) {
-			cell.classList.add("has-health-alcohol");
-			haList[dateStr].forEach(item => {
-				cell.innerHTML += `<div class="health-record alcohol">${item.pureAlcoholConsumed}g</div>`;
-				cell.innerHTML += `<div class="health-record alcohol">${item.alcoholContent}%</div>`;
-				cell.innerHTML += `<div class="health-record alcohol">${item.alcoholConsumed}ml</div>`;
-			});
-		}
+	cell.classList.add("has-health-alcohol");
+	haList[dateStr].forEach(item => {
+		cell.innerHTML += `<div class="health-record alcohol">${item.pureAlcoholConsumed}g ${item.alcoholContent}% ${item.alcoholConsumed}ml</div>`;
+	});
+}
 
 		row.appendChild(cell);
 	}

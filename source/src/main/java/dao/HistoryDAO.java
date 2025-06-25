@@ -60,7 +60,7 @@ public class HistoryDAO {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/D2?"
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
 					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
 					"root", "password");
 

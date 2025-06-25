@@ -180,7 +180,29 @@ INSERT INTO point VALUES  ("dojouser3", 2023, 8, 0, 7, 300, 210, 1);
 
 INSERT INTO point VALUES  ("dojouser4", 2025, 6, 57599, 7, 300, 300, 5);
 
-INSERT INTO point(user_id, year, month) VALUES  ("test1", 2025, 6);
+INSERT INTO point VALUES  ("test1", 2025, 6, 7200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("test1", 2025, 5, 5000, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("test1", 2025, 4, 57600, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("test1", 2025, 3, 54000, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("test1", 2025, 2, 50400, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("test1", 2025, 1, 46800, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("test1", 2024, 12, 43200, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("test1", 2024, 11, 39600, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("test1", 2024, 10, 36000, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("test1", 2024, 9, 32400, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("test1", 2024, 8, 28800, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("test1", 2024, 7, 25200, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("test1", 2024, 6, 21600, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("test1", 2024, 5, 18000, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("test1", 2024, 4, 14400, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("test1", 2024, 3, 10800, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("test1", 2024, 2, 7200, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("test1", 2024, 1, 3600, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("test1", 2023, 12, 0, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("test1", 2023, 11, 0, 7, 300, 0, 1);
+INSERT INTO point VALUES  ("test1", 2023, 10, 0, 7, 300, 70, 1);
+INSERT INTO point VALUES  ("test1", 2023, 9, 0, 7, 300, 140, 1);
+INSERT INTO point VALUES  ("test1", 2023, 8, 0, 7, 300, 210, 1);
 
 SELECT * FROM point;
 

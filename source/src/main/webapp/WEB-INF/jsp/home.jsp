@@ -115,6 +115,7 @@ window.onload = function () {
 <canvas id="imageCanvas" width="1627" height="1021" style="width:${width}px;"></canvas>
 
 <script src="<c:url value='/js/createTownAvatar.js' />"></script>
+<script src="<c:url value='/js/home.js' />"></script>
 
 </body>
 </html>
