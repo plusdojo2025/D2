@@ -1,44 +1,56 @@
 @charset "UTF-8";
 
+#alcohol_container, #exercise_container {
+	display: flex;
+	align-items: center;
+	flex-direction: column; /* 子要素を縦に並べる */
+}
 
-
-.alcohol_field, .exercise_field{
-    /* 立体感を出すための影 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    margin: 10px;
-    background-color: #ddd;
+.alcohol_field, .exercise_field {
+	/* 立体感を出すための影 */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	margin: 10px;
+	background-color: #ddd;
+	width: 100%; /* 幅を統一（必須） */
+	max-width: 600px; /*必要なら制限 */
 }
 
 .input-group {
-    display: flex;
-    align-items: center;
-    margin: 0px;
-   
+	display: flex;
+	align-items: center;
+	margin: 0px;
 }
 
 .input-group label {
-    width: 150px;
+	width: 220px;
 }
 
 .input-group input {
-    width: 100px;
-    margin-right: 10px;
+	width: 100px;
+	margin-right: 10px;
 }
 
-#form{
-    background-color: #ccc;
+.input-group select {
+	width: 180px;
+	margin-right: 10px;
 }
 
-input[type="number"]:hover,
-input[type="number"]:active
-{
-    background-color:bisque
+#form {
+	background-color: #f9f6f2;
+	text-align: center;
+	font-size: 1.2rem; /* 文字をやや大きく */
 }
 
-input[name="free"]{
-    width: 70%;
-    height: 100px;
-    margin: 10px;
-    padding: 10px;
-    box-sizing: border-box;
+
+
+input[type="number"]:hover, input[type="number"]:active {
+	background-color: bisque
+}
+
+input[name="free"] {
+	width: 40%;
+	height: 100px;
+	margin: 10px;
+	padding: 10px;
+	box-sizing: border-box;
 }
