@@ -17,14 +17,17 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 <body>
 
 	<!-- ① タイトル（ホームボタン） -->
-	<h1>
-		<a href="<c:url value='/HomeServlet' />">ケンコークラフト</a>
+	<h1 class="logo-header">
+		<a href="<c:url value='/HomeServlet' />"> <img
+			src="${pageContext.request.contextPath}/img/logo1.png" alt="Logo"
+			class="logo-img"></a>
 	</h1>
 
 	<!-- ② ヘルプボタン -->
 	<button class="btn" style="float: right;" onclick="showHelp()">ヘルプ</button>
 
-	<h2>過去ファイルのダウンロード・閲覧</h2>
+	<h2 class="view">過去ファイルのダウンロード・閲覧</h2>
+	<hr>
 
 	<!-- ③ ファイル選択（今回は使用しない） -->
 	<!--  <input type="file" disabled>
@@ -62,7 +65,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 
 
 	<!-- ⑥ ファイルリスト -->
-	<div style="float: right; border: 1px solid #000; padding: 10px;">
+	<div class="file_list" style="float: right;">
 		<form method="post"
 			action="<c:url value='/HistoryServlet?mode=download' />">
 			<%
@@ -78,8 +81,12 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 			%>
 			<button class="btn" type="submit">ダウンロード</button>
 		</form>
+	</div>
+	<div id="footer">
+		<p class="copyright">&copy;2025 視力検査Dチーム 健康管理アプリ</p>
+	</div>
 
-		<script>
+	<script>
 		const taList = {}; // タウンアバターのリスト
 		const yearMonthList = [];
 		<c:forEach var="avatar" items="${avatarList}">
@@ -109,10 +116,11 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 			alert("このページでは、過去ファイルのダウンロード・街並みの表示ができます。\n"
 					+ "検索ボックスで日付をフィルタし、「街を見る」で表示、「ダウンロード」で保存できます。");
 		}
+		
 	</script>
-		<script src="<c:url value='/js/history.js' />"></script>
-		<script src="<c:url value='/js/test.js' />"></script>
-		<script src="<c:url value='/js/common.js' />"></script>
+	<script src="<c:url value='/js/history.js' />"></script>
+	<script src="<c:url value='/js/test.js' />"></script>
+	<script src="<c:url value='/js/common.js' />"></script>
 </body>
 
 </html>
