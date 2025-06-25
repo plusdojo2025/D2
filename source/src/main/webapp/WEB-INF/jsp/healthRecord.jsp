@@ -22,6 +22,7 @@
 		<!-- ヘッダー（ここまで） -->
 		<!-- メイン（ここから） -->
 		<h2>健康記録登録</h2>
+		<hr>
 		<form method="POST" id="form"
 			action="<c:url value='/HealthRecordServlet' />">
 
