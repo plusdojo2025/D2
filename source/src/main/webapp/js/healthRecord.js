@@ -148,6 +148,7 @@ function addExercise() {
 		metsInput.value = '';
 
 		timeInput.name = `exercise_time${exerciseCount}`;
+		timeInput.id = `exercise_time${exerciseCount}`;
 		timeInput.value = '';
 
 		exerciseSelect.name = `exercise_select${exerciseCount}`;

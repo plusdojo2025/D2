@@ -23,7 +23,7 @@
   <div class="container">
     <c:forEach var="i" begin="0" end="11" varStatus="status">
   <c:set var="avatar" value="${avatars[i]}" />
-  <div class="month-block">
+  <div class="month-block" id="${i}">
     <c:choose>
       <c:when test="${avatar != null}">
         <h3>${yearList[i]}年 ${monthList[i]}月</h3>
@@ -39,13 +39,20 @@
 
   <a href="<c:url value='/HistoryServlet' />">1年以上前の街並みはこちら</a>
 
-  <div style="text-align:center; margin-top:40px;">
-    <button id="prev-btn">← 前の月</button>
-    <span id="month-display" style="margin:0 15px; font-weight:bold; font-size:24px;"></span>
-    <button id="next-btn">次の月 →</button>
-    <br /><br />
-    <div id="avatar-container"></div>
-  </div>
+<div id="layer"></div> <!-- ポップアップ時に背景を薄くする -->
+<div id="popup">
+	
+	<button onclick="closePopup()">閉じる</button>
+	
+	<div style="text-align:center; margin-top:40px;">
+		<button id="prev-btn">← 前の月</button>
+		<span id="month-display" style="margin:0 15px; font-weight:bold; font-size:24px;"></span>
+		<button id="next-btn">次の月 →</button>
+		<br /><br />
+		<div id="avatar-container"></div>
+	</div>
+  
+</div>
 
   <script>
     const taList = {};

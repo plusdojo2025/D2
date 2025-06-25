@@ -40,7 +40,7 @@ import dto.TownAvatarElements;
 @MultipartConfig(location = "C:\\plusdojo2025\\D2\\source\\src\\main\\webapp\\WEB-INF\\uploaded", maxFileSize = 1048576)
 public class HistoryServlet extends HttpServlet {
 	
-	private boolean test = true;
+	private boolean test = false;
 	private String testUserId = "kazutoshi_t"; // テスト用のユーザID
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

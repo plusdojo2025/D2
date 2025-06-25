@@ -9,9 +9,39 @@ const avatarContainer = document.getElementById("avatar-container");
 // 今月がavatarDataListの0番目なので、currentMonthIndex=0スタート
 let currentMonthIndex = 0;
 
+const monthBlockList = document.getElementsByClassName("month-block");
 
 
-// 表示更新とボタン状態切り替え
+// ポップアップ制御 -------------------------------------
+// monthBlockListの要素それぞれにaddEventListenerを設定
+for (let i = 0; i < monthBlockList.length; i++) {
+  monthBlockList[i].addEventListener("click", function() {
+	currentMonthIndex = this.id;
+	updateDisplay();
+    openPopup();
+  });
+}
+
+function openPopup() {
+	document.getElementById("layer").style.display = "block";
+	document.getElementById("popup").style.display = "block";
+}
+
+function closePopup() {
+	document.getElementById("layer").style.display = "none"
+	document.getElementById("popup").style.display = "none";
+}
+
+window.addEventListener('load', function() {
+	document.querySelectorAll('#layer').forEach(elm => {
+		elm.onclick = function() {
+			closePopup()
+		};
+	});
+});
+
+
+// 表示更新とボタン状態切り替え -----------------------------------
 function updateDisplay() {
   const yearMonth = yearMonthList[currentMonthIndex];
   if (!yearMonth) return;

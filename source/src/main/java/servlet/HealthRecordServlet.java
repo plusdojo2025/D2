@@ -32,7 +32,7 @@ import dto.TargetValue;
 @WebServlet("/HealthRecordServlet")
 public class HealthRecordServlet extends HttpServlet {
 
-	private boolean test = true;
+	private boolean test = false;
 	private String testUserId = "kazutoshi_t"; // テスト用のユーザID
 	private String testDate = "2024-05-20"; // テスト用の日付
 
