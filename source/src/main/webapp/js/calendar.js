@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		cbSleep: 'sleep',
 		cbCalorieIntake: 'calorieIntake',
 		cbCalorieConsu: 'calorieConsu',
-		cbMemo: 'free'
+		cbMemo: 'free',
+		cbNowWeight: 'nowweight'
 	};
 
 	const healthRecordChk = document.getElementById('cbHealth');
@@ -42,16 +43,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		healthRecordChk.addEventListener('change', function() {
 			const enabled = this.checked;
+
+			// 子チェックボックスもON/OFF（報酬記録以外）
+			for (const chkId of Object.keys(checkMap)) {
+				const childChk = document.getElementById(chkId);
+				if (childChk) {
+					childChk.checked = enabled; // ✅ 健康記録ON → 子もON / OFF → 子もOFF
+				}
+			}
+
+			// セクションの表示制御
+			for (const [chkId, className] of Object.entries(checkMap)) {
+				toggleSection(className, enabled && document.getElementById(chkId).checked);
+			}
+
+			// 全体の.health-record 表示（あれば）
 			document.querySelectorAll('.health-record').forEach(el => {
 				el.style.display = enabled ? '' : 'none';
 			});
-
-			for (const [chkId, className] of Object.entries(checkMap)) {
-				const childChk = document.getElementById(chkId);
-				if (childChk) {
-					toggleSection(className, enabled && childChk.checked);
-				}
-			}
 		});
 	}
 
@@ -60,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			el.style.display = show ? '' : 'none';
 		});
 	}
+
 
 	// 報酬記録チェックボックス制御
 	const rewardChk = document.getElementById('cbReward');
@@ -113,7 +123,7 @@ function openPopup(date) {
 
 	// 健康記録exercise
 	for (let i = 0; i < 30; i++) {
-		deleteExercise(); 
+		deleteExercise();
 	}
 	if (heList[date]) {
 		// 健康運動記録があったらフォームにデフォで表示
@@ -133,11 +143,11 @@ function openPopup(date) {
 	if (haList[date]) {
 		// 健康アルコール記録があったらフォームにデフォで表示
 		for (let i = 0; i < haList[date].length; i++) {
-		addAlcohol();
-		const alcoholContent = document.getElementById("alcohol_content" + i);
-		const alcoholConsumed = document.getElementById("alcohol_consumed" + i);
-		alcoholContent.value = haList[date][i].alcoholContent;
-		alcoholConsumed.value = haList[date][i].alcoholConsumed;
+			addAlcohol();
+			const alcoholContent = document.getElementById("alcohol_content" + i);
+			const alcoholConsumed = document.getElementById("alcohol_consumed" + i);
+			alcoholContent.value = haList[date][i].alcoholContent;
+			alcoholConsumed.value = haList[date][i].alcoholConsumed;
 		}
 	}
 
@@ -160,12 +170,12 @@ window.addEventListener('load', function() {
 
 function controlFormAccessibility(date) {
 	let isNewest = false; // 初期値は登録不可
-    const today = new Date();
-    const selectedDate = new Date(date);
-    today.setHours(0, 0, 0, 0);
-    selectedDate.setHours(0, 0, 0, 0);   
-	
-	
+	const today = new Date();
+	const selectedDate = new Date(date);
+	today.setHours(0, 0, 0, 0);
+	selectedDate.setHours(0, 0, 0, 0);
+
+
 	// 年月が一致なら次の処理へ
 	if (selectedDate.getFullYear() === today.getFullYear() && selectedDate.getMonth() === today.getMonth()) {
 		// 選択した日付以降健康記録が登録されていなければ、登録可能
@@ -183,34 +193,34 @@ function controlFormAccessibility(date) {
 		// 年月が一致しない場合は登録不可
 	}
 
-    const inputs = document.querySelectorAll('#popup input, #popup select, #popup textarea, #add_exercise_button, #remove_exercise_button, #add_alcohol_button, #remove_alcohol_button');
-    inputs.forEach(el => {
-        el.disabled = !isNewest; // 当日なら有効、それ以外は無効
-    });
+	const inputs = document.querySelectorAll('#popup input, #popup select, #popup textarea, #add_exercise_button, #remove_exercise_button, #add_alcohol_button, #remove_alcohol_button');
+	inputs.forEach(el => {
+		el.disabled = !isNewest; // 当日なら有効、それ以外は無効
+	});
 
-    const saveButton = document.getElementById('save_button'); // 保存ボタンも対象
-    if (saveButton) {
-        saveButton.disabled = !isNewest;
-    }
+	const saveButton = document.getElementById('save_button'); // 保存ボタンも対象
+	if (saveButton) {
+		saveButton.disabled = !isNewest;
+	}
 }
 
 function toISOStringWithTimezone(date) {
 	// https://qiita.com/h53/items/05139982c6fd81212b08
-    const pad = function (str) {
-        return ('0' + str).slice(-2);
-    };
-    const year = (date.getFullYear()).toString();
-    const month = pad((date.getMonth() + 1).toString());
-    const day = pad(date.getDate().toString());
-    const hour = pad(date.getHours().toString());
-    const min = pad(date.getMinutes().toString());
-    const sec = pad(date.getSeconds().toString());
-    const tz = -date.getTimezoneOffset();
-    const sign = tz >= 0 ? '+' : '-';
-    const tzHour = pad((tz / 60).toString());
-    const tzMin = pad((tz % 60).toString());
+	const pad = function(str) {
+		return ('0' + str).slice(-2);
+	};
+	const year = (date.getFullYear()).toString();
+	const month = pad((date.getMonth() + 1).toString());
+	const day = pad(date.getDate().toString());
+	const hour = pad(date.getHours().toString());
+	const min = pad(date.getMinutes().toString());
+	const sec = pad(date.getSeconds().toString());
+	const tz = -date.getTimezoneOffset();
+	const sign = tz >= 0 ? '+' : '-';
+	const tzHour = pad((tz / 60).toString());
+	const tzMin = pad((tz % 60).toString());
 
-    return `${year}-${month}-${day}T${hour}:${min}:${sec}${sign}${tzHour}:${tzMin}`;
+	return `${year}-${month}-${day}T${hour}:${min}:${sec}${sign}${tzHour}:${tzMin}`;
 }
 
 // カレンダー関連 -------------------------------------
@@ -259,18 +269,18 @@ function generateCalendar(year, month) {
 		}
 
 		if (heList[dateStr]) {
-	cell.classList.add("has-health-exercise");
-	heList[dateStr].forEach(item => {
-		cell.innerHTML += `<div class="health-record exercise">${item.exerciseType} ${item.exerciseTime}分</div>`;
-	});
-}
+			cell.classList.add("has-health-exercise");
+			heList[dateStr].forEach(item => {
+				cell.innerHTML += `<div class="health-record exercise">${item.exerciseType} ${item.exerciseTime}分</div>`;
+			});
+		}
 
 		if (haList[dateStr]) {
-	cell.classList.add("has-health-alcohol");
-	haList[dateStr].forEach(item => {
-		cell.innerHTML += `<div class="health-record alcohol">${item.pureAlcoholConsumed}g ${item.alcoholContent}% ${item.alcoholConsumed}ml</div>`;
-	});
-}
+			cell.classList.add("has-health-alcohol");
+			haList[dateStr].forEach(item => {
+				cell.innerHTML += `<div class="health-record alcohol">${item.pureAlcoholConsumed}g ${item.alcoholContent}% ${item.alcoholConsumed}ml</div>`;
+			});
+		}
 
 		row.appendChild(cell);
 	}

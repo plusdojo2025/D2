@@ -38,21 +38,132 @@ td:hover {
   background-color: #fff4da;
 }
 
-
-#popup{
-	display: none; /* 初期表示は非表示 */
-	position: fixed; 
-	top: 10%; 
-	left: 20%; 
-	width: 60%; 
-	height: 80%; 
-	background: white; 
-	border: 2px solid black; 
-	overflow: auto; 
-	z-index: 9999; 
-	padding: 1em;	
+.has-schedule {
+	background-color: #e0f7fa;
 }
 
+.has-special {
+	background-color: #ffe0e0;
+}
+
+
+#layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 999;
+  display: none;
+}
+
+#popup {
+display: none; 
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  padding: 24px;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 90%;
+  font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+}
+
+#popup h2 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+#popup label {
+  display: block;
+  margin: 12px 0 4px;
+  font-weight: bold;
+  color: #444;
+  font-size: 13px;
+}
+
+
+#popup input[type="number"]{
+  width: 90px;
+  padding: 4px 6px;
+  margin-bottom: 8px;
+  font-size: 13px;
+   border: 1px solid #ccc;    
+  box-sizing: border-box; 
+   background-color: #fff;
+}
+#popup input[type="text"],
+#popup select{
+	width: 60%;
+	padding: 6px 8px;
+	margin-bottom: 8px;
+	font-size: 13px;
+}
+.input-group {
+  margin-bottom: 10px;
+}
+
+#popup input[type="radio"] {
+  margin-right: 4px;
+}
+
+#popup button {
+  margin: 8px 6px 12px 0;
+  background-color: #66bb6a;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#popup button:hover {
+  background-color: #fbcd88;
+}
+
+#popup input[type="submit"] {
+  font-size: 1.1em;
+	padding: 10px 25px;
+	border-radius: 6px;
+	background-color: #66bb6a;
+	color: #fff;
+	border: none;
+}
+
+#popup input[type="submit"]:hover {
+  background-color: #fbcd88;
+}
+#popup textarea {
+  width: 90%;             
+  height: 80px;          
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  resize: vertical;      
+  line-height: 1.4;
+  vertical-align: top;
+}
+
+#popup #error_message {
+  color: red;
+  font-size: 12px;
+  margin-top: 6px;
+}
 /*健康記録（カレンダー内）*/
 .health-record {
   display: block;
@@ -66,24 +177,27 @@ td:hover {
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
   line-height: 1.4;
 }
+.health-record.reward {
+  background-color: #ddfdf8; 
+}
 .health-record.nowweight {
-  background-color: #fffad2; /* 薄い黄色 */
+  background-color: #fffad2; 
 }
 
 .health-record.calorieIntake {
-  background-color: #f0fce9; /* 緑系 */
+  background-color: #f0fce9; 
 }
 
 .health-record.calorieConsu {
-  background-color: #ffebee; /* 赤系 */
+  background-color: #ffebee; 
 }
 
 .health-record.nosmoke {
-  background-color: #ecffff; /* 水色 */
+  background-color: #ecffff; 
 }
 
 .health-record.sleep {
-  background-color: #ede7f6; /* 紫系 */
+  background-color: #ede7f6; 
 }
 
 .health-record.exercise {
@@ -108,6 +222,8 @@ td:hover {
   justify-content: center;
   font-size: 14px;
   font-family: 'Segoe UI', sans-serif;
+  margin-top:60px;
+  margin-bottom: 40px;
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -131,34 +247,54 @@ td:hover {
 }
 
 .cb-label {
-  position: relative;
-  padding-left: 18px; /* サークル分の余白 */
-  margin-right: 10px;
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 4px 6px 4px 0;
+  border-radius: 10px;
   font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  background-color: #f0f0f0; /* デフォルト背景 */
+  transition: background-color 0.2s;
 }
 
-.cb-label::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #ccc;
+/* カテゴリごとの色 */
+.cb-label.reward {
+  background-color: #aefbec;
 }
 
-/* 色別指定：カレンダーと同じ色を使おう！ */
-.cb-label.reward::before          { background-color: #90caf9; }
-.cb-label.weight::before          { background-color: #edf307; }
-.cb-label.intake::before   { background-color: #a5d6a7; }
-.cb-label.consu::before    { background-color: #ef9a9a; }
-.cb-label.smoke::before         { background-color: #80bfff; }
-.cb-label.sleep::before           { background-color: #ce93d8; }
-.cb-label.memo::before            { background-color: #e0e0e0; }
-.cb-label.exercise::before        { background-color: #ffb164; }
-.cb-label.alcohol::before         { background-color: #f48fb1; }
+.cb-label.weight {
+  background-color: #fff1b9;
+}
+
+.cb-label.intake {
+  background-color: #d2ffa6; 
+}
+
+.cb-label.consu {
+  background-color: #ffdbdb; /* 赤 */
+}
+
+.cb-label.smoke {
+  background-color: #d1f0fe;
+}
+
+.cb-label.sleep-label {
+  background-color: #ede7f6; /* 紫 */
+}
+
+.cb-label.memo {
+  background-color: #eeeeee; /* グレー */
+}
+
+.cb-label.exercise-label {
+  background-color: #ffdebd;
+}
+
+.cb-label.alcohol-label {
+  background-color: #fce4ec;
+}
+
 /*月選択*/
 .month-label {
   display: flex;
@@ -173,13 +309,14 @@ td:hover {
   padding: 15px;
   margin: 20px 0;
   border-radius: 8px;
-  text-align: left;
+  text-align: center; 
 }
 
-
-
-
-
+.summary-box p {
+  margin: 0.8em 0; 
+  font-size: 1em;
+  line-height: 1.6;  
+}
 
 
 
