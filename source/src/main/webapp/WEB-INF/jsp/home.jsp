@@ -29,15 +29,18 @@ window.onload = function () {
 
 </head>
 <body>
+
 <header>
-    <h1>ケンコークラフト ホーム</h1>
+    <h1 class="logo-header">
+    <img src="${pageContext.request.contextPath}/img/logo1.png" alt="Logo" class="logo-img">
+  </h1>
     <%
     	java.time.LocalDate now = java.time.LocalDate.now();
     	String currentDateStr = now.toString();
     	int currentYear = now.getYear();
     	int currentMonth = now.getMonthValue();
 	%>
-    <nav>
+    <nav class = "header-nav">
         <a href="<c:url value='/HealthRecordServlet?date=<%= currentDateStr %>' />">健康記録登録</a>
         <a href="<c:url value='/CalendarServlet?year=<%= currentYear %>&month=<%= currentMonth %>' />">カレンダー</a>
         <a href="<c:url value='/Summary' />">サマリー</a>
@@ -45,11 +48,12 @@ window.onload = function () {
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </nav>
 </header>
-
+<div class="info-box">
 <h2>お知らせ</h2>
 <p>現在の累計消費カロリー: ${totalCaloriesSum} kcal</p>
 <p>次の目的地まであと ${requiredSteps} 歩 (消費カロリー ${remainingCalories} kcal)です。</p>
-
+</div>
+<div class="info-box2">
 <h2>今月の目標値</h2>
 <% if (targetValue != null) { %>
 <p>
@@ -63,7 +67,7 @@ window.onload = function () {
 <% } else { %>
 <p>目標値が設定されていません。</p>
 <% } %>
-
+</div>
 <!-- ポップアップフォーム（閉じられない） -->
 <div id="popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#ffffffcc; z-index:1000; padding:30px;">
     <!-- フォーム内容 -->
@@ -93,7 +97,7 @@ window.onload = function () {
 </div>
 
 <h3>今月の街並み・アバター</h3>
-<p>ここに画像やアバターが表示されます。</p>
+
 
 <c:forEach var="build" items="${avatar.buildings}">
 	<div class="imgBuild" id="${build.imagePath}"></div>
@@ -107,7 +111,7 @@ window.onload = function () {
 <input type="hidden" id="peopleNum" value="${avatar.peopleCount}">
 <!-- --------------------------------------------------------------- -->
 
-<c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
+<c:set var="width" value="1000" /> <!-- 実際に画面に表示する際の横幅[px] -->
 <canvas id="imageCanvas" width="1627" height="1021" style="width:${width}px;"></canvas>
 
 <script src="<c:url value='/js/createTownAvatar.js' />"></script>
