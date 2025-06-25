@@ -306,5 +306,8 @@
 	<script src="<c:url value='/js/healthRecord.js' />"></script>
 	<script src="<c:url value='/js/createTownAvatar.js' />"></script>
 	<script src="<c:url value='/js/common.js' />"></script>
+	<div id="footer">
+    <p class="copyright">&copy;2025 視力検査Dチーム 健康管理アプリ</p>
+  </div>
 </body>
 </html>
