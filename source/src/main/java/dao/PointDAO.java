@@ -259,10 +259,15 @@ public class PointDAO {
 		PreparedStatement pstmt = null;
 		boolean result = false;
 
-		String sql = "UPDATE POINT SET " + fieldName + " = ? WHERE user_id = ? AND year = ? AND month = ?";
-
 		try {
-			conn = getConnection();
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+	        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+	                + "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+	                "root", "password");
+	        
+	        String sql = "UPDATE POINT SET " + fieldName + " = ? WHERE user_id = ? AND year = ? AND month = ?";
+	        
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setInt(1, value);
@@ -297,11 +302,16 @@ public class PointDAO {
 		PreparedStatement pstmt = null;
 		boolean result = false;
 
-		String sql = "INSERT INTO POINT (user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime) "
-				+ "VALUES (?, ?, ?, ?, 0, 0, 0, 0)";
-
 		try {
-			conn = getConnection(); // getConnection() は既存のDB接続メソッド
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+	        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+	                + "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+	                "root", "password");
+	        
+	        String sql = "INSERT INTO POINT (user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime) "
+					+ "VALUES (?, ?, ?, ?, 0, 0, 0, 0)";
+	        
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, userID);
