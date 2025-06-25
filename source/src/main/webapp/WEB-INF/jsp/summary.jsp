@@ -4,13 +4,19 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>12か月サマリー</title>
+  <title>サマリー</title>
   <link rel="stylesheet" href="<c:url value='/css/summary.css'/>">
   <link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
 <body>
-  <h1><a href="<c:url value='/HomeServlet' />">ケンコークラフト</a></h1>
-  <h2>12か月サマリー</h2>
+ <h1 class="logo-header">
+    <a href="<c:url value='/HomeServlet' />">
+  <img src="${pageContext.request.contextPath}/img/logo1.png" alt="Logo" class="logo-img">
+</a>
+  </h1>
+  
+  <h2>サマリー</h2>
+  <hr>
 
   <script>
     const monthList = [
@@ -36,13 +42,11 @@
   </div>
 </c:forEach>
   </div>
-
+<hr>
   <a href="<c:url value='/HistoryServlet' />">1年以上前の街並みはこちら</a>
 
 <div id="layer"></div> <!-- ポップアップ時に背景を薄くする -->
 <div id="popup">
-	
-	<button onclick="closePopup()">閉じる</button>
 	
 	<div style="text-align:center; margin-top:40px;">
 		<button id="prev-btn">← 前の月</button>
@@ -51,6 +55,7 @@
 		<br /><br />
 		<div id="avatar-container"></div>
 	</div>
+	<button onclick="closePopup()">閉じる</button>
   
 </div>
 
@@ -85,5 +90,9 @@
   <script src="<c:url value='/js/test.js' />"></script>
   <script src="<c:url value='/js/summary.js' />"></script>
   <script src="<c:url value='/js/common.js' />"></script>
+  
+  <div id="footer">
+    <p class="copyright">&copy;2025 視力検査Dチーム 健康管理アプリ</p>
+  </div>
 </body>
 </html>
