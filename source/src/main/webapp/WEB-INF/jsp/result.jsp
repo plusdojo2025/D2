@@ -5,7 +5,9 @@
 <head>
 <meta charset="UTF-8">
 
-<title>名刺管理</title>
+<title>ケンコークラフト</title>
+<script src="<c:url value='/js/common.js' />"></script>
+<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
 <body>
 <h1><c:out value="${result.title}" /></h1>
