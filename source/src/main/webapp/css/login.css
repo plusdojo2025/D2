@@ -37,17 +37,18 @@ body {
 }
 
 label {
-  display: inline-block;    /* ブロックのように幅指定できるように */
-  width: 100px;             /* ラベルの幅を固定 */
-  text-align: right;        /* テキスト（:も含む）を右寄せ */
-  font-size: 1.0em;         /* お好みで文字サイズ */
-  margin-right: 10px;       /* ラベルと入力欄の間の隙間 */
+  display: inline-block;
+  width: 160px;     /* ← ここで幅を揃える（例：160px） */
+  text-align: right; /* ラベル文字を右寄せに */
+  margin-right: 10px;
+  font-size: 1em;
 }
 
-input[type="text"] {
-  font-size: 1.0em;
+input[type="text"],
+input[type="password"] {
+  font-size: 1em;
   padding: 6px 8px;
-  width: 250px;             /* 入力欄の幅を揃える */
+  width: 250px;      /* 入力欄の横幅 */
 }
 
 

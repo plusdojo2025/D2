@@ -35,3 +35,17 @@ body {
   text-align: left;
   margin-left: 20px;
 }
+label {
+  display: inline-block;
+  width: 160px;     /* ← ここで幅を揃える（例：160px） */
+  text-align: right; /* ラベル文字を右寄せに */
+  margin-right: 10px;
+  font-size: 1em;
+}
+
+input[type="text"],
+input[type="password"] {
+  font-size: 1em;
+  padding: 6px 8px;
+  width: 250px;      /* 入力欄の横幅 */
+}
