@@ -1,1 +1,59 @@
 @charset "UTF-8";
+/*ケンコークラフトを真ん中に*/
+.logo-img {
+  height: 100px;
+  width: auto; /* 高さに応じて横幅を自動調整 */
+  max-width: 100%; /* 親要素より大きくならないように */
+  display: block;
+  margin: 0 auto;
+}
+
+
+/*後ろの色  */
+body {
+ text-align: center;
+ background-color: #f0fce9;
+	
+	}
+	/* 全体を中央ぞろえ */
+	.header-nav {
+  background-color: #56a773;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 30px 0;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 40px;
+  margin-top: 0;
+  align-self: stretch;
+  width: 100%; 
+}
+/* ログインボタンを左に */
+.login-title {
+  text-align: left;
+  margin-left: 20px;
+}
+
+label {
+  display: inline-block;    /* ブロックのように幅指定できるように */
+  width: 100px;             /* ラベルの幅を固定 */
+  text-align: right;        /* テキスト（:も含む）を右寄せ */
+  font-size: 1.0em;         /* お好みで文字サイズ */
+  margin-right: 10px;       /* ラベルと入力欄の間の隙間 */
+}
+
+input[type="text"] {
+  font-size: 1.0em;
+  padding: 6px 8px;
+  width: 250px;             /* 入力欄の幅を揃える */
+}
+
+
+/* 「新規登録はこちら→」「ユーザー登録」リンク */
+a {
+  font-size: 1.2em;
+  margin-top: 20px;
+  display: inline-block;
+}

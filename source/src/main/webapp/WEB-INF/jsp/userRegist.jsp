@@ -7,33 +7,49 @@
 <head>
 	<meta charset="UTF-8">
 	<title>ユーザー登録</title>
-	<link rel="stylesheet" href="<c:url value='/css/userRegist.css'/>">
-	<link rel="stylesheet" href="<c:url value='/css/common.css'/>">
+
+	<!-- CSSキャッシュ防止 -->
+	<link rel="stylesheet" href="<c:url value='/css/userRegist.css'/>?v=1.0">
+	<link rel="stylesheet" href="<c:url value='/css/common.css'/>?v=1.0">
 </head>
 
 <body>
-	<hr>
+	<div class="container">
+		<h1 class="regist-title">ユーザー登録フォーム</h1>
 
-	<h2>ユーザー登録フォーム</h2>
+		<div class="logo-header">
+			<img src="${pageContext.request.contextPath}/img/logo1.png" alt="Logo" class="logo-img">
+		</div>
 
-	<form action="<c:url value='/UserRegistServlet' />" method="post" onsubmit="return validateUserRegistForm();">
-		<label for="id">ID：</label> 
-		<input type="text" id="id" name="id"><br><br>
+		<hr>
 
-		<label for="pw">パスワード：</label> 
-		<input type="password" id="pw" name="pw"><br><br>
+		<form action="<c:url value='/UserRegistServlet' />" method="post" onsubmit="return validateUserRegistForm();">
+			<div>
+				<label for="id">ID：</label> 
+				<input type="text" id="id" name="id"><br><br>
+			</div>
 
-		<label for="pwConfirm">パスワード（確認）：</label> 
-		<input type="password" id="pwConfirm" name="pwConfirm"><br><br>
+			<div>
+				<label for="pw">パスワード：</label> 
+				<input type="password" id="pw" name="pw"><br><br>
+			</div>
 
-		<input type="submit" value="登録">
-	</form>
+			<div>
+				<label for="pwConfirm">パスワード（確認）：</label> 
+				<input type="password" id="pwConfirm" name="pwConfirm"><br><br>
+			</div>
 
-	<br>
-	<a href="<c:url value='/LoginServlet' />">ログインページに戻る</a>
-	
+			<input type="submit" value="登録">
+		</form>
+
+		<br>
+		<div>
+			<a href="<c:url value='/LoginServlet' />">ログインページに戻る</a>
+		</div>
+	</div>
+
+	<!-- JavaScript読み込み -->
 	<script src="<c:url value='/js/userRegist.js' />"></script>
 	<script src="<c:url value='/js/common.js' />"></script>
-
 </body>
 </html>
