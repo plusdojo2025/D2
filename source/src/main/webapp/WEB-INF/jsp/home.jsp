@@ -117,5 +117,8 @@ window.onload = function () {
 <script src="<c:url value='/js/createTownAvatar.js' />"></script>
 <script src="<c:url value='/js/home.js' />"></script>
 
+  <div id="footer">
+    <p class="copyright">&copy;2025 視力検査Dチーム 健康管理アプリ</p>
+  </div>
 </body>
 </html>
