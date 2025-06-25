@@ -253,7 +253,7 @@ function generateCalendar(year, month) {
 		if (rwList[dateStr]) {
 			cell.classList.add("has-reward");
 			rwList[dateStr].forEach(item => {
-				cell.innerHTML += `<div class="reward-record">${item}</div>`;
+				cell.innerHTML += `<div class="reward-record" reward>${item}</div>`;
 			});
 		}
 

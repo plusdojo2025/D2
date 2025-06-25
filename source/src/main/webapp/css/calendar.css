@@ -177,9 +177,19 @@ display: none;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
   line-height: 1.4;
 }
-.health-record.reward {
-  background-color: #ddfdf8; 
+.reward-record {
+  display: block;
+  padding: 4px 8px;
+  margin: 4px 0;
+  border-radius: 12px;
+  font-size: 12px;
+  background-color: #dffff8;
+  border: 1px solid #d0dce5;
+  color: #333;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+  line-height: 1.4;
 }
+
 .health-record.nowweight {
   background-color: #fffad2; 
 }
