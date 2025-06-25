@@ -24,7 +24,7 @@ import dto.TownAvatarElements;
 @WebServlet("/CalendarServlet")
 public class CalendarServlet extends HttpServlet {
 
-	private boolean test = false;
+	private boolean test = true;
 	private String testUserId = "kazutoshi_t"; // テスト用のユーザID
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

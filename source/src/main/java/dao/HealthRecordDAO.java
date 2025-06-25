@@ -306,7 +306,7 @@ public class HealthRecordDAO {
 	                date,
 	                null,    // exerciseType → 今回は使わない
 	                0,       // exerciseTime → 同上
-	                0.0,     // nowWeight（未使用）
+	                rs.getDouble("now_weight"),     // nowWeight（未使用）
 	                0.0,     // calorieConsu（個別で管理）
 	                rs.getInt("nosmoke"),
 	                0.0,     // alcoholContent（今回は未使用）
