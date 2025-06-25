@@ -249,31 +249,28 @@ function generateCalendar(year, month) {
 
 		if (hwList[dateStr]) {
 			cell.classList.add("has-health-record");
-			cell.innerHTML += `<div class="health-record">${hwList[dateStr].nowWeight}kg</div>`;
+			cell.innerHTML += `<div class="health-record nowweight">${hwList[dateStr].nowWeight}kg</div>`;
 			cell.innerHTML += `<div class="health-record calorieIntake">${hwList[dateStr].calorieIntake}kcal</div>`;
 			cell.innerHTML += `<div class="health-record calorieConsu">${hwList[dateStr].calorieConsu}kcal</div>`;
-			cell.innerHTML += `<div class="health-record nosmoke">${hwList[dateStr].nosmoke} 喫煙</div>`;
+			const smokeText = hwList[dateStr].nosmoke == 1 ? "喫煙なし" : "喫煙あり";
+			cell.innerHTML += `<div class="health-record nosmoke">${smokeText}</div>`;
 			cell.innerHTML += `<div class="health-record sleep">${hwList[dateStr].sleepHours} 時間</div>`;
 			cell.innerHTML += `<div class="health-record free">${hwList[dateStr].free}</div>`;
 		}
 
 		if (heList[dateStr]) {
-			cell.classList.add("has-health-exercise");
-			heList[dateStr].forEach(item => {
-				cell.innerHTML += `<div class="health-record exercise">${item.exerciseType}</div>`;
-				cell.innerHTML += `<div class="health-record exercise">${item.exerciseTime}分</div>`;
-				cell.innerHTML += `<div class="health-record exercise">${item.calorieConsu}kcal</div>`;
-			});
-		}
+	cell.classList.add("has-health-exercise");
+	heList[dateStr].forEach(item => {
+		cell.innerHTML += `<div class="health-record exercise">${item.exerciseType} ${item.exerciseTime}分</div>`;
+	});
+}
 
 		if (haList[dateStr]) {
-			cell.classList.add("has-health-alcohol");
-			haList[dateStr].forEach(item => {
-				cell.innerHTML += `<div class="health-record alcohol">${item.pureAlcoholConsumed}g</div>`;
-				cell.innerHTML += `<div class="health-record alcohol">${item.alcoholContent}%</div>`;
-				cell.innerHTML += `<div class="health-record alcohol">${item.alcoholConsumed}ml</div>`;
-			});
-		}
+	cell.classList.add("has-health-alcohol");
+	haList[dateStr].forEach(item => {
+		cell.innerHTML += `<div class="health-record alcohol">${item.pureAlcoholConsumed}g ${item.alcoholContent}% ${item.alcoholConsumed}ml</div>`;
+	});
+}
 
 		row.appendChild(cell);
 	}

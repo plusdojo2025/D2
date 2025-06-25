@@ -14,7 +14,7 @@
 
 <body>
 	<!-- タイトル -->
-	<h1><a href="<c:url value='/HomeServlet' />">ケンコークラフト</a></h1>
+	<h1 class="logo-header"><a href="<c:url value='/HomeServlet' />"> <img src="${pageContext.request.contextPath}/img/logo1.png" alt="Logo" class="logo-img"></a></h1>
 
 	<div>
 		<!-- TODO: 〇月と書かれているところをクリックすると年と月を選べるプルダウンを作成する。 -->
@@ -30,29 +30,9 @@
 		String max = now.getYear() + "-" + String.format("%02d", now.getMonthValue());
 		%>
 
-		<input type="month" id="monthInput" min="<%=min%>" max="<%=max%>" />
+		<div class="bar-top">
+  <!-- 年月選択 -->
 
-		<script>
-			document.getElementById('monthInput').addEventListener(
-					'change',
-					function() {
-						const ym = this.value;
-						if (!ym)
-							return;
-
-						const parts = ym.split('-');
-						const year = parts[0];
-						const month = parseInt(parts[1]);
-
-						const url = '/D2/CalendarServlet?month=' + month
-								+ '&year=' + year; // TODO: /D2/...に変更
-						window.location.href = url;
-					});
-		</script>
-
-
-
-		<!-- 次の月に移動 -->
 
 	</div>
 
@@ -60,17 +40,25 @@
 
 	<!-- カレンダー -->
 	<!-- --------------------------------------------------------------- -->
-	<div>
+	<div class="checkbox-group">
+	
+	 <label class="month-label">
+    年月：
+    <input type="month" id="monthInput" min="<%=min%>" max="<%=max%>" />
+  </label>
+	
 		<!-- チェックボックス -->
-		<label><input type="checkbox" name="cbhealthRecord"	id="cbHealth" checked>健康記録</label>
-		<label><input type="checkbox" name="rewardRecord" id="cbReward" checked>報酬記録</label>
-		<label><input type="checkbox" name="exercise" id="cbExercise" checked>運動記録</label>
-		<label><input type="checkbox" name="noSmoke" id="cbSmoke" checked>禁煙</label> 
-		<label><input type="checkbox" name="calorieIntake" id="cbCalorieIntake" checked>摂取カロリー</label>
-		<label><input type="checkbox" name="calorieCounsu" id="cbCalorieConsu" checked>消費カロリー</label> 
-		<label><input type="checkbox" name="sleepingTime" id="cbSleep" checked>睡眠</label>
-		<label><input type="checkbox" name="alcohol" id="cbAlcohol" checked>お酒</label>
-		<label><input type="checkbox" name="memo" id="cbMemo" checked>メモ</label>
+		<label class="cb-label health"><input type="checkbox" name="cbhealthRecord"	id="cbHealth" checked>健康記録</label>
+		<label class="cb-label reward"><input type="checkbox" name="rewardRecord" id="cbReward" checked>報酬記録</label>
+		<label class="cb-label weight"><input type="checkbox" name="nowweight" id="cbNowWeight" checked>体重</label>
+		<label class="cb-label intake"><input type="checkbox" name="calorieIntake" id="cbCalorieIntake" checked>摂取カロリー</label>
+		<label class="cb-label consu"><input type="checkbox" name="calorieCounsu" id="cbCalorieConsu" checked>消費カロリー</label> 
+		<label class="cb-label smoke"><input type="checkbox" name="noSmoke" id="cbSmoke" checked>禁煙</label>
+		<label class="cb-label sleep"><input type="checkbox" name="sleepingTime" id="cbSleep" checked>睡眠</label>
+		<label class="cb-label memo"><input type="checkbox" name="memo" id="cbMemo" checked>メモ</label>
+		<label class="cb-label exercise"><input type="checkbox" name="exercise" id="cbExercise" checked>運動記録</label>
+		<label class="cb-label alcohol"><input type="checkbox" name="alcohol" id="cbAlcohol" checked>お酒</label>
+		
 	</div>
 	
 	<table>
@@ -94,7 +82,7 @@
 	<div class="imgFace" id="${avatar.face.imagePath}"></div>
 	<input type="hidden" id="peopleNum" value="${avatar.peopleCount}">
 
-	<c:set var="width" value="500" /> <!-- 実際に画面に表示する際の横幅[px] -->
+	<c:set var="width" value="1000" /> <!-- 実際に画面に表示する際の横幅[px] -->
 	<canvas id="imageCanvas" width="1627" height="1021" style="width:${width}px;"></canvas>
 	<!-- --------------------------------------------------------------- -->
 	
