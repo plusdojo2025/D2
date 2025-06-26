@@ -47,20 +47,31 @@ const drawAvatar = async () => {
 		];
 
 		const relPeoplePos = [ // 周囲の人物の相対位置dx,dy, スケールs 
-			[-700, 0, 0.5], // 1人目
-            [-500, 0, 0.5], // 2人目
-            [-300, 0, 0.5], // 3人目
-            [100, 0, 0.5], // 4人目
-            [300, 0, 0.5], // 5人目
-            [500, 0, 0.5], // 6人目
-            [700, 0, 0.5] // 7人目
+			[-600, 150, -0.25], // 左激遠
+            [-450, 100, 0.4], // 左中
+            [700, 150, 0.25], // 右激遠
+            [100, 80, 0.5], // 右中
+            [270, 120, -0.55], // 右中近
+            [400, 100, 1],// 右近
+            [-1200, 90, -1.75], // 左激近
 		];
 
 		// Load base images
-		const backgroundImage = await loadImage('img/background.png');
+		let backgroundImage;
 		const defaultClothImage = await loadImage('img/cloth0.png')
 		const faceImage = await loadImage(face[0].id); // Face image
 		const peopleImage = await loadImage(people[0].id); // People image
+		
+		// build, cloth, peopleの中にどれか一つでもuniverseが含まれていたら宇宙の背景をloadする
+        const universe = [build, cloth, face, people].some(arr =>
+            Array.from(arr).some(item => item.id.includes('universe'))
+        );
+        if (universe) {
+            backgroundImage = await loadImage('img/universe_background.png');
+        } else {
+            backgroundImage = await loadImage('img/background.png');
+        }
+		
 		for (let i = 0; i < build.length; i++) {
 			buildImages[i] = await loadImage(build[i].id);
 		}
@@ -91,9 +102,30 @@ const drawAvatar = async () => {
 		}
 		// Draw surrounding people
 		for (let i = 0; i < peopleNum; i++) {
-			ctx.drawImage(peopleImage, x_people + relPeoplePos[i][0], y_people + relPeoplePos[i][1],
-				peopleImage.width * relPeoplePos[i][2], peopleImage.height * relPeoplePos[i][2]
-			);
+			const scale = relPeoplePos[i][2];
+            const drawWidth = peopleImage.width * scale;
+            const drawHeight = peopleImage.height * scale;
+
+            if (0 < scale){
+                ctx.drawImage(
+                    peopleImage, 
+                    x_people + relPeoplePos[i][0], 
+                    y_people + relPeoplePos[i][1],
+                    drawWidth, 
+                    drawHeight
+                );
+            } else { //左右反転
+                ctx.save();
+                ctx.scale(-1, 1);
+                ctx.drawImage(
+                    peopleImage, 
+                    -(x_people + relPeoplePos[i][0]), 
+                    y_people + relPeoplePos[i][1],
+                    drawWidth, 
+                    -drawHeight
+                ); 
+                ctx.restore();
+            }
 		}
 		// cloth and face
 		if (clothImages.length === 4) {

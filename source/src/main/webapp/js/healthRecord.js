@@ -256,7 +256,8 @@ function addAlcohol() {
 		volumeInput.value = '';
 
 		glassSelect.id = `glassSelect${alcoholCount}`;
-		glassSelect.innerHTML = '<option value="">参考: 器の種類</option>';
+		glassSelect.name = `glassSelect${alcoholCount}`;
+		//glassSelect.innerHTML = '<option value="">参考: 摂取量</option>';
 
 		cupCountInput.id = `cupCount${alcoholCount}`;
 		cupCountInput.value = 1;
@@ -425,11 +426,16 @@ function deleteAlcohol() {
 
 // ホイール操作でinput numberを操作
 // 新しく追加されたinput numberにも対応
+// addEventListenerの'change'に対応
 document.addEventListener('wheel', function(event) {
 	const target = event.target;
 	if (target.tagName.toLowerCase() === 'input' && target.type === 'number') {
 		event.preventDefault();
 		const delta = Math.sign(event.deltaY);
 		target.stepUp(-delta);
+		// ホイール操作後にchangeイベントを発火
+		const changeEvent = new Event('change', { bubbles: true });
+		target.dispatchEvent(changeEvent);
 	}
+
 }, { passive: false });
