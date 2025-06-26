@@ -18,6 +18,7 @@
 <p>睡眠ポイント: <c:out value="${sleepMessage}" /></p>
 <p>摂取カロリーポイント: <c:out value="${calorieMessage}" /></p>
 <p>禁煙ポイント: <c:out value="${nosmokeMessage}" /></p>
+<p>報酬: <c:out value="${rewardMessage}" /></p>
 <a href="${result.backTo}">戻る</a>
 </body>
 </html>

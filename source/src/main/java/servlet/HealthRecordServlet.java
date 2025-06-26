@@ -137,7 +137,7 @@ public class HealthRecordServlet extends HttpServlet {
 			request.setAttribute("result", new Result("登録成功！", "レコードを登録しました。", referer));
 			uDao.updateWeight(userId, nowWeight);
 		} else { // 登録失敗!
-			request.setAttribute("result", new Result("登録失敗！", "レコードを登録できませんでした。", referer));
+			request.setAttribute("result", new Result("登録失敗！", "レコードを登録できませんでした。今日の健康記録が既に登録されている可能性があります。", referer));
 			// 結果ページにフォワードする
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
 			dispatcher.forward(request, response);
@@ -232,31 +232,43 @@ public class HealthRecordServlet extends HttpServlet {
 		 * 報酬受け取り処理 更新されたポイントの更新前と更新後のポイントと 各種達成ポイントテーブル(DAO作って)を比較して
 		 * ポイントが達成していたら報酬受け取り処理を行う （RewardDayDAOのinsertを使う）
 		 */
+		List<String> rewardList = new ArrayList<String>(); // 登録後の報酬メッセージ用リスト
+		String[] rewardBuilding = { "1つ目の建物が建った！", "2つ目の建物が建った！", "3つ目の建物が建った！" };
+		String[] rewardClothes = { "服を受け取った！", "靴を受け取った！", "帽子を受け取った！", "民族衣装を受け取った！" };
+		String[] rewardPeople = { "人が増えた！", "人であふれた！", "人がいなくなった..." };
+		String[] rewardFace = { "顔色が良くなった！", "顔色が悪くなった..." };
+
+
 		Date date1 = Date.valueOf(date);
 		RewardDayDAO RDDao = new RewardDayDAO();
 		// 飲酒ポイントの報酬（建物）の受け取り処理
 		if (alcoholPointChanged) {
 			AchievementPointDAO apDao = new AchievementPointDAO();
 			List<AchievementPoint> apList = apDao.selectAlcohol();
+			String rewardMessage = null;
 			if ((point.getTotal_alcohol_consumed() + 10) == apList.get(0).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "1つ目の建物が建った！");
-				RDDao.insert(rewardDay);
+				rewardMessage = rewardBuilding[0];
 			} else if ((point.getTotal_alcohol_consumed() + 10) == apList.get(1).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "2つ目の建物が建った！");
-				RDDao.insert(rewardDay);
+				rewardMessage = rewardBuilding[1];
 			} else if ((point.getTotal_alcohol_consumed() + 10) == apList.get(2).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "3つ目の建物が建った！");
+				rewardMessage = rewardBuilding[2];
+			}
+			if (rewardMessage != null) {
+				RewardDay rewardDay = new RewardDay(userId, date1, rewardMessage);
 				RDDao.insert(rewardDay);
+				rewardList.add(rewardMessage);
 			}
 		}
 
 		// 睡眠時間ポイントの報酬（顔色）の受け取り処理
 		if (sleepPointChanged == 1) {
-			RewardDay rewardDay = new RewardDay(userId, date1, "顔色が良くなった！");
+			RewardDay rewardDay = new RewardDay(userId, date1, rewardFace[0]);
 			RDDao.insert(rewardDay);
+			rewardList.add(rewardFace[0]);
 		} else if (sleepPointChanged == -1) {
-			RewardDay rewardDay = new RewardDay(userId, date1, "顔色が悪くなった！");
+			RewardDay rewardDay = new RewardDay(userId, date1, rewardFace[1]);
 			RDDao.insert(rewardDay);
+			rewardList.add(rewardFace[1]);
 		} else if (sleepPointChanged == 0) {
 			// 何もしない
 		}
@@ -265,18 +277,20 @@ public class HealthRecordServlet extends HttpServlet {
 		if (caloriePointChanged) {
 			AchievementPointDAO apDao = new AchievementPointDAO();
 			List<AchievementPoint> apList = apDao.selectEat();
+			String rewardMessage = null;
 			if ((point.getTotal_calorie_intake() + 10) == apList.get(0).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "服を受け取った！");
-				RDDao.insert(rewardDay);
+				rewardMessage = rewardClothes[0];
 			} else if ((point.getTotal_calorie_intake() + 10) == apList.get(1).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "靴を受け取った！");
-				RDDao.insert(rewardDay);
+				rewardMessage = rewardClothes[1];
 			} else if ((point.getTotal_calorie_intake() + 10) == apList.get(2).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "帽子を受け取った！");
-				RDDao.insert(rewardDay);
+				rewardMessage = rewardClothes[2];
 			} else if ((point.getTotal_calorie_intake() + 10) == apList.get(3).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "民族衣装を受け取った！");
+				rewardMessage = rewardClothes[3];
+			}
+			if (rewardMessage != null) {
+				RewardDay rewardDay = new RewardDay(userId, date1, rewardMessage);
 				RDDao.insert(rewardDay);
+				rewardList.add(rewardMessage);
 			}
 		}
 
@@ -285,15 +299,18 @@ public class HealthRecordServlet extends HttpServlet {
 			AchievementPointDAO apDao = new AchievementPointDAO();
 			List<AchievementPoint> apList = apDao.selectSmoke();
 			if ((point.getTotal_nosmoke() + 1) == apList.get(apList.size() - 1).getAchievementPoint()) {
-				RewardDay rewardDay = new RewardDay(userId, date1, "人であふれた！");
+				RewardDay rewardDay = new RewardDay(userId, date1, rewardPeople[1]);
 				RDDao.insert(rewardDay);
+				rewardList.add(rewardPeople[1]);
 			} else {
-				RewardDay rewardDay = new RewardDay(userId, date1, "人が増えた！");
+				RewardDay rewardDay = new RewardDay(userId, date1, rewardPeople[0]);
 				RDDao.insert(rewardDay);
+				rewardList.add(rewardPeople[0]);
 			}
 		} else if (nosmokePointChanged == -1) {
-			RewardDay rewardDay = new RewardDay(userId, date1, "人がいなくなった！");
+			RewardDay rewardDay = new RewardDay(userId, date1, rewardPeople[2]);
 			RDDao.insert(rewardDay);
+			rewardList.add(rewardPeople[2]);
 		} else if (nosmokePointChanged == 0) {
 			// 何もしない
 		}
@@ -306,6 +323,7 @@ public class HealthRecordServlet extends HttpServlet {
 			String country = WTDao.select(point.getTotal_calorie_consumed() + totalCalorieConsu);
 			RewardDay rewardDay = new RewardDay(userId, date1, country + "に到達した！");
 			RDDao.insert(rewardDay);
+			rewardList.add(country + "に到達した！");
 		}
 
 		// 報酬受け取り処理 更新されたポイントの更新前と更新後のポイントと 各種達成ポイントテーブル(DAO作って)を比較して
@@ -318,50 +336,61 @@ public class HealthRecordServlet extends HttpServlet {
 
 		if (alcoholPointChanged) {
 
-			request.setAttribute("alcoholMessage", "飲酒ポイントが増加し、もらえました。");
+			request.setAttribute("alcoholMessage", "UP ↑");
 
 		} else {
 
-			request.setAttribute("alcoholMessage", "飲酒ポイントが増加せず、もらえませんでした。");
+			request.setAttribute("alcoholMessage", "STAY →");
 
 		}
 
 		if (sleepPointChanged == 1) {
 
-			request.setAttribute("sleepMessage", "睡眠ポイントが増加し、もらえました。");
+			request.setAttribute("sleepMessage", "UP ↑");
 
 		} else if (sleepPointChanged == -1) {
 
-			request.setAttribute("sleepMessage", "睡眠ポイントが減少し、もらえませんでした。");
+			request.setAttribute("sleepMessage", "DOWN ↓");
 
 		} else {
 
-			request.setAttribute("sleepMessage", "睡眠ポイントは変更されませんでした。");
+			request.setAttribute("sleepMessage", "STAY → (上限 or 下限)");
 
 		}
 
 		if (caloriePointChanged) {
 
-			request.setAttribute("calorieMessage", "摂取カロリーポイントが増加し、もらえました。");
+			request.setAttribute("calorieMessage", "UP ↑");
 
 		} else {
 
-			request.setAttribute("calorieMessage", "摂取カロリーポイントが増加せず、もらえませんでした。");
+			request.setAttribute("calorieMessage", "STAY →");
 
 		}
 
 		if (nosmokePointChanged == 1) {
 
-			request.setAttribute("nosmokeMessage", "禁煙ポイントが増加し、もらえました。");
+			request.setAttribute("nosmokeMessage", "UP ↑");
 
 		} else if (nosmokePointChanged == -1) {
 
-			request.setAttribute("nosmokeMessage", "禁煙ポイントが減少し、もらえませんでした。");
+			request.setAttribute("nosmokeMessage", "DOWN ↓");
 
 		} else {
 
-			request.setAttribute("nosmokeMessage", "禁煙ポイントは変更されませんでした。");
+			request.setAttribute("nosmokeMessage", "STAY → (上限 or 下限)");
 
+		}
+
+		// リクエストスコープに報酬メッセージをセット
+		if (rewardList.isEmpty()) {
+			request.setAttribute("rewardMessage", "報酬はありませんでした。");
+		} else {
+			StringBuilder sb = new StringBuilder();
+			for (String reward : rewardList) {
+				sb.append(reward).append(" ");
+			}
+			request.setAttribute("rewardMessage", sb.toString());
 		}
 
 		// 結果ページにフォワードする
