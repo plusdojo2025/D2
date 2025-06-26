@@ -104,8 +104,8 @@ INSERT INTO target_value(user_id) VALUES
     ("dojouser4"),
     ("dojouser5");
 
-UPDATE target_value SET month=5, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="kazutoshi_t";
-UPDATE target_value SET month=5, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="dojouser1";
+UPDATE target_value SET month=6, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="kazutoshi_t";
+UPDATE target_value SET month=6, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="dojouser1";
 UPDATE target_value SET month=6, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="dojouser2";
 UPDATE target_value SET month=6, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="dojouser3";
 UPDATE target_value SET month=6, pure_alcohol_consumed=50, sleep_time=8, calorie_intake=3000, target_weight=60 WHERE user_id="dojouser4";
@@ -140,7 +140,7 @@ INSERT INTO point VALUES  ("kazutoshi_t", 2024, 9, 32400, 7, 300, 300, 3);
 INSERT INTO point VALUES  ("kazutoshi_t", 2024, 8, 28800, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2024, 7, 25200, 7, 300, 300, 5);
 
-INSERT INTO point VALUES  ("dojouser1", 2025, 6, 7200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("dojouser1", 2025, 6, 10799, 5, 300, 300, 4);
 INSERT INTO point VALUES  ("dojouser1", 2025, 5, 5000, 7, 300, 300, 3);
 INSERT INTO point VALUES  ("dojouser1", 2025, 4, 57600, 7, 300, 300, 1);
 INSERT INTO point VALUES  ("dojouser1", 2025, 3, 54000, 7, 300, 300, 2);
