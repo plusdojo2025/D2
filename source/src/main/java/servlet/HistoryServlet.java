@@ -37,7 +37,8 @@ import dto.TownAvatarElements;
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/HistoryServlet")
-@MultipartConfig(location = "C:\\plusdojo2025\\D2\\source\\src\\main\\webapp\\WEB-INF\\uploaded", maxFileSize = 1048576)
+//@MultipartConfig(location = "C:\\plusdojo2025\\D2\\source\\src\\main\\webapp", maxFileSize = 1048576)
+@MultipartConfig(maxFileSize = 1048576)
 public class HistoryServlet extends HttpServlet {
 	
 	private boolean test = false;
@@ -272,9 +273,9 @@ public class HistoryServlet extends HttpServlet {
 
 	    if (this.test) {
 	        session.setAttribute("user_id", testUserId);
-	        uploadFolderPath = "C:/plusdojo2025/D2/source/src/main/webapp/WEB-INF/uploaded";
+	        uploadFolderPath = "C:/plusdojo2025/D2/source/src/main/webapp/uploaded";
 	    } else {
-	        uploadFolderPath = req.getServletContext().getRealPath("/WEB-INF/uploaded");
+	        uploadFolderPath = req.getServletContext().getRealPath("/uploaded");
 	    }
 
 	    userIdSession = (String) session.getAttribute("user_id");
@@ -346,7 +347,7 @@ public class HistoryServlet extends HttpServlet {
 	            }
 
 	            String fileName = getFileName(part);
-	            part.write(fileName); // location に保存される
+	            part.write("/uploaded/" + fileName); // location に保存される
 
 	            File file = new File(uploadFolderPath + "/" + fileName);
 	            if (!file.exists()) continue;
