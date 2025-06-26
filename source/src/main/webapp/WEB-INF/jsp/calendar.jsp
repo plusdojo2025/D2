@@ -43,9 +43,10 @@
 	<div class="checkbox-group">
 	
 	 <label class="month-label">
-    年月：
-    <input type="month" id="monthInput" min="<%=min%>" max="<%=max%>" />
-  </label>
+	  <%--  ${displayYear}年 ${displayMonth}月 --%>
+	   <input type="month" id="monthInput" min="<%=min%>" max="<%=max%>" 
+	   value="${displayYear}-${String.format('%02d', displayMonth)}">
+	</label>
 	
 		<!-- チェックボックス -->
 		<label class="cb-label health"><input type="checkbox" name="cbhealthRecord"	id="cbHealth" checked>健康記録</label>
@@ -54,10 +55,10 @@
 		<label class="cb-label intake"><input type="checkbox" name="calorieIntake" id="cbCalorieIntake" checked>摂取カロリー</label>
 		<label class="cb-label consu"><input type="checkbox" name="calorieCounsu" id="cbCalorieConsu" checked>消費カロリー</label> 
 		<label class="cb-label smoke"><input type="checkbox" name="noSmoke" id="cbSmoke" checked>禁煙</label>
-		<label class="cb-label sleep"><input type="checkbox" name="sleepingTime" id="cbSleep" checked>睡眠</label>
+		<label class="cb-label sleep-label"><input type="checkbox" name="sleepingTime" id="cbSleep" checked>睡眠</label>
 		<label class="cb-label memo"><input type="checkbox" name="memo" id="cbMemo" checked>メモ</label>
-		<label class="cb-label exercise"><input type="checkbox" name="exercise" id="cbExercise" checked>運動記録</label>
-		<label class="cb-label alcohol"><input type="checkbox" name="alcohol" id="cbAlcohol" checked>お酒</label>
+		<label class="cb-label exercise-label"><input type="checkbox" name="exercise" id="cbExercise" checked>運動記録</label>
+		<label class="cb-label alcohol-label"><input type="checkbox" name="alcohol" id="cbAlcohol" checked>お酒</label>
 		
 	</div>
 	
@@ -67,6 +68,31 @@
         </tr>
         <tbody id="calendar-body"></tbody>
     </table> 
+    
+    <!-- 統計値 -->
+	<!-- --------------------------------------------------------------- -->
+	<div class="summary-box">
+		<%
+	String[] monthNames = {
+		"1月", "2月", "3月", "4月", "5月", "6月",
+		"7月", "8月", "9月", "10月", "11月", "12月"
+	};
+	int displayMonth = (Integer) request.getAttribute("displayMonth");
+	%>
+
+
+
+  <p><%= monthNames[displayMonth - 1] %>の統計</p>
+
+  <p>合計消費カロリー：<%= String.format("%.1f", request.getAttribute("sumCalorieConsumed")) %> kcal</p>
+  <p>1日の平均純アルコール量：<%= String.format("%.1f", request.getAttribute("avgPureAlcohol")) %> g</p>
+  <p>1日の平均睡眠時間：<%= String.format("%.1f", request.getAttribute("avgSleep")) %> 時間</p>
+
+  <p>合計禁煙日数：<%= request.getAttribute("sumNosmokeDays") %> 日</p>
+  <p>1日の平均消費カロリー：<%= String.format("%.1f", request.getAttribute("avgConsumed")) %> kcal</p>
+  <p>1日の平均摂取カロリー：<%= String.format("%.1f", request.getAttribute("avgIntake")) %> kcal</p>
+
+	</div>
 	<!-- --------------------------------------------------------------- -->
 
 	<!-- アバター画像 -->
@@ -89,31 +115,7 @@
 
 	
 
-	<!-- 統計値 -->
-	<!-- --------------------------------------------------------------- -->
-	<div class="summary-box">
-		<%
-	String[] monthNames = {
-		"1月", "2月", "3月", "4月", "5月", "6月",
-		"7月", "8月", "9月", "10月", "11月", "12月"
-	};
-	int displayMonth = (Integer) request.getAttribute("displayMonth");
-	%>
-
-	<p><%= monthNames[displayMonth - 1] %>の統計</p>
-		<p>
-			合計消費カロリー：<%=String.format("%.1f", request.getAttribute("sumCalorieConsumed"))%>
-			kcal 1日の平均純アルコール量：<%=String.format("%.1f", request.getAttribute("avgPureAlcohol"))%>
-			g 1日の平均睡眠時間：<%=String.format("%.1f", request.getAttribute("avgSleep"))%>
-			時間
-		</p>
-		<p>
-			合計禁煙日数：<%=request.getAttribute("sumNosmokeDays")%>
-			日 1日の平均消費カロリー：<%=String.format("%.1f", request.getAttribute("avgConsumed"))%>
-			kcal 1日の平均摂取カロリー：<%=String.format("%.1f", request.getAttribute("avgIntake"))%>
-			kcal
-		</p>
-	</div>
+	
 
 	<!-- --------------------------------------------------------------- -->
 	
@@ -231,7 +233,8 @@
 
 			<br>
 
-			<label>自由欄<br> <input type="text" name=free id="input_free"></label>
+			<label for="free">自由欄</label>
+<textarea name="free" id="input_free"></textarea>
 
 			<br>
 

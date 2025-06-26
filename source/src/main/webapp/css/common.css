@@ -70,13 +70,13 @@ body {
 	font-size: 1.1em;
 	padding: 10px 25px;
 	border-radius: 6px;
-	background-color: #666;
+	background-color: #66bb6a;
 	color: #fff;
 	border: none;
 }
 
 #register:hover {
-	background-color: #444; /* ホバー時に少し濃く */
+	background-color: #fbcd88; /* オレンジ */
 }
 
 #footer {
