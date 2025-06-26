@@ -140,7 +140,7 @@
 
 			<label>
 				現在の体重[kg]：
-					<input type="number" step="0.5" name="now_weight" value="60.0" id="input_weight">	
+					<input type="number" step="0.1" name="now_weight" value="60.0" id="input_weight" min="0" required>	
 			</label>
 
 			<br>
@@ -221,14 +221,14 @@
 
 			<label> 
 				睡眠時間[h]：
-					<input type="number" name="sleep_hours" step="0.5" default="7.0" value="7.0" id="input_sleep">
+					<input type="number" name="sleep_hours" step="0.5" default="7.0" value="7.0" id="input_sleep" min="0" required>
 			</label>
 
 			<br>
 
 			<label> 
 				摂取カロリー[kcal]： 
-					<input type="number" name="calorie_intake" min="0" step="100" value="2000" id="input_calorie_intake">
+					<input type="number" name="calorie_intake" min="0" step="100" value="2000" id="input_calorie_intake" required>
 			</label>
 
 			<br>

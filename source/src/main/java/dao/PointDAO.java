@@ -172,6 +172,57 @@ public class PointDAO {
 		return point;
 
 	}
+	
+	public Point selectByUserIdMonthYear(String userId, int month, int year) {
+		Point point = new Point();
+		Connection conn = null;
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/d2?"
+
+					+ "characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9&rewriteBatchedStatements=true",
+
+					"root", "password");
+
+			String sql = "SELECT user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime FROM point WHERE user_id=? AND month=? AND year=?";
+
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			pStmt.setString(1, userId);
+			pStmt.setInt(2, month);
+			pStmt.setInt(3, year);
+
+			ResultSet rs = pStmt.executeQuery();
+
+			rs.next();
+
+			point = new Point(rs.getString("user_id"), rs.getInt("month"), rs.getInt("year"),
+					rs.getInt("total_calorie_consumed"), rs.getInt("total_nosmoke"),
+					rs.getInt("total_alcohol_consumed"), rs.getInt("total_calorie_intake"),
+					rs.getInt("total_sleeptime"));
+
+		} catch (SQLException | ClassNotFoundException e) {
+
+			e.printStackTrace();
+
+			point = null;
+
+		} finally {
+
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+		}
+
+		return point;
+
+	}
 
 	public boolean update(Point pt) {
 		Connection conn = null;
@@ -310,7 +361,7 @@ public class PointDAO {
 	                "root", "password");
 	        
 	        String sql = "INSERT INTO point (user_id, year, month, total_calorie_consumed, total_nosmoke, total_alcohol_consumed, total_calorie_intake, total_sleeptime) "
-					+ "VALUES (?, ?, ?, ?, 0, 0, 0, 0)";
+					+ "VALUES (?, ?, ?, ?, 0, 0, 0, 1)";
 	        
 			pstmt = conn.prepareStatement(sql);
 

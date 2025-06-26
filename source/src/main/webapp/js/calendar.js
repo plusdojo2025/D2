@@ -11,9 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			const parts = ym.split('-');
 			const year = parts[0];
 			const month = parseInt(parts[1]);
+			
+			// 現在のURLをベースにクエリパラメータを変更
+			const url = new URL(window.location.href);
+			url.searchParams.set('year', year);
+			url.searchParams.set('month', month);
 
-			const url = '/D2/CalendarServlet?month=' + month + '&year=' + year;
-			window.location.href = url;
+			// URLを変更して遷移
+			window.location.href = url.toString();
 		});
 	}
 

@@ -126,11 +126,18 @@ public class HealthRecordServlet extends HttpServlet {
 		}
 
 		// 健康記録登録・現在の体重登録
+	    String referer = request.getHeader("Referer"); // リファラ（送信元）のURLを取得
+
+	    if (referer == null || referer.isEmpty() || referer.contains("HealthRecord")) {
+	    	// リファラがない場合はデフォルトのページにリダイレクト
+	    	referer = request.getContextPath() + "/HomeServlet";
+	    } 
+	    
 		if (HRDao.insert(hw, haList, heList)) { // 登録成功
-			request.setAttribute("result", new Result("登録成功！", "レコードを登録しました。", "/D2/HomeServlet"));
+			request.setAttribute("result", new Result("登録成功！", "レコードを登録しました。", referer));
 			uDao.updateWeight(userId, nowWeight);
 		} else { // 登録失敗!
-			request.setAttribute("result", new Result("登録失敗！", "レコードを登録できませんでした。", "/D2/HomeServlet"));
+			request.setAttribute("result", new Result("登録失敗！", "レコードを登録できませんでした。", referer));
 			// 結果ページにフォワードする
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
 			dispatcher.forward(request, response);

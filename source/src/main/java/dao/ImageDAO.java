@@ -20,7 +20,9 @@ public class ImageDAO {
 	    static public int getCountryOrder(int totalCalorieConsumed) {
 	        int countryOrder = 0;
 
-	        countryOrder  = totalCalorieConsumed / 3600 + 1;
+	        countryOrder = totalCalorieConsumed / 3600;
+	        countryOrder = countryOrder % 17; // 宇宙(17番目を)を超えたら日本(1番目)に戻る
+	        countryOrder = countryOrder + 1; // 0~16 → 1~17
 	        
 	        return countryOrder;
 	    }

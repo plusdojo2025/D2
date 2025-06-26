@@ -67,7 +67,7 @@ public class HistoryServlet extends HttpServlet {
 			folderPath = "c:/plusdojo2025/D2/source/src/main/webapp/"
 					+ "history/" + userId;
 		} else {
-			folderPath = request.getContextPath() + "/source/src/main/webapp/history/" + userId;
+			folderPath = request.getServletContext().getRealPath("/history/" + userId);
 			}
 
 		/*
@@ -78,31 +78,35 @@ public class HistoryServlet extends HttpServlet {
 		LocalDate today = java.time.LocalDate.now(); // 今日の日付を取得
 		// 2025-06-19
 		HealthRecordDAO hrDao = new HealthRecordDAO();
-		List<String> dateList = hrDao.select(userId); // 全ての健康記録の日付だけ古い順に取得
-		Date oldestDayTmp = Date.valueOf(dateList.get(0));// 一番古い日付を取得 2024-04-01
-		LocalDate oldestDay = oldestDayTmp.toLocalDate();
-
-		// 今日の年月を取得
-		int todayYear = today.getYear();// 2025
-		int todayMonth = today.getMonthValue();// 6
-		// 一番古い健康記録データの年月を取得
-		int oldestDayYear = oldestDay.getYear();// 2024
-		int oldestDayMonth = oldestDay.getMonthValue();// 4
-		int gap = 0;
-
-		if (todayYear - oldestDayYear >= 1) {
-			gap = 12 * (todayYear - oldestDayYear) + (todayMonth - oldestDayMonth);
-		}
-		if (gap >= 12) {
-			int loopCount = gap - 12 + 1;
-			for (int i = 0; i < loopCount; i++) {
-				if (oldestDayMonth + i > 12) {
-					hrDao.delete(userId, oldestDayYear + 1, oldestDayMonth + i - 12);
-				} else {
-					hrDao.delete(userId, oldestDayYear, oldestDayMonth + i);
+		int todayYear = today.getYear();
+		int todayMonth = today.getMonthValue();
+		int gap = 0; // 今日と一番古いデータ日との間の月数
+		try {
+			List<String> dateList = hrDao.select(userId); // 全ての健康記録の日付だけ古い順に取得
+			Date oldestDayTmp = Date.valueOf(dateList.get(0));// 一番古い日付を取得 2024-04-01
+			LocalDate oldestDay = oldestDayTmp.toLocalDate();
+			
+			// 一番古い健康記録データの年月を取得
+			int oldestDayYear = oldestDay.getYear();// 2024
+			int oldestDayMonth = oldestDay.getMonthValue();// 4
+			
+			if (todayYear - oldestDayYear >= 1) {
+				gap = 12 * (todayYear - oldestDayYear) + (todayMonth - oldestDayMonth);
+			}
+			if (gap >= 12) {
+				int loopCount = gap - 12 + 1;
+				for (int i = 0; i < loopCount; i++) {
+					if (oldestDayMonth + i > 12) {
+						hrDao.delete(userId, oldestDayYear + 1, oldestDayMonth + i - 12);
+					} else {
+						hrDao.delete(userId, oldestDayYear, oldestDayMonth + i);
+					}
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 
 		// 報酬達成日のレコードを削除
 		RewardDayDAO rdDao = new RewardDayDAO();
@@ -138,12 +142,21 @@ public class HistoryServlet extends HttpServlet {
 		PointDAO pDao = new PointDAO();
 		// ポイントテーブルのレコードを日付の古い順に取得
 		List<Point> pointList = pDao.selectByUserId(userId);
-		// 一番古いポイントレコードの年月を取得
-		int oldestDayYear3 = pointList.get(0).getYear();
-		int oldestDayMonth3 = pointList.get(0).getMonth();
-		if (todayYear - oldestDayYear3 >= 1) {
-			gap = 12 * (todayYear - oldestDayYear3) + (todayMonth - oldestDayMonth3);
+		int oldestDayYear3 = 0;
+		int oldestDayMonth3 = 0;
+		
+		try {
+			// 一番古いポイントレコードの年月を取得
+			oldestDayYear3 = pointList.get(0).getYear();
+			oldestDayMonth3 = pointList.get(0).getMonth();
+			if (todayYear - oldestDayYear3 >= 1) {
+				gap = 12 * (todayYear - oldestDayYear3) + (todayMonth - oldestDayMonth3);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			gap = 0;
 		}
+
 		if (gap >= 12) {
 			int loopCount = gap - 12 + 1;
 			int j = 0;
@@ -255,7 +268,7 @@ public class HistoryServlet extends HttpServlet {
 
 		// 過去ファイルのリストを取得
 		HistoryDAO dao = new HistoryDAO();
-		List<History> hrList = dao.select("kazutoshi_t");
+		List<History> hrList = dao.select(userId);
 		request.setAttribute("fileList", hrList);
 
 		// ログインページにフォワードする

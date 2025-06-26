@@ -140,32 +140,32 @@ INSERT INTO point VALUES  ("kazutoshi_t", 2024, 9, 32400, 7, 300, 300, 3);
 INSERT INTO point VALUES  ("kazutoshi_t", 2024, 8, 28800, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("kazutoshi_t", 2024, 7, 25200, 7, 300, 300, 5);
 
-INSERT INTO point VALUES  ("dojouser1", 2025, 6, 10799, 5, 300, 300, 4);
-INSERT INTO point VALUES  ("dojouser1", 2025, 5, 5000, 7, 300, 300, 3);
-INSERT INTO point VALUES  ("dojouser1", 2025, 4, 57600, 7, 300, 300, 1);
-INSERT INTO point VALUES  ("dojouser1", 2025, 3, 54000, 7, 300, 300, 2);
-INSERT INTO point VALUES  ("dojouser1", 2025, 2, 50400, 7, 300, 300, 3);
-INSERT INTO point VALUES  ("dojouser1", 2025, 1, 46800, 7, 300, 300, 4);
-INSERT INTO point VALUES  ("dojouser1", 2024, 12, 43200, 7, 300, 300, 5);
-INSERT INTO point VALUES  ("dojouser1", 2024, 11, 39600, 7, 300, 300, 1);
-INSERT INTO point VALUES  ("dojouser1", 2024, 10, 36000, 7, 300, 300, 2);
-INSERT INTO point VALUES  ("dojouser1", 2024, 9, 32400, 7, 300, 300, 3);
-INSERT INTO point VALUES  ("dojouser1", 2024, 8, 28800, 7, 300, 300, 4);
-INSERT INTO point VALUES  ("dojouser1", 2024, 7, 25200, 7, 300, 300, 5);
+-- INSERT INTO point VALUES  ("dojouser1", 2025, 6, 10799, 5, 300, 300, 4);
+INSERT INTO point VALUES  ("dojouser1", 2025, 5, 39600, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("dojouser1", 2025, 4, 36000, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("dojouser1", 2025, 3, 32400, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("dojouser1", 2025, 2, 28800, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("dojouser1", 2025, 1, 25200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("dojouser1", 2024, 12, 21600, 7, 300, 300, 5);
+INSERT INTO point VALUES  ("dojouser1", 2024, 11, 18000, 7, 300, 300, 1);
+INSERT INTO point VALUES  ("dojouser1", 2024, 10, 14400, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("dojouser1", 2024, 9, 10800, 7, 300, 300, 3);
+INSERT INTO point VALUES  ("dojouser1", 2024, 8, 7200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("dojouser1", 2024, 7, 3600, 7, 300, 300, 5);
 
-INSERT INTO point VALUES  ("dojouser2", 2025, 6, 5000, 7, 300, 300, 4);
+-- INSERT INTO point VALUES  ("dojouser2", 2025, 6, 5000, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("dojouser2", 2025, 5, 5000, 7, 200, 300, 3);
 INSERT INTO point VALUES  ("dojouser2", 2025, 4, 5000, 7, 100, 300, 1);
 INSERT INTO point VALUES  ("dojouser2", 2025, 3, 5000, 7, 0, 300, 2);
-INSERT INTO point VALUES  ("dojouser2", 2025, 2, 5000, 7, 300, 210, 3);
+-- INSERT INTO point VALUES  ("dojouser2", 2025, 2, 5000, 7, 300, 210, 3);
 INSERT INTO point VALUES  ("dojouser2", 2025, 1, 5000, 7, 300, 140, 4);
 INSERT INTO point VALUES  ("dojouser2", 2024, 12, 5000, 7, 300, 70, 5);
 INSERT INTO point VALUES  ("dojouser2", 2024, 11, 5000, 7, 300, 70, 5);
 INSERT INTO point VALUES  ("dojouser2", 2024, 10, 5000, 7, 300, 0, 1);
 INSERT INTO point VALUES  ("dojouser2", 2024, 9, 5000, 7, 0, 0, 1);
 
-INSERT INTO point VALUES  ("dojouser3", 2025, 6, 7200, 7, 300, 300, 4);
-INSERT INTO point VALUES  ("dojouser3", 2025, 5, 5000, 7, 300, 300, 3);
+-- INSERT INTO point VALUES  ("dojouser3", 2025, 6, 7200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("dojouser3", 2025, 5, 25200, 7, 300, 300, 3);
 INSERT INTO point VALUES  ("dojouser3", 2024, 6, 21600, 7, 300, 300, 1);
 INSERT INTO point VALUES  ("dojouser3", 2024, 5, 18000, 7, 300, 300, 2);
 INSERT INTO point VALUES  ("dojouser3", 2024, 4, 14400, 7, 300, 300, 3);
@@ -178,7 +178,7 @@ INSERT INTO point VALUES  ("dojouser3", 2023, 10, 0, 7, 300, 70, 1);
 INSERT INTO point VALUES  ("dojouser3", 2023, 9, 0, 7, 300, 140, 1);
 INSERT INTO point VALUES  ("dojouser3", 2023, 8, 0, 7, 300, 210, 1);
 
-INSERT INTO point VALUES  ("dojouser4", 2025, 6, 57599, 7, 300, 300, 5);
+-- INSERT INTO point VALUES  ("dojouser4", 2025, 6, 57599, 7, 300, 300, 5);
 
 INSERT INTO point VALUES  ("test1", 2025, 6, 7200, 7, 300, 300, 4);
 INSERT INTO point VALUES  ("test1", 2025, 5, 5000, 7, 300, 300, 3);
@@ -219,22 +219,22 @@ CREATE TABLE reward_day(
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
-INSERT INTO reward_day(user_id, date, reward_explain) VALUES  
-    ("kazutoshi_t", "2025-05-10", "人であふれた！"),
-    ("kazutoshi_t", "2025-05-15", "建物が建った！"),
-    ("kazutoshi_t", "2025-05-31", "民族衣装がもらえた！"),
-    ("kazutoshi_t", "2025-06-10", "人であふれた！"),
-    ("kazutoshi_t", "2025-06-15", "建物が建った！"),
-    ("kazutoshi_t", "2025-06-15", "建物が建った！"),
-    ("kazutoshi_t", "2025-06-30", "民族衣装がもらえた！"),
-    ("dojouser1", "2025-05-10", "人であふれた！"),
-    ("dojouser1", "2025-05-15", "建物が建った！"),
-    ("dojouser1", "2025-05-31", "民族衣装がもらえた！"),
-    ("dojouser1", "2025-06-10", "人であふれた！"),
-    ("dojouser1", "2025-06-15", "建物が建った！"),
-    ("dojouser1", "2025-06-15", "建物が建った！"),
-    ("dojouser1", "2025-06-30", "民族衣装がもらえた！")    
-    ;
+-- INSERT INTO reward_day(user_id, date, reward_explain) VALUES  
+--     ("kazutoshi_t", "2025-05-10", "人であふれた！"),
+--     ("kazutoshi_t", "2025-05-15", "建物が建った！"),
+--     ("kazutoshi_t", "2025-05-31", "民族衣装がもらえた！"),
+--     ("kazutoshi_t", "2025-06-10", "人であふれた！"),
+--     ("kazutoshi_t", "2025-06-15", "建物が建った！"),
+--     ("kazutoshi_t", "2025-06-15", "建物が建った！"),
+--     ("kazutoshi_t", "2025-06-30", "民族衣装がもらえた！"),
+--     ("dojouser1", "2025-05-10", "人であふれた！"),
+--     ("dojouser1", "2025-05-15", "建物が建った！"),
+--     ("dojouser1", "2025-05-31", "民族衣装がもらえた！"),
+--     ("dojouser1", "2025-06-10", "人であふれた！"),
+--     ("dojouser1", "2025-06-15", "建物が建った！"),
+--     ("dojouser1", "2025-06-15", "建物が建った！"),
+--     ("dojouser1", "2025-06-30", "民族衣装がもらえた！")    
+--     ;
 
 SELECT * FROM reward_day;
 
@@ -288,19 +288,19 @@ INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercis
 INSERT INTO health_whole VALUES ("kazutoshi_t", "2025-06-03", 0, 8, 3000, "test0603", 60);
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("kazutoshi_t", "2025-06-03", 600, "ウォーキング", 60);
 
--- 2025/0601
-INSERT INTO health_whole VALUES ("dojouser1", "2025-06-01", 0, 8, 2000, "test0601", 60);
-INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser1", "2025-06-01", 30, 300, 5);
-INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser1", "2025-06-01", 30, 100, 10);
-INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-01", 300, "ウォーキング", 30);
-INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-01", 300, "サイクリング", 60);
--- 2025/0602
-INSERT INTO health_whole VALUES ("dojouser1", "2025-06-02", 1, 7.5, 2500, "test0602", 60);
-INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser1", "2025-06-02", 30, 300, 5);
-INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-02", 900, "ランニング", 30);
--- 2025/0603
-INSERT INTO health_whole VALUES ("dojouser1", "2025-06-03", 0, 8, 3000, "test0603", 60);
-INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-03", 600, "ウォーキング", 60);
+-- -- 2025/0601
+-- INSERT INTO health_whole VALUES ("dojouser1", "2025-06-01", 0, 8, 2000, "test0601", 60);
+-- INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser1", "2025-06-01", 30, 300, 5);
+-- INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser1", "2025-06-01", 30, 100, 10);
+-- INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-01", 300, "ウォーキング", 30);
+-- INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-01", 300, "サイクリング", 60);
+-- -- 2025/0602
+-- INSERT INTO health_whole VALUES ("dojouser1", "2025-06-02", 1, 7.5, 2500, "test0602", 60);
+-- INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser1", "2025-06-02", 30, 300, 5);
+-- INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-02", 900, "ランニング", 30);
+-- -- 2025/0603
+-- INSERT INTO health_whole VALUES ("dojouser1", "2025-06-03", 0, 8, 3000, "test0603", 60);
+-- INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-06-03", 600, "ウォーキング", 60);
 
 SELECT * FROM health_whole;
 SELECT * FROM health_alcohol;
@@ -537,14 +537,14 @@ INSERT INTO history VALUES
     ("kazutoshi_t", 2024, 3, "2024-3.txt"),
     ("kazutoshi_t", 2024, 4, "2024-4.txt"),
     ("kazutoshi_t", 2024, 5, "2024-5.txt"),
-    ("kazutoshi_t", 2024, 6, "2024-6.txt"),
-    ("dojouser1", 2023, 12, "2023-12.txt"),
-    ("dojouser1", 2024, 1, "2024-1.txt"),
-    ("dojouser1", 2024, 2, "2024-2.txt"),
-    ("dojouser1", 2024, 3, "2024-3.txt"),
-    ("dojouser1", 2024, 4, "2024-4.txt"),
-    ("dojouser1", 2024, 5, "2024-5.txt"),
-    ("dojouser1", 2024, 6, "2024-6.txt")
+    ("kazutoshi_t", 2024, 6, "2024-6.txt")
+    -- ("dojouser1", 2023, 12, "2023-12.txt"),
+    -- ("dojouser1", 2024, 1, "2024-1.txt"),
+    -- ("dojouser1", 2024, 2, "2024-2.txt"),
+    -- ("dojouser1", 2024, 3, "2024-3.txt"),
+    -- ("dojouser1", 2024, 4, "2024-4.txt"),
+    -- ("dojouser1", 2024, 5, "2024-5.txt"),
+    -- ("dojouser1", 2024, 6, "2024-6.txt")
     ;
 
 SELECT * FROM history;

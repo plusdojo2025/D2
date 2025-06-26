@@ -41,7 +41,7 @@ public class HomeServlet extends HttpServlet {
 			java.time.LocalDate now = java.time.LocalDate.now();
 			int currentYear = now.getYear();
 			int currentMonth = now.getMonthValue();
-//			int currentMonth = 8;
+//			int currentMonth = 7;
 
 			PointDAO pointDAO = new PointDAO();
 
@@ -68,7 +68,8 @@ public class HomeServlet extends HttpServlet {
 					request.setAttribute("errorMsg", "今月のポイントレコードの作成に失敗しました。");
 				}
 			}
-			Point point = pointDAO.selectByUserIdMonth(userId, currentMonth);
+			
+			Point point = pointDAO.selectByUserIdMonthYear(userId, currentMonth, currentYear);
 
 			int year = 0;
 			int month = 0;
@@ -86,19 +87,17 @@ public class HomeServlet extends HttpServlet {
 			    sleepPoint = point.getTotal_sleeptime();
 			    noSmokePoint = point.getTotal_nosmoke();
 			    totalCalorieConsu = point.getTotal_calorie_consumed();
-			}
-
-			// ImageAllDAOを使って画像情報を取得
-			ImageAllDAO imageAllDAO = new ImageAllDAO();
-			
-			int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
-			
-			TownAvatarElements avatar = imageAllDAO.select(year, month, caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
-					ImageDAO.getCountryOrder(point.getTotal_calorie_consumed());
-
-			// JSPにセットしてフォワード
-			request.setAttribute("avatar", avatar);
-
+			    // ImageAllDAOを使って画像情報を取得
+			    ImageAllDAO imageAllDAO = new ImageAllDAO();
+			    
+			    int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
+			    
+			    TownAvatarElements avatar = imageAllDAO.select(year, month, caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
+			    ImageDAO.getCountryOrder(point.getTotal_calorie_consumed());
+			    
+			    // JSPにセットしてフォワード
+			    request.setAttribute("avatar", avatar);				
+			} 
 
 			// === 通常の目標値とポイントデータの取得処理 ===
 			TargetValueDAO tdao = new TargetValueDAO();
@@ -162,8 +161,9 @@ public class HomeServlet extends HttpServlet {
 
 		// フォームから取得
 		java.time.LocalDate now = java.time.LocalDate.now();
+		int year = now.getYear();
 		int currentMonth = now.getMonthValue();
-//		int currentMonth = 8;
+//		int currentMonth = 7;
 		String pureAlcoholStr = request.getParameter("pure_alcohol_consumed");
 		String sleepTimeStr = request.getParameter("sleep_time");
 		String calorieIntakeStr = request.getParameter("calorie_intake");
@@ -230,19 +230,21 @@ public class HomeServlet extends HttpServlet {
 
 // Pointテーブルのにその月のレコードを追加
 		if (userId != null) {
-			int year = now.getYear();
-			int month = now.getMonthValue();
+			
+			// int month = now.getMonthValue();
 
 			PointDAO pointDAO = new PointDAO();
 
 			// その月のレコードが存在するか確認するために検索
 			Point searchPoint = new Point();
 			searchPoint.setUser_id(userId);
-			searchPoint.setMonth(month);
+			searchPoint.setMonth(currentMonth);
 
-			List<Point> existingPoints = pointDAO.select(searchPoint);
+//			List<Point> existingPoints = pointDAO.select(searchPoint);
+			Point existingPoints = pointDAO.selectByUserIdMonthYear(userId, currentMonth, year);
 
-			if (existingPoints == null || existingPoints.isEmpty()) {
+//			if (existingPoints == null || existingPoints.isEmpty()) {
+			if (existingPoints == null) {
 				// まだレコードがなければ、最新の累計消費カロリーを取得
 				List<Point> allPoints = pointDAO.selectByUserId(userId);
 
@@ -254,17 +256,49 @@ public class HomeServlet extends HttpServlet {
 				}
 
 				// 新しい月のレコードを追加（累計消費カロリーだけ引き継ぐ）
-				boolean inserted = pointDAO.insert(userId, month, year, latestCalorie);
+				boolean inserted = pointDAO.insert(userId, currentMonth, year, latestCalorie);
 
 				if (!inserted) {
 					// 挿入に失敗した場合のエラーハンドリング
 					request.setAttribute("errorMsg", "ポイントレコードの追加に失敗しました。");
 				}
 			}
-		} else {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
-			dispatcher.forward(request, response);
 		}
+		
+		PointDAO pointDAO = new PointDAO();
+		Point point = pointDAO.selectByUserIdMonthYear(userId, currentMonth, year);
+
+		int month = 0;
+		int caloriePoint = 0;
+		int alcoholPoint = 0;
+		int sleepPoint = 0;
+		int noSmokePoint = 0;
+		int totalCalorieConsu = 0;
+
+		if (point != null) {
+			year = point.getYear();
+			month = point.getMonth();
+		    caloriePoint = point.getTotal_calorie_intake();
+		    alcoholPoint = point.getTotal_alcohol_consumed();
+		    sleepPoint = point.getTotal_sleeptime();
+		    noSmokePoint = point.getTotal_nosmoke();
+		    totalCalorieConsu = point.getTotal_calorie_consumed();
+		    // ImageAllDAOを使って画像情報を取得
+		    ImageAllDAO imageAllDAO = new ImageAllDAO();
+		    
+		    int countryOrder = ImageDAO.getCountryOrder(totalCalorieConsu);
+		    
+		    TownAvatarElements avatar = imageAllDAO.select(year, month, caloriePoint, alcoholPoint, sleepPoint, noSmokePoint, countryOrder);
+		    ImageDAO.getCountryOrder(point.getTotal_calorie_consumed());
+		    
+		    // JSPにセットしてフォワード
+		    request.setAttribute("avatar", avatar);
+		}
+
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
+		dispatcher.forward(request, response);
+
 	}
 	
 }

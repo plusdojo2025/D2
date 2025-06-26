@@ -61,11 +61,7 @@
 
   <script>
     const taList = {};
-    const yearMonthList = [
-        <c:forEach var="i" begin="0" end="11" varStatus="status">
-          { year: ${yearList[i]}, month: ${monthList[i]} }<c:if test="${!status.last}">,</c:if>
-        </c:forEach>
-      ];
+    const yearMonthList = [];
 
     <c:forEach var="avatar" items="${avatars}">
       <c:if test="${avatar != null}">
