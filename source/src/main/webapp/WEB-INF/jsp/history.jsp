@@ -9,7 +9,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ケンコークラフト</title>
+<title>過去ファイル</title>
 <link rel="stylesheet" href="<c:url value='/css/history.css'/>">
 <link rel="stylesheet" href="<c:url value='/css/common.css'/>">
 </head>
@@ -37,11 +37,10 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 	<form method="POST" enctype="multipart/form-data"
 		action="HistoryServlet?mode=upload" class="upload-form">
 		<!-- ファイル選択エリア -->
-		<label class="file-box"> <span id="file-name">ファイルを選択してください</span>
-			<input type="file" name="file" id="file-input" multiple
-			hidden="hidden" />
-			<button type="button" class="select-button"
-				onclick="document.getElementById('file-input').click();">選択</button>
+		<label class="file-box"> 
+			<span id="file-name">ファイルを選択してください</span>
+			<input type="file" name="file" id="file-input" multiple hidden="hidden" />
+			<button type="button" class="select-button">選択</button>
 		</label>
 
 		<!-- アップロードボタン -->
@@ -66,10 +65,10 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 
 	<!-- ⑥ ファイルリスト -->
 	<div class="file_list" style="float: right;">
-		<form method="post"
+		<form id="downloadForm" method="post"
 			action="<c:url value='/HistoryServlet?mode=download' />">
 			<%
-			if (fileList != null) {
+			if (fileList != null && !fileList.isEmpty()) {
 				for (History h : fileList) {
 			%>
 			<label> <input type="checkbox" name="fileNames"
@@ -77,6 +76,12 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 			</label><br>
 			<%
 			}
+			} else {
+			%>
+			<label>
+				<input type="checkbox" name="fileNames" value="none" disabled> 過去ファイルはありません
+			</label><br>
+			<%
 			}
 			%>
 			<button class="btn" type="submit">ダウンロード</button>
@@ -110,13 +115,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 				month: ${avatar.month},
 			});
 		</c:forEach>;
-
-
-		function showHelp() {
-			alert("このページでは、１年以上前の過去ファイルのダウンロード・街並みの表示ができます。\n"
-					+ "「ダウンロード」で過去ファイルの保存 → 保存したファイルを展開 → 展開したテキストファイルを「選択」 → 「街を見る」で表示できます。");
-		}
-		
+	
 	</script>
 	<script src="<c:url value='/js/history.js' />"></script>
 	<script src="<c:url value='/js/test.js' />"></script>
