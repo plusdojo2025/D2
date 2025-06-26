@@ -87,3 +87,12 @@ nextBtn.addEventListener("click", () => {
 
 // 初期表示
 updateDisplay();
+
+
+function showHelp() {
+	alert(
+		"サマリーページ\n ～あなたの過去1年間の街並みを振り返る場所～\n\n"
+		+ "このページでできること\n"
+		+ "1. 街並みをクリックで拡大表示"
+	)
+}

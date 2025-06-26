@@ -40,6 +40,7 @@ window.onload = function () {
     	int currentYear = now.getYear();
     	int currentMonth = now.getMonthValue();
 	%>
+	<button id="help-btn" style="float: right;" onclick="showHelp()">ヘルプ</button>
     <nav class = "header-nav">
         <a href="<c:url value='/HealthRecordServlet' />?date=<%= currentDateStr %>">健康記録登録</a>
         <a href="<c:url value='/CalendarServlet' />?year=<%= currentYear %>&month=<%= currentMonth %>">カレンダー</a>

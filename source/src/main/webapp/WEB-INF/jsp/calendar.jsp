@@ -40,6 +40,8 @@
 
 	<!-- カレンダー -->
 	<!-- --------------------------------------------------------------- -->
+	<button id="help-btn" style="float: right;" onclick="showHelp()">ヘルプ</button>
+	
 	<div class="checkbox-group">
 	
 	 <label class="month-label">
@@ -155,7 +157,7 @@
 					<div class="input-group">
 						<label for="exercise_type0">種類とメッツ：</label>
 						<input type="text" name="exercise_type0" id="exercise_type0" placeholder="例：ジョギング">
-						<input type="number" name="mets0" id="mets0" placeholder="例：6.0" step="0.5" min="0.0">
+						<input type="number" name="mets0" id="mets0" placeholder="例：6.0" step="0.1" min="0.0">
 					</div>
 					
 					<div class="input-group">

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const parts = ym.split('-');
 			const year = parts[0];
 			const month = parseInt(parts[1]);
-			
+
 			// 現在のURLをベースにクエリパラメータを変更
 			const url = new URL(window.location.href);
 			url.searchParams.set('year', year);
@@ -295,3 +295,11 @@ function generateCalendar(year, month) {
 
 generateCalendar(year, month);
 
+function showHelp() {
+	alert(
+		"カレンダーページ\n ～あなたの健康・報酬記録を月ごとに確認する場所～\n\n"
+		+ "このページでできること\n"
+		+ "1. 1年前までの記録・街並みの確認\n"
+		+ "2. 健康記録の登録(今月の最終登録日～今日)"
+	)
+}

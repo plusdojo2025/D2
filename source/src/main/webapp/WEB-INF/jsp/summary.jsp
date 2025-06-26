@@ -15,6 +15,7 @@
 </a>
   </h1>
   
+  <button id="help-btn" style="float: right;" onclick="showHelp()">ヘルプ</button>
   <h2>サマリー</h2>
   <hr>
 

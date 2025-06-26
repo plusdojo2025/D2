@@ -88,3 +88,12 @@ body {
     color: #ffffff;
     background-color: #64d085;
   } 
+  
+#help-btn {
+	background-color: #64d085;
+	color: white;
+	border: none;
+	padding: 7px 15px;
+	border-radius: 4px;
+	cursor: pointer;
+}

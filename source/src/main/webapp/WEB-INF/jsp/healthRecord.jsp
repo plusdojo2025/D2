@@ -19,8 +19,10 @@
 				src="${pageContext.request.contextPath}/img/logo1.png" alt="Logo"
 				class="logo-img"></a>
 		</h1>
+		
 		<!-- ヘッダー（ここまで） -->
 		<!-- メイン（ここから） -->
+		<button id="help-btn" style="float: right;" onclick="showHelp()">ヘルプ</button>
 		<h2>健康記録登録</h2>
 		<hr>
 		<form method="POST" id="form"
@@ -42,7 +44,7 @@
 					<div class="input-group">
 						<label for="exercise_type0">種類とメッツ：</label> 
 						<input type="text" name="exercise_type0" id="exercise_type0" placeholder="例：ジョギング">
-						<input type="number" name="mets0" id="mets0" placeholder="例：6.0" step="0.5" min="0.0">
+						<input type="number" name="mets0" id="mets0" placeholder="例：6.0" step="0.1" min="0.0">
 					</div>
 
 					<div class="input-group">
@@ -133,6 +135,18 @@
 		<!-- フッター（ここまで） -->
 	</div>
 
+	<script>
+		function showHelp() {
+			alert(
+				"健康記録登録ページ \n ～今日の健康記録を登録する場所～\n\n"
+				+ "このページでできること\n"
+				+ "1. 今日の健康記録を登録※\n"
+				+ "※今日の健康記録を登録すると、過去の健康記録は登録できなくなります。過去の健康記録を登録したい場合は、カレンダーページから登録してください。\n\n"
+				+ "テスト用Tips:\n"
+				+ "現在体重:60kg, 運動の種類:ボウリング, 運動時間1200分とすることで、次の国に到達できます。"
+			)
+		}	
+	</script>
 	<script src="<c:url value='/js/healthRecord.js' />"></script>
 	<script src="<c:url value='/js/common.js' />"></script>
 </body>
