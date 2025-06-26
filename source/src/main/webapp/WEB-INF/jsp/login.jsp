@@ -14,7 +14,6 @@
 
 <body>
   <div class="container">
-    <h1 class="login-title">ログイン</h1>
 
     <!-- h1からdivに変更して画像拡大を防止 -->
     <div class="logo-header">
@@ -50,5 +49,12 @@
   <!-- JavaScriptファイル読み込み -->
   <script src="<c:url value='/js/login.js' />"></script>
   <script src="<c:url value='/js/common.js' />"></script>
+
+  <!-- サーバーからのエラーがある場合はアラート表示 -->
+  <c:if test="${not empty errorMessage}">
+    <script>
+      alert("${errorMessage}");
+    </script>
+  </c:if>
 </body>
 </html>

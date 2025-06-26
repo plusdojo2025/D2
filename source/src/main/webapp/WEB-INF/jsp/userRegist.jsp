@@ -15,7 +15,7 @@
 
 <body>
 	<div class="container">
-		<h1 class="regist-title">ユーザー登録フォーム</h1>
+		
 
 		<div class="logo-header">
 			<img src="${pageContext.request.contextPath}/img/logo1.png" alt="Logo" class="logo-img">
