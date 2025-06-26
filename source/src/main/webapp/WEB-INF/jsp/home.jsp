@@ -77,16 +77,16 @@ window.onload = function () {
         <label>目標体重 (kg): <input type="number" step="0.1" name="target_weight" min="0" required></label><br>
         <label>純アルコール摂取量 (g/日): 
             <input type="number" step="1" name="pure_alcohol_consumed" min="0" required>
-            <span style="font-size: 0.9em; color: gray;">(男性は40g、女性は20g以下が推奨)</span>
-        </label><br>
+        </label>
+        <span class="hint-text">(男性は40g、女性は20g以下が推奨)</span><br>
         <label>睡眠時間 (時間): 
             <input type="number" step="0.5" name="sleep_time" min="0" required>
-            <span style="font-size: 0.9em; color: gray;">(6時間以上推奨)</span>
-        </label><br>
+        </label>
+        <span class="hint-text">(6時間以上推奨)</span><br>
         <label>カロリー摂取量 (kcal/日): 
             <input type="number" step="100" name="calorie_intake" min="0" required>
-            <span style="font-size: 0.9em; color: gray;">(男性は2600前後、女性は2200前後推奨)</span>
-        </label><br>
+        </label>
+        <span class="hint-text">(男性は2600前後、女性は2200前後推奨)</span><br>
 
         <h3>プロフィール</h3>
         <label>体重 (kg): <input type="number" step="0.1" name="weight" min="0" required></label><br>
@@ -102,16 +102,19 @@ window.onload = function () {
                 <option value="5">5: 非常に高い（アスリートレベル）</option>
             </select>
         </label><br>
-
-        性別:
-        <select name="sex" required>
-            <option value="">選択してください</option>
-            <option value="M">男性</option>
-            <option value="F">女性</option>
-        </select>
+		<h3>性別</h3>
+         <div class="target-label">
+            <label for="sex">性別:</label>
+            <select name="sex" id="sex" required>
+                <option value="">選択してください</option>
+                <option value="M">男性</option>
+                <option value="F">女性</option>
+            </select>
+        </div>
         <br>
         <button type="submit">登録</button>
     </form>
+
 </div>
 
 
