@@ -41,8 +41,8 @@ window.onload = function () {
     	int currentMonth = now.getMonthValue();
 	%>
     <nav class = "header-nav">
-        <a href="<c:url value='/HealthRecordServlet?date=<%= currentDateStr %>' />">健康記録登録</a>
-        <a href="<c:url value='/CalendarServlet?year=<%= currentYear %>&month=<%= currentMonth %>' />">カレンダー</a>
+        <a href="<c:url value='/HealthRecordServlet' />?date=<%= currentDateStr %>">健康記録登録</a>
+        <a href="<c:url value='/CalendarServlet' />?year=<%= currentYear %>&month=<%= currentMonth %>">カレンダー</a>
         <a href="<c:url value='/Summary' />">サマリー</a>
         <a href="<c:url value='/HistoryServlet' />">過去のファイル</a>
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
