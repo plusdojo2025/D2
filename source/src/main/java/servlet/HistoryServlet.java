@@ -347,9 +347,9 @@ public class HistoryServlet extends HttpServlet {
 	            }
 
 	            String fileName = getFileName(part);
-	            part.write("/uploaded/" + fileName); // location に保存される
+	            part.write(getServletContext().getRealPath("uploaded/" + fileName)); // location に保存される
 
-	            File file = new File(uploadFolderPath + "/" + fileName);
+	            File file = new File(getServletContext().getRealPath("uploaded/" + fileName));
 	            if (!file.exists()) continue;
 
 	            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
