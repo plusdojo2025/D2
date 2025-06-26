@@ -35,13 +35,13 @@
     font-size: 0.8em;
     color: #555;
     gap: 5px;
-    white-space: nowrap; /* ラベルが折り返されないように */
+    white-space: nowrap;
 }
 
 #popup form input,
 #popup form select {
     flex: none;
-    width: 150px; /* 入力フィールドの幅を統一 */
+    width: 150px;
     padding: 4px 6px;
     font-size: 0.8em;
     border: 1px solid #ccc;
@@ -63,8 +63,8 @@
 
 #popup form .target-label {
     flex: none;
-    width: 230px; /* 目標値のラベルの幅を広く */
-    text-align: right; /* ラベルを右寄せ */
+    width: 230px;
+    text-align: right; 
 }
 
 #popup button {
@@ -85,20 +85,20 @@
 
 #popup form .target-label {
     display: flex;
-    justify-content: space-between; /* 子要素を均等に配置 */
-    align-items: center; /* 垂直方向を中央揃え */
-    gap: 10px; /* ラベルとセレクトボックスの間隔 */
+    justify-content: space-between;
+    align-items: center; 
+    gap: 10px;
     font-size: 0.8em;
     color: #555;
-    width: 100%; /* ラベルとセレクトボックスの配置用 */
+    width: 100%;
 }
 
 #popup form .target-label select {
-    margin-left: auto; /* セレクトボックスを右寄せ */
-    flex: none; /* 幅を固定 */
-    width: 150px; /* 必要に応じて幅を調整 */
-    text-align: left; /* テキストを左寄せ */
-    padding: 4px 6px; /* 内側の余白 */
+    margin-left: auto;
+    flex: none;
+    width: 150px;
+    text-align: left;
+    padding: 4px 6px;
     font-size: 0.8em;
     border: 1px solid #ccc;
     border-radius: 3px;
