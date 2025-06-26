@@ -30,6 +30,11 @@ public class HomeServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// もしもログインしていなかったらログインサーブレットにリダイレクトする
 		HttpSession session = request.getSession();
+		if (session.getAttribute("user_id") == null) {
+			// もしもログインしていなかったらログインサーブレットにリダイレクト
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
 		
 		// セッションからuser_idを取得
 		String userId = (String) session.getAttribute("user_id");
@@ -127,22 +132,28 @@ public class HomeServlet extends HttpServlet {
 				}
 			}
 
-			request.setAttribute("totalCaloriesSum", totalCaloriesSum);
+			request.setAttribute("totalCaloriesSum", totalCalorieConsu);
 
-			double Step = 0.03;
-			int CountryCalorie = 3600;
-			int nextcountry = 120000;
+//			double Step = 0.03;
+//			int CountryCalorie = 3600;
+//			int nextcountry = 120000;
+//			int currentCountryIndex = totalCaloriesSum / CountryCalorie;
+//			int nextTargetCalories = CountryCalorie * (currentCountryIndex + 1);
+//			int remainingCalories = Math.max(0, nextTargetCalories - totalCaloriesSum);
+//			int requiredSteps = (int) Math.ceil(remainingCalories / Step);
+//			double displayStepsToNext = nextcountry * ((double) remainingCalories / CountryCalorie);
 
-			int currentCountryIndex = totalCaloriesSum / CountryCalorie;
-			int nextTargetCalories = CountryCalorie * (currentCountryIndex + 1);
-			int remainingCalories = Math.max(0, nextTargetCalories - totalCaloriesSum);
-			int requiredSteps = (int) Math.ceil(remainingCalories / Step);
-			double displayStepsToNext = nextcountry * ((double) remainingCalories / CountryCalorie);
-
+			int distanceByCalorie 	= 3600;
+			int distanceByWalk 		= 120000;
+			int remainingCalories;
+			int requiredSteps;
+			remainingCalories = distanceByCalorie - (totalCalorieConsu % distanceByCalorie);
+			requiredSteps = (int)(distanceByWalk * ((double)remainingCalories/(double)distanceByCalorie));
+			
 			request.setAttribute("requiredSteps", requiredSteps);
 			request.setAttribute("remainingCalories", remainingCalories);
-			request.setAttribute("displayStepsToNext", (int) Math.ceil(displayStepsToNext));
-			request.setAttribute("currentCountry", currentCountryIndex + 1);
+//			request.setAttribute("displayStepsToNext", (int) Math.ceil(displayStepsToNext));
+//			request.setAttribute("currentCountry", currentCountryIndex + 1);
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");

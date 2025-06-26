@@ -51,7 +51,7 @@ window.onload = function () {
 <div class="info-box">
 <h2>お知らせ</h2>
 <p>現在の累計消費カロリー: ${totalCaloriesSum} kcal</p>
-<p>次の目的地まであと ${requiredSteps} 歩 (消費カロリー ${remainingCalories} kcal)です。</p>
+<p>次の国まであと ${requiredSteps} 歩 (消費カロリー ${remainingCalories} kcal)です。</p>
 </div>
 <div class="info-box2">
 <h2>今月の目標値</h2>

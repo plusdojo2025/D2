@@ -45,7 +45,7 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 		</label>
 
 		<!-- アップロードボタン -->
-		<button type="submit" class="upload-button">アップロード</button>
+		<button type="submit" class="upload-button">街を見る</button>
 	</form>
 	<!--  <form action="HistoryServlet" method="post" style="display: inline;">
 		
@@ -113,8 +113,8 @@ List<History> fileList = (List<History>) request.getAttribute("fileList");
 
 
 		function showHelp() {
-			alert("このページでは、過去ファイルのダウンロード・街並みの表示ができます。\n"
-					+ "検索ボックスで日付をフィルタし、「街を見る」で表示、「ダウンロード」で保存できます。");
+			alert("このページでは、１年以上前の過去ファイルのダウンロード・街並みの表示ができます。\n"
+					+ "「ダウンロード」で過去ファイルの保存、保存したファイルを「選択」し、「街を見る」で表示できます。");
 		}
 		
 	</script>
