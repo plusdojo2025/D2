@@ -166,9 +166,9 @@ INSERT INTO point VALUES  ("dojouser2", 2024, 9, 5000, 7, 0, 0, 1);
 
 INSERT INTO point VALUES  ("dojouser3", 2025, 5, 57599, 7, 300, 300, 3);
 -- INSERT INTO point VALUES  ("dojouser3", 2025, 4, 54000, 7, 300, 300, 1);
-INSERT INTO point VALUES  ("dojouser3", 2025, 3, 50400, 7, 300, 300, 2);
+INSERT INTO point VALUES  ("dojouser3", 2025, 3, 50400, 7, 100, 70, 2);
 INSERT INTO point VALUES  ("dojouser3", 2025, 2, 46800, 7, 300, 300, 3);
-INSERT INTO point VALUES  ("dojouser3", 2025, 1, 43200, 7, 300, 300, 4);
+INSERT INTO point VALUES  ("dojouser3", 2025, 1, 43200, 7, 200, 140, 4);
 INSERT INTO point VALUES  ("dojouser3", 2024, 12, 39600, 7, 300, 300, 5);
 INSERT INTO point VALUES  ("dojouser3", 2024, 11, 36000, 7, 300, 300, 1);
 INSERT INTO point VALUES  ("dojouser3", 2024, 10, 32400, 7, 300, 300, 2);
@@ -332,11 +332,11 @@ INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercis
 INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-05-01", 300, "サイクリング", 60);
 -- 2025/0602
 INSERT INTO health_whole VALUES ("dojouser2", "2025-05-02", 1, 7.5, 2500, "test dojouser2", 60);
-INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser1", "2025-05-02", 30, 300, 5);
-INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-05-02", 900, "ランニング", 30);
+INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser2", "2025-05-02", 30, 300, 5);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser2", "2025-05-02", 900, "ランニング", 30);
 -- 2025/0603
 INSERT INTO health_whole VALUES ("dojouser3", "2025-05-03", 0, 8, 3000, "test dojouser3", 60);
-INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser1", "2025-05-03", 600, "ウォーキング", 60);
+INSERT INTO health_exercise(user_id, date, calorie_consu, exercise_type, exercise_time) VALUES ("dojouser3", "2025-05-03", 600, "ウォーキング", 60);
 -- 2025/0601
 INSERT INTO health_whole VALUES ("dojouser4", "2025-05-01", 0, 8, 2000, "test dojouser4", 60);
 INSERT INTO health_alcohol(user_id, date, pure_alcohol_consumed, alcohol_consumed, alcohol_content) VALUES ("dojouser4", "2025-05-01", 30, 300, 5);
